@@ -12,12 +12,12 @@ import {
 import { useNavigation} from "@react-navigation/native"
 
 export default function HomeScreen({ navigation }) {
-    const navigation = useNavigation()
+    const mainnavigation = useNavigation()
 
 
   // 🔹 Handle Card Click
   const handleCardClick = (screenName) => {
-    navigation.navigate(screenName);
+    mainnavigation.navigate(screenName);
   };
 
   return (

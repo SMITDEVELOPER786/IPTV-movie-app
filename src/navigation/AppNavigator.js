@@ -7,7 +7,6 @@ import LoginScreen from "../screens/LoginScreen";
 import MoviesScreen from "../screens/MoviesScreen";
 import SeriesScreen from "../screens/SeriesScreen";
 import SplashScreen from "../screens/SplashScreen";
-import SettingsScreen from "../screens/SettingsScreen";
 import MultiScreen from "../screens/MultiScreen";
 import NotificationScreen from "../screens/NotificationScreen";
 import ParentalControlScreen from "../screens/ParentalControlScreen";
@@ -21,7 +20,8 @@ import AddPlaylistScreen from "../screens/AddPlaylistScreen";
 import AutomationScreen from "../screens/AutomationScreen";
 import EPGScreen from "../screens/EPGScreen";
 import FeedbackScreen from "../screens/FeedbackScreen";
-import GeneralSettingsScreen from "../screens/GeneralSettingsScreen";
+// import GeneralSettingsScreen from "../screens/GeneralSettingsScreen";
+// import SettingsScreen from "../screens/SettingsScreen";
 
 const Stack = createStackNavigator();
 
@@ -38,7 +38,7 @@ export default function AppNavigator() {
       <Stack.Screen name="Splash" component={SplashScreen} />
       <Stack.Screen name="Login" component={LoginScreen} />
       <Stack.Screen name="Home" component={HomeScreen} />
-      <Stack.Screen name="Movies" component={MoviesScreen} />
+      {/* <Stack.Screen name="Movies" component={MoviesScreen} />
       <Stack.Screen name="Series" component={SeriesScreen} />
       <Stack.Screen name="Settings" component={SettingsScreen} />
       <Stack.Screen name="Multi" component={MultiScreen} />
@@ -53,8 +53,8 @@ export default function AppNavigator() {
       <Stack.Screen name="AddPlaylist" component={AddPlaylistScreen} />
       <Stack.Screen name="Automation" component={AutomationScreen} />
       <Stack.Screen name="EPG" component={EPGScreen} />
-      <Stack.Screen name="Feedback" component={FeedbackScreen} />
-      <Stack.Screen name="GeneralSettings" component={GeneralSettingsScreen} />
+      <Stack.Screen name="Feedback" component={FeedbackScreen} /> */}
+      {/* <Stack.Screen name="GeneralSettings" component={GeneralSettingsScreen} /> */}
     </Stack.Navigator>
   );
 }

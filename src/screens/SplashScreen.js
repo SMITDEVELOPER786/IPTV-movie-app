@@ -21,14 +21,7 @@ export default function SplashScreen({ navigation }) {
 
   return (
     <View style={styles.container}>
-      <Image
-        source={require("../assets/images/Logo.png")}
-        style={styles.logo}
-      />
-
-      <Animated.Text style={[styles.text, { opacity: fadeAnim }]}>
-        Infinite Player
-      </Animated.Text>
+     <Text>Splash Screen</Text>
     </View>
   );
 }

@@ -1,7 +1,7 @@
 import React from 'react';
 import { StatusBar, StyleSheet, useColorScheme, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
-import AppNavigator from './src/navigators/AppNavigator';
+import AppNavigator from './src/navigation/AppNavigator';
 import {
   SafeAreaProvider,
   useSafeAreaInsets,
