@@ -1,12 +1,7 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
-
-import { NewAppScreen } from '@react-native/new-app-screen';
+import React from 'react';
 import { StatusBar, StyleSheet, useColorScheme, View } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import AppNavigator from './src/navigators/AppNavigator';
 import {
   SafeAreaProvider,
   useSafeAreaInsets,
@@ -24,14 +19,13 @@ function App() {
 }
 
 function AppContent() {
-  const safeAreaInsets = useSafeAreaInsets();
+  const insets = useSafeAreaInsets();
 
   return (
-    <View style={styles.container}>
-      <NewAppScreen
-        templateFileName="App.tsx"
-        safeAreaInsets={safeAreaInsets}
-      />
+    <View style={[styles.container, { paddingTop: insets.top }]}>
+      <NavigationContainer>
+        <AppNavigator />
+      </NavigationContainer>
     </View>
   );
 }
