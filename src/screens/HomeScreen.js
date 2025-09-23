@@ -82,7 +82,7 @@ export default function HomeScreen({ navigation }) {
 
         {/* Action Buttons */}
         <View style={styles.actions}>
-          <TouchableOpacity style={styles.actionBtn}>
+          <TouchableOpacity style={styles.actionBtn} onPress={()=> handleCardClick('Playlist')}>
             <Text style={styles.actionText}>Update Playlist</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.actionBtn}>

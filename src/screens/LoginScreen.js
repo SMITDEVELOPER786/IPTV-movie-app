@@ -8,8 +8,10 @@ import {
   TouchableOpacity,
   ImageBackground,
 } from "react-native";
-
+import HomeScreen from "./HomeScreen";
+import { useNavigation } from "@react-navigation/native";
 export default function LoginScreen() {
+  const navigation = useNavigation()
   return (
     <ImageBackground
       source={require("../assets/images/Thumb.png")}
@@ -35,7 +37,7 @@ export default function LoginScreen() {
           secureTextEntry
         />
 
-        <TouchableOpacity style={styles.button}>
+        <TouchableOpacity style={styles.button} onPress={()=> navigation.navigate("Home")}>
           <Text style={styles.buttonText}>Sign In</Text>
         </TouchableOpacity>
       </View>
