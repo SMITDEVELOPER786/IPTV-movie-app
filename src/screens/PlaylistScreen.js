@@ -6,12 +6,12 @@ import {
   StyleSheet,
   Text,
   View,
-  Dimensions,   // 👈 Add this
+  Dimensions, // 👈 Add this
 } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 
-const { width } = Dimensions.get("window"); // 👈 Get screen width
+const { width } = Dimensions.get('window'); // 👈 Get screen width
 const isSmallScreen = width < 600; // 👈 Define breakpoint (600px ~ tablets)
 
 const PlaylistScreen = () => {
@@ -70,10 +70,9 @@ const PlaylistScreen = () => {
       resizeMode="cover"
     >
       <View style={styles.overlay}>
-        <View style={styles.headAndDetails}>
-          <Text style={styles.heading}>Playlist</Text>
-          <Text style={styles.text}>{currentTime}</Text>
-          <Text style={styles.text}>{currentDate}</Text>
+        <View style={styles.headerLeft}>
+          <Text style={styles.time}>{currentTime}</Text>
+          <Text style={styles.date}>{currentDate}</Text>
         </View>
 
         <View style={styles.listbg}>
@@ -147,16 +146,22 @@ const PlaylistScreen = () => {
 
 export default PlaylistScreen;
 
-
 const styles = StyleSheet.create({
   imageBg: { flex: 1 },
   overlay: { flex: 1, backgroundColor: 'rgba(0, 0, 0, 0.7)', padding: 20 },
-  headAndDetails: {
-    marginTop: 20,
-    flexDirection: 'row',
-    gap: 20,
-    flexWrap: 'wrap',
-    justifyContent: 'flex-end',
+  headerLeft: {
+    flexDirection: 'column',
+    marginBottom: 30,
+    marginTop: 30,
+  },
+  time: {
+    color: '#fff',
+    fontSize: width * 0.06,
+    fontWeight: 'bold',
+  },
+  date: {
+    color: '#fff',
+    fontSize: width * 0.04,
   },
   heading: { color: '#fff', fontSize: 24 },
   heading2: { color: '#fff', fontSize: 18, fontWeight: 'bold' },
@@ -193,15 +198,21 @@ const styles = StyleSheet.create({
     color: '#A098AE',
   },
   rightSideIcons: { flexDirection: 'row', gap: 10 },
-  iconImg:{width:18, height:18,},
-  btnCon:{flexDirection:'row', justifyContent:'space-between', alignItems:'center', marginTop:30, flexWrap: 'wrap'},
-  btns:{
+  iconImg: { width: 18, height: 18 },
+  btnCon: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginTop: 30,
+    flexWrap: 'wrap',
+  },
+  btns: {
     backgroundColor: '#515DEF',
     paddingVertical: 10,
     paddingHorizontal: '8%',
     borderRadius: 10,
   },
   btnText: {
-    color:'#ffffff'
-  }
+    color: '#ffffff',
+  },
 });
