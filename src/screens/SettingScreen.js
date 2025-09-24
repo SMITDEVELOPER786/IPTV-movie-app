@@ -1,11 +1,20 @@
-import { StyleSheet, Text, View, ScrollView, TouchableOpacity, SafeAreaView, Dimensions } from 'react-native'
+import { 
+  StyleSheet, 
+  Text, 
+  View, 
+  ScrollView, 
+  TouchableOpacity, 
+  SafeAreaView, 
+  ImageBackground, 
+  Dimensions 
+} from 'react-native'
 import React from 'react'
 import { useNavigation } from '@react-navigation/native'
 
 const { width, height } = Dimensions.get('window')
 
 export default function SettingsScreen() {
-   const navigation  = useNavigation()
+  const navigation  = useNavigation()
   const settingsOptions = [
     { id: 1, title: 'General Setting', icon: '⚙️', description: 'App preferences' },
     { id: 2, title: 'VPN', icon: '🔒', description: 'Network security' },
@@ -26,75 +35,85 @@ export default function SettingsScreen() {
   }
 
   return (
-    <SafeAreaView style={styles.container}>
-      {/* Background Overlay */}
-      <View style={styles.backgroundOverlay}>
-        
-        {/* Header */}
-        <View style={styles.header}>
-          <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
-            <Text style={styles.backArrow}>←</Text>
-          </TouchableOpacity>
+    <ImageBackground 
+      source={require('../assets/images/Thumb.png')} 
+      style={styles.imageBg}
+      resizeMode="cover"
+    >
+      <SafeAreaView style={styles.container}>
+        {/* Background Overlay */}
+        <View style={styles.backgroundOverlay}>
           
-          <Text style={styles.headerTitle}>SETTINGS</Text>
-          
-          <TouchableOpacity style={styles.menuButton}>
-            <Text style={styles.menuText}></Text>
-          </TouchableOpacity>
+          {/* Header */}
+          <View style={styles.header}>
+            <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
+              <Text style={styles.backArrow}>←</Text>
+            </TouchableOpacity>
+            
+            <Text style={styles.headerTitle}>SETTINGS</Text>
+            
+            <TouchableOpacity style={styles.menuButton}>
+              <Text style={styles.menuText}></Text>
+            </TouchableOpacity>
+          </View>
+
+          {/* Date/Time Display */}
+          <View style={styles.dateTimeContainer}>
+            <View style={styles.dateTimeLeft}>
+              <Text style={styles.dateText}>29TH, 2025</Text>
+              <Text style={styles.timeText}>10:00PM</Text>
+            </View>
+            <View style={styles.dateTimeRight}>
+              <Text style={styles.dateText}>AUG 29TH, 2025</Text>
+              <Text style={styles.timeText}>10:00PM</Text>
+            </View>
+          </View>
+
+          <ScrollView 
+            style={styles.content} 
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={styles.scrollContent}
+            bounces={true}
+          >
+            {/* Settings Grid */}
+            <View style={styles.settingsGrid}>
+              {settingsOptions.map((setting) => (
+                <TouchableOpacity
+                  key={setting.id}
+                  style={styles.settingCard}
+                  onPress={() => handleSettingPress(setting)}
+                  activeOpacity={0.7}
+                >
+                  <View style={styles.settingIconContainer}>
+                    <Text style={styles.settingIcon}>{setting.icon}</Text>
+                  </View>
+                  <Text style={styles.settingTitle}>{setting.title}</Text>
+                  <Text style={styles.settingDescription}>{setting.description}</Text>
+                </TouchableOpacity>
+              ))}
+            </View>
+            {/* Extra space for better scrolling */}
+            <View style={styles.extraSpace} />
+          </ScrollView>
+
         </View>
-
-        {/* Date/Time Display */}
-        <View style={styles.dateTimeContainer}>
-          <View style={styles.dateTimeLeft}>
-            <Text style={styles.dateText}>29TH, 2025</Text>
-            <Text style={styles.timeText}>10:00PM</Text>
-          </View>
-          <View style={styles.dateTimeRight}>
-            <Text style={styles.dateText}>AUG 29TH, 2025</Text>
-            <Text style={styles.timeText}>10:00PM</Text>
-          </View>
-        </View>
-
-        <ScrollView 
-          style={styles.content} 
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={styles.scrollContent}
-          bounces={true}
-        >
-          {/* Settings Grid */}
-          <View style={styles.settingsGrid}>
-            {settingsOptions.map((setting) => (
-              <TouchableOpacity
-                key={setting.id}
-                style={styles.settingCard}
-                onPress={() => handleSettingPress(setting)}
-                activeOpacity={0.7}
-              >
-                <View style={styles.settingIconContainer}>
-                  <Text style={styles.settingIcon}>{setting.icon}</Text>
-                </View>
-                <Text style={styles.settingTitle}>{setting.title}</Text>
-                <Text style={styles.settingDescription}>{setting.description}</Text>
-              </TouchableOpacity>
-            ))}
-          </View>
-          {/* Extra space for better scrolling */}
-          <View style={styles.extraSpace} />
-        </ScrollView>
-
-      </View>
-    </SafeAreaView>
+      </SafeAreaView>
+    </ImageBackground>
   )
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#0a0a1a',
+  },
+  imageBg: {
+    flex: 1,
+    width: '100%',
+    height: '100%',
   },
   backgroundOverlay: {
     flex: 1,
-    backgroundColor: 'rgba(10, 10, 26, 0.95)',
+    backgroundColor: 'rgba(16, 16, 24, 0.95)', // dark overlay over the bg image
   },
   header: {
     flexDirection: 'row',
@@ -161,8 +180,8 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     paddingHorizontal: 16,
-    paddingBottom: 100, // Extra space for navigation arrows
-    minHeight: height * 0.8, // Ensure scrollable content
+    paddingBottom: 100,
+    minHeight: height * 0.8,
   },
   settingsGrid: {
     flexDirection: 'row',
@@ -172,8 +191,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 4,
   },
   settingCard: {
-    width: (width - 48) / 3, // Better calculation for 3 columns
-    aspectRatio: 0.9, // Slightly taller cards
+    width: (width - 48) / 3,
+    aspectRatio: 0.9,
     backgroundColor: 'rgba(30, 40, 80, 0.8)',
     borderRadius: 12,
     padding: 12,
@@ -182,14 +201,14 @@ const styles = StyleSheet.create({
     justifyContent: 'space-evenly',
     borderWidth: 1,
     borderColor: 'rgba(100, 120, 200, 0.3)',
-    elevation: 3, // Android shadow
-    shadowColor: '#000', // iOS shadow
+    elevation: 3,
+    shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,
     shadowRadius: 4,
   },
   extraSpace: {
-    height: 80, // Extra space at bottom
+    height: 80,
   },
   settingIconContainer: {
     width: 40,
@@ -216,30 +235,5 @@ const styles = StyleSheet.create({
     fontSize: 10,
     textAlign: 'center',
     lineHeight: 10,
-  },
-  navigationContainer: {
-    position: 'absolute',
-    bottom: 20,
-    left: 0,
-    right: 0,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    paddingHorizontal: 30,
-    zIndex: 10,
-  },
-  navArrow: {
-    width: 50,
-    height: 50,
-    borderRadius: 25,
-    backgroundColor: 'rgba(100, 120, 200, 0.3)',
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderWidth: 1,
-    borderColor: 'rgba(100, 120, 200, 0.5)',
-  },
-  navArrowText: {
-    color: '#fff',
-    fontSize: 24,
-    fontWeight: '600',
   },
 })
