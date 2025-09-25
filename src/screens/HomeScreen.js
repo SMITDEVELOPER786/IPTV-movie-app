@@ -6,276 +6,153 @@ import {
   ImageBackground,
   TouchableOpacity,
   TextInput,
-  Image,
   ScrollView,
+  Image,
   Dimensions,
 } from "react-native";
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation } from "@react-navigation/native";
 
 const { width, height } = Dimensions.get("window");
 
-export default function HomeScreen() {
-  const navigation = useNavigation();
+export default function HomeScreen({ navigation }) {
+  const mainnavigation = useNavigation();
 
   const handleCardClick = (screenName) => {
-    navigation.navigate(screenName);
-  };
-
-  const handleActionClick = (action) => {
-    console.log(`${action} clicked`);
+    mainnavigation.navigate(screenName);
   };
 
   return (
-    <ImageBackground
-      source={require("../assets/images/Thumb.png")}
-      style={styles.bg}
-      resizeMode="cover"
+    <ScrollView
+      style={styles.container}
+      showsVerticalScrollIndicator={true}
+      contentContainerStyle={{paddingBottom: 40 }} // 🔹 let content expand
     >
-      <View style={styles.overlay}>
-        {/* Header */}
-        <View style={styles.header}>
-          <View style={styles.headerLeft}>
+      <ImageBackground
+        source={require("../assets/images/Thumb.png")}
+        style={styles.bg}
+       imageStyle={{ resizeMode: "cover" }}
+      >
+        <View style={styles.overlay}>
+          {/* Header */}
+          <View style={styles.header}>
             <Text style={styles.time}>10:00 PM</Text>
             <Text style={styles.date}>AUG 29TH, 2025</Text>
-          </View>
-
-          {/* Search */}
-          <View style={styles.searchBox}>
             <TextInput
+              style={styles.search}
               placeholder="Master Search"
               placeholderTextColor="#aaa"
-              style={styles.search}
             />
           </View>
-        </View>
 
-        {/* Categories */}
-        <View style={styles.categoryRow}>
-          <ScrollView
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={styles.scrollContent}
-            snapToInterval={width * 0.44} // Snap to card width for smooth scrolling
-            decelerationRate="fast" // Smooth snap effect
-          >
-            {/* LIVE TV */}
+          {/* Categories */}
+          <View style={styles.categoryRow}>
             <TouchableOpacity
               style={styles.card}
               onPress={() => handleCardClick("LiveTV")}
-              activeOpacity={0.8} // Subtle press feedback
             >
               <Image
-                source={{
-                  uri: "https://images.pexels.com/photos/1201996/pexels-photo-1201996.jpeg?auto=compress&cs=tinysrgb&w=400&h=250&fit=crop",
-                }}
+                source={require("../assets/images/livve.png")}
                 style={styles.cardImage}
               />
-              <View style={styles.cardOverlay}>
-                <Text style={styles.cardText}>🔴 LIVE TV</Text>
-              </View>
+              <Text style={styles.cardText}>LIVE TV</Text>
             </TouchableOpacity>
 
-            {/* MOVIES */}
             <TouchableOpacity
               style={styles.card}
               onPress={() => handleCardClick("Movies")}
-              activeOpacity={0.8}
             >
               <Image
-                source={{
-                  uri: "https://images.pexels.com/photos/7991386/pexels-photo-7991386.jpeg?auto=compress&cs=tinysrgb&w=400&h=250&fit=crop",
-                }}
+                source={require("../assets/images/adventures.png")}
                 style={styles.cardImage}
               />
-              <View style={styles.cardOverlay}>
-                <Text style={styles.cardText}>🎬 MOVIES</Text>
-              </View>
+              <Text style={styles.cardText}>MOVIES</Text>
             </TouchableOpacity>
 
-            {/* SERIES */}
             <TouchableOpacity
               style={styles.card}
               onPress={() => handleCardClick("Series")}
-              activeOpacity={0.8}
             >
               <Image
-                source={{
-                  uri: "https://images.pexels.com/photos/8983711/pexels-photo-8983711.jpeg?auto=compress&cs=tinysrgb&w=400&h=250&fit=crop",
-                }}
+                source={require("../assets/images/series.png")}
                 style={styles.cardImage}
               />
-              <View style={styles.cardOverlay}>
-                <Text style={styles.cardText}>📺 SERIES</Text>
-              </View>
+              <Text style={styles.cardText}>SERIES</Text>
             </TouchableOpacity>
-          </ScrollView>
+          </View>
+
+          {/* Action Buttons */}
+          <View style={styles.actions}>
+            <TouchableOpacity
+              style={styles.actionBtn}
+              onPress={() => handleCardClick("Playlist")}
+            >
+              <Text style={styles.actionText}>Update Playlist</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.actionBtn}>
+              <Text style={styles.actionText}>Reload Cache</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.actionBtn}>
+              <Text style={styles.actionText}>Multiscreen</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.actionBtn}>
+              <Text style={styles.actionText}>Add Playlist</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.actionBtn}               onPress={() => handleCardClick("Settings")}>
+              <Text style={styles.actionText}>Settings</Text>
+            </TouchableOpacity>
+          </View>
+
+          {/* Expiration Date */}
+          <Text style={styles.expiration}>
+            EXPIRATION: December 25TH, 2025
+          </Text>
+
         </View>
-
-        {/* Actions */}
-        <View style={styles.actions}>
-          <TouchableOpacity
-            style={styles.actionBtn}
-            onPress={() => handleCardClick("Playlist")}
-            activeOpacity={0.7}
-          >
-            <Text style={styles.actionText}>🔄 Update Playlist</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={styles.actionBtn}
-            onPress={() => handleActionClick("Reload Cache")}
-            activeOpacity={0.7}
-          >
-            <Text style={styles.actionText}>⬇ Reload Cache</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={styles.actionBtn}
-            onPress={() => handleActionClick("Multiscreen")}
-            activeOpacity={0.7}
-          >
-            <Text style={styles.actionText}>🟦 Multiscreen</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={styles.actionBtn}
-            onPress={() => handleActionClick("Add Playlist")}
-            activeOpacity={0.7}
-          >
-            <Text style={styles.actionText}>➕ Add Playlist</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={styles.actionBtn}
-            onPress={() => handleCardClick("Settings")}
-            activeOpacity={0.7}
-          >
-            <Text style={styles.actionText}>⚙ Settings</Text>
-          </TouchableOpacity>
-        </View>
-
-        {/* Expiration */}
-        <Text style={styles.expiration}>
-          EXPIRATION: DECEMBER 25TH, 2025
-        </Text>
-      </View>
-    </ImageBackground>
+      </ImageBackground>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  bg: {
-    flex: 1,
-  },
+  container: { flex: 1,backgroundColor: "black", // fallback color
+ },
+  bg: { 
+    flex:1,
+    width: "100%", 
+  }, 
   overlay: {
-    flex: 1,
-    backgroundColor: "rgba(0,0,0,0.75)", // Slightly darker for better contrast
-    padding: width * 0.05,
-    justifyContent: "space-between", // Distribute content evenly
+    backgroundColor: "rgba(0,0,0,0.6)",
+    padding: 10,
   },
-  header: {
-    flexDirection: width < 400 ? "column" : "row",
-    justifyContent: "space-between",
-    alignItems: width < 400 ? "flex-start" : "center",
-    marginBottom: height * 0.05,
-    gap: width < 400 ? 12 : 0, // Gap for stacked layout
-  },
-  headerLeft: {
-    flexDirection: "column",
-  },
-  time: {
-    color: "#fff",
-    fontSize: width * 0.065, // Slightly larger for readability
-    fontWeight: "bold",
-  },
-  date: {
-    color: "#ddd",
-    fontSize: width * 0.04,
-  },
-  searchBox: {
-    flex: 1,
-    backgroundColor: "rgba(30,30,30,0.85)",
-    borderRadius: 12,
-    paddingHorizontal: width * 0.04,
-    borderWidth: 1,
-    borderColor: "rgba(255,255,255,0.2)",
-    marginLeft: width < 400 ? 0 : width * 0.05,
-    width: width < 400 ? "100%" : "auto",
-  },
+  header: { marginBottom: 15 },
+  time: { color: "#fff", fontSize: 18, fontWeight: "bold" },
+  date: { color: "#fff", fontSize: 12, marginBottom: 8 },
   search: {
+    backgroundColor: "#222",
     color: "#fff",
-    paddingVertical: height * 0.015,
-    fontSize: width * 0.045,
-  },
-  categoryRow: {
-    marginBottom: height * 0.05,
-  },
-  scrollContent: {
-    paddingLeft: width * 0.05,
-    paddingRight: width * 0.1,
-    gap: width * 0.04, // Space between cards
-  },
-  card: {
-    width: width * 0.4, // Slightly smaller for better fit
-    height: height * 0.2,
-    borderRadius: 14,
-    overflow: "hidden",
-    justifyContent: "flex-end",
-    elevation: 5, // Android shadow
-    shadowColor: "#000", // iOS shadow
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.3,
-    shadowRadius: 4,
-  },
-  cardImage: {
+    padding: 8,
+    borderRadius: 6,
     width: "100%",
-    height: "100%",
-    position: "absolute",
   },
-  cardOverlay: {
-    backgroundColor: "rgba(0,0,0,0.5)", // Overlay for better text readability
-    padding: width * 0.03,
-  },
-  cardText: {
-    color: "#fff",
-    fontSize: width * 0.05,
-    fontWeight: "700",
-    textAlign: "left",
-    textShadowColor: "rgba(0,0,0,0.8)",
-    textShadowOffset: { width: 1, height: 1 },
-    textShadowRadius: 3,
-  },
+  categoryRow: { marginVertical: 15 },
+  card: { marginBottom: 15, alignItems: "center", width: "100%" },
+  cardImage: { width: width * 0.8, height: width * 0.48, borderRadius: 8 },
+  cardText: { color: "#fff", marginTop: 6, fontWeight: "bold", fontSize: 14 },
   actions: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    justifyContent: "space-around",
-    marginBottom: height * 0.04,
-    gap: width * 0.03,
+    flexDirection: "column",
+    marginVertical: 15,
+    alignItems: "stretch",
   },
   actionBtn: {
-    backgroundColor: "rgba(50,50,50,0.9)",
-    paddingHorizontal: width * 0.05,
-    paddingVertical: height * 0.02,
-    borderRadius: 10,
-    margin: width * 0.015,
-    minWidth: width * 0.3, // Larger buttons for touch
-    elevation: 3,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.2,
-    shadowRadius: 2,
-  },
-  actionText: {
+    backgroundColor: "#0E0D13",
     color: "#fff",
-    fontSize: width * 0.04,
-    fontWeight: "600",
-    textAlign: "center",
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+    borderRadius: 5,
+    marginVertical: 6,
+    alignItems: "center",
+    width: "100%",
   },
-  expiration: {
-    color: "#ccc",
-    textAlign: "center",
-    marginTop: height * 0.03,
-    fontSize: width * 0.04,
-    letterSpacing: 0.5,
-  },
+  actionText: { color: "#fff", fontSize: 14 },
+  expiration: { color: "#aaa", textAlign: "center", fontSize: 12 },
 });

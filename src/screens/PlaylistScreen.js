@@ -72,11 +72,27 @@ const PlaylistScreen = () => {
       resizeMode="cover"
     >
       <View style={styles.overlay}>
+        
+        {/* Header with back button + title */}
+        <View style={styles.headers}>
+          <Pressable style={styles.backButton} onPress={() => navigation.goBack()}>
+            {/* You can replace this Text with an Image icon */}
+            <Text style={styles.backArrow}>←</Text>
+          </Pressable>
+
+          <Text style={styles.headerTitle}>Playlist</Text>
+
+          {/* Spacer for balance */}
+          <View style={{ width: 38 }} />
+        </View>
+
+        {/* Time & Date */}
         <View style={styles.headerLeft}>
           <Text style={styles.time}>{currentTime}</Text>
           <Text style={styles.date}>{currentDate}</Text>
         </View>
 
+        {/* Playlist Management Section */}
         <View style={styles.listbg}>
           <View style={styles.head}>
             <Text style={styles.heading2}>Playlist Management</Text>
@@ -87,6 +103,7 @@ const PlaylistScreen = () => {
             </Pressable>
           </View>
 
+          {/* Playlist List */}
           <View style={styles.listCon}>
             <FlatList
               data={showAll ? mockData : mockData.slice(0, 4)}
@@ -128,6 +145,7 @@ const PlaylistScreen = () => {
             />
           </View>
 
+          {/* Buttons */}
           <View style={styles.btnCon}>
             <Pressable
               onPress={() => setIsModalVisible(true)}
@@ -142,7 +160,8 @@ const PlaylistScreen = () => {
         </View>
       </View>
 
-         <AddPlaylistModal
+      {/* Modal */}
+      <AddPlaylistModal
         visible={isModalVisible}
         onClose={() => setIsModalVisible(false)}
       />
@@ -155,6 +174,38 @@ export default PlaylistScreen;
 const styles = StyleSheet.create({
   imageBg: { flex: 1 },
   overlay: { flex: 1, backgroundColor: 'rgba(0, 0, 0, 0.7)', padding: 20 },
+  
+  /* Header */
+  headers: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 20,
+    paddingVertical: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: 'rgba(255,255,255,0.1)',
+  },
+  backButton: {
+    width: 38,
+    height: 38,
+    borderRadius: 20,
+    backgroundColor: 'rgba(255,255,255,0.1)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  backArrow: {
+    color: '#fff',
+    fontSize: 20,
+    fontWeight: '600',
+  },
+  headerTitle: {
+    color: '#fff',
+    fontSize: 20,
+    fontWeight: '700',
+    letterSpacing: 1,
+  },
+
+  /* Time & Date */
   headerLeft: {
     flexDirection: 'column',
     marginBottom: 30,
@@ -168,9 +219,9 @@ const styles = StyleSheet.create({
   date: {
     color: '#fff',
   },
-  heading: { color: '#fff', fontSize: 24 },
+
+  /* Playlist Section */
   heading2: { color: '#fff', fontSize: 18, fontWeight: 'bold' },
-  text: { color: '#fff', fontSize: 16, marginTop: 10 },
   listbg: {
     paddingTop: '4%',
     paddingRight: '8%',
@@ -183,9 +234,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   viewAllBtn: { color: '#4F45B6' },
-  listCon: {
-    marginTop: 30,
-  },
+  listCon: { marginTop: 30 },
   list: {
     marginTop: 10,
     flexDirection: 'row',
@@ -200,15 +249,12 @@ const styles = StyleSheet.create({
     borderStyle: 'solid',
     borderRadius: 5,
   },
-  listText: {
-    color: '#FFFFFF',
-    fontWeight: 700,
-  },
-  listTextCenter: {
-    color: '#A098AE',
-  },
+  listText: { color: '#FFFFFF', fontWeight: '700' },
+  listTextCenter: { color: '#A098AE' },
   rightSideIcons: { flexDirection: 'row', gap: 10 },
   iconImg: { width: 18, height: 18 },
+
+  /* Buttons */
   btnCon: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -222,7 +268,5 @@ const styles = StyleSheet.create({
     paddingHorizontal: '8%',
     borderRadius: 10,
   },
-  btnText: {
-    color: '#ffffff',
-  },
+  btnText: { color: '#ffffff' },
 });
