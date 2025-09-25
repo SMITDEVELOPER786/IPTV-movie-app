@@ -59,7 +59,6 @@ export default function AppNavigator() {
       <Stack.Screen name="EPG" component={EPGScreen} />
       <Stack.Screen name="Feedback" component={FeedbackScreen} /> 
       <Stack.Screen name="GeneralSettings" component={GeneralSettingsScreen} />
-      <Stack.Screen name="LiveTV" component={LiveTVScreen} />
     </Stack.Navigator>
   );
 }
