@@ -1,4 +1,4 @@
-// MoviesScreen.js
+
 import {
   ImageBackground,
   Pressable,
@@ -22,7 +22,7 @@ const categories = [
   {
     id: '2',
     name: 'Adventure',
-    image: require('../assets/images/adventure.png'),
+    image: require('../assets/images/adventure2.png'),
   },
   { id: '3', name: 'Sci-fi', image: require('../assets/images/scifi.png') },
   { id: '4', name: 'Fantasy', image: require('../assets/images/fantasy.png') },
@@ -130,7 +130,7 @@ const MoviesScreen = () => {
             </ImageBackground>
           </View>
 
-          {/* 👇 CategoryList Component */}
+          {/* CategoryList Component */}
           <View style={styles.cateSide}>
             <CategoryList />
           </View>

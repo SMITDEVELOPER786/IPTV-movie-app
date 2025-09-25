@@ -73,10 +73,8 @@ const PlaylistScreen = () => {
     >
       <View style={styles.overlay}>
         
-        {/* Header with back button + title */}
         <View style={styles.headers}>
           <Pressable style={styles.backButton} onPress={() => navigation.goBack()}>
-            {/* You can replace this Text with an Image icon */}
             <Text style={styles.backArrow}>←</Text>
           </Pressable>
 
