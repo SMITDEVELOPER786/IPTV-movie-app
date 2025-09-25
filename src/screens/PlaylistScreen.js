@@ -6,13 +6,14 @@ import {
   StyleSheet,
   Text,
   View,
-  Dimensions, // 👈 Add this
+  Dimensions,
 } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
+import AddPlaylistModal from '../screens/AddPlaylistModal';
 
-const { width } = Dimensions.get('window'); // 👈 Get screen width
-const isSmallScreen = width < 600; // 👈 Define breakpoint (600px ~ tablets)
+const { width } = Dimensions.get('window');
+const isSmallScreen = width < 600;
 
 const PlaylistScreen = () => {
   const navigation = useNavigation();
@@ -20,6 +21,7 @@ const PlaylistScreen = () => {
   const [currentTime, setCurrentTime] = useState('');
   const [currentDate, setCurrentDate] = useState('');
   const [showAll, setShowAll] = useState(false);
+  const [isModalVisible, setIsModalVisible] = useState(false);
 
   const mockData = [
     { id: 1, name: 'My Sports', desc: 'sports.m3u8', quantity: '158' },
@@ -100,7 +102,6 @@ const PlaylistScreen = () => {
 
                   <Text style={styles.listText}>{item.name}</Text>
 
-                  {/* 👇 Hide on small screens */}
                   {!isSmallScreen && (
                     <>
                       <Text style={styles.listTextCenter}>{item.desc}</Text>
@@ -129,7 +130,7 @@ const PlaylistScreen = () => {
 
           <View style={styles.btnCon}>
             <Pressable
-              onPress={() => navigation.navigate('AddPlaylist')}
+              onPress={() => setIsModalVisible(true)}
               style={styles.btns}
             >
               <Text style={styles.btnText}>+ Add Playlist</Text>
@@ -140,6 +141,11 @@ const PlaylistScreen = () => {
           </View>
         </View>
       </View>
+
+         <AddPlaylistModal
+        visible={isModalVisible}
+        onClose={() => setIsModalVisible(false)}
+      />
     </ImageBackground>
   );
 };
@@ -156,17 +162,21 @@ const styles = StyleSheet.create({
   },
   time: {
     color: '#fff',
-    fontSize: width * 0.06,
+    fontSize: 20,
     fontWeight: 'bold',
   },
   date: {
     color: '#fff',
-    fontSize: width * 0.04,
   },
   heading: { color: '#fff', fontSize: 24 },
   heading2: { color: '#fff', fontSize: 18, fontWeight: 'bold' },
   text: { color: '#fff', fontSize: 16, marginTop: 10 },
-  listbg: { padding: '8%' },
+  listbg: {
+    paddingTop: '4%',
+    paddingRight: '8%',
+    paddingBottom: '8%',
+    paddingLeft: '8%',
+  },
   head: {
     flexDirection: 'row',
     alignItems: 'center',
