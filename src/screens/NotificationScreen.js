@@ -5,9 +5,14 @@ import {
   View,
   ScrollView,
   Pressable,
+  Dimensions,
+
 } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
+
+const { width } = Dimensions.get('window');
+const isPhone = width < 768;
 
 const NotificationScreen = () => {
   const [currentTime, setCurrentTime] = useState('');
@@ -75,8 +80,15 @@ const NotificationScreen = () => {
             <Text style={styles.date}>{currentDate}</Text>
           </View>
 
-          <View style={styles.notify}>
-            <View style={styles.notifyHeader}>
+          <View style={[
+            styles.notify,
+            isPhone && {padding:10}
+            ]}>
+            <View 
+            style={[
+              styles.notifyHeader,
+              isPhone && {flexDirection: 'column', gap:5}
+              ]}>
               <Text style={styles.heading}>
                 Intermittent Video Freezing
               </Text>
@@ -108,7 +120,6 @@ const styles = StyleSheet.create({
   },
   scrollContainer: {
     flex: 1,
-    marginTop: 30,
   },
   headers: {
     flexDirection: 'row',

@@ -1,4 +1,3 @@
-
 import {
   ImageBackground,
   Pressable,
@@ -8,10 +7,14 @@ import {
   ScrollView,
   Image,
   FlatList,
+  Dimensions,
 } from 'react-native';
 import React from 'react';
 import Header from '../components/Header';
 import LinearGradient from 'react-native-linear-gradient';
+
+const { width } = Dimensions.get('window');
+const isPhone = width < 768;
 
 const categories = [
   {
@@ -51,7 +54,12 @@ const CategoryList = () => {
       showsHorizontalScrollIndicator={false}
       contentContainerStyle={{ gap: 15 }}
       renderItem={({ item }) => (
-        <View style={styles.categoryCard}>
+        <View
+          style={[
+            styles.categoryCard,
+            isPhone && { width: width * 0.84}, 
+          ]}
+        >
           <ImageBackground
             source={item.image}
             style={styles.categoryImg}
@@ -75,15 +83,29 @@ const MovieList = () => {
     <FlatList
       data={movies}
       keyExtractor={item => item.id}
-      numColumns={5}
+      numColumns={isPhone ? 1 : 5} 
       scrollEnabled={false}
-      columnWrapperStyle={{ gap:20, marginBottom: 15, justifyContent:'center' }}
+      columnWrapperStyle={
+        !isPhone
+          ? { gap: 20, marginBottom: 15, justifyContent: 'center' }
+          : undefined
+      }
       renderItem={({ item }) => (
-        <Image source={item.image} style={styles.movieImg} />
+        <View style={isPhone ? { marginBottom: 20 } : {}}>
+          <Image
+            source={item.image}
+            style={[
+              styles.movieImg,
+              isPhone && { width: width * 0.84, height: 500, alignSelf:'center' },
+            ]}
+          />
+        </View>
       )}
     />
   );
 };
+
+
 const MoviesScreen = () => {
   return (
     <ImageBackground
@@ -99,7 +121,12 @@ const MoviesScreen = () => {
           contentContainerStyle={{ paddingBottom: 40 }}
           showsVerticalScrollIndicator={false}
         >
-          <View style={styles.mainImg}>
+          <View
+            style={[
+              styles.mainImg,
+              isPhone && { height: 270 }, 
+            ]}
+          >
             <ImageBackground
               source={require('../assets/images/Thumb2.png')}
               style={styles.imageBgInner}
@@ -117,9 +144,17 @@ const MoviesScreen = () => {
               >
                 <Image
                   source={require('../assets/images/title.png')}
-                  style={styles.titleimg}
+                  style={[
+                    styles.titleimg,
+                    isPhone && { width: 130, height: 40 }, 
+                  ]}
                 />
-                <Text style={{ width: '40%', color: '#fff' }}>
+                <Text
+                  style={[
+                    { width: '40%', color: '#fff' },
+                    isPhone && { width: '100%', marginTop: 10, fontSize:12 },
+                  ]}
+                >
                   Ved and Tara fall in love while on a holiday in Corsica and
                   decide to keep their real identities undisclosed.
                 </Text>
@@ -145,6 +180,7 @@ const MoviesScreen = () => {
 };
 
 export default MoviesScreen;
+
 
 const styles = StyleSheet.create({
   imageBg: { flex: 1 },

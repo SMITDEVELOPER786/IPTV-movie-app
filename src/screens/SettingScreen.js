@@ -1,57 +1,100 @@
-import { 
-  StyleSheet, 
-  Text, 
-  View, 
-  ScrollView, 
-  TouchableOpacity, 
-  SafeAreaView, 
-  ImageBackground, 
-  Dimensions 
-} from 'react-native'
-import React from 'react'
-import { useNavigation } from '@react-navigation/native'
+import {
+  StyleSheet,
+  Text,
+  View,
+  ScrollView,
+  TouchableOpacity,
+  SafeAreaView,
+  ImageBackground,
+  Dimensions,
+} from 'react-native';
+import React, { useState } from 'react';
+import VideoFormatModal from './VideoFormatModal';
+import { useNavigation } from '@react-navigation/native';
 
-const { width, height } = Dimensions.get('window')
+const { width, height } = Dimensions.get('window');
 
 export default function SettingsScreen() {
-  const navigation  = useNavigation()
+  const navigation = useNavigation();
+  const [isModalVisible, setIsModalVisible] = useState(false);
+
   const settingsOptions = [
-    { id: 1, title: 'General Setting', icon: '⚙️', description: 'App preferences' },
+    {
+      id: 1,
+      title: 'General Setting',
+      icon: '⚙️',
+      description: 'App preferences',
+      nav: 'GeneralSettings',
+    },
     { id: 2, title: 'VPN', icon: '🔒', description: 'Network security' },
-    { id: 3, title: 'Video Format', icon: '🎥', description: 'Quality settings' },
+    {
+      id: 3,
+      title: 'Video Format',
+      icon: '🎥',
+      description: 'Quality settings',
+    },
     { id: 4, title: 'Automation', icon: '🤖', description: 'Auto features' },
     { id: 5, title: 'Languages', icon: '🌐', description: 'App language' },
-    { id: 6, title: 'Parental Control', icon: '👨‍👩‍👧‍👦', description: 'Family safety' },
-    { id: 7, title: 'View Catalogue', icon: '📋', description: 'Content library' },
-    { id: 8, title: 'Player Setting', icon: '▶️', description: 'Playback options' },
+    {
+      id: 6,
+      title: 'Parental Control',
+      icon: '👨‍👩‍👧‍👦',
+      description: 'Family safety',
+    },
+    {
+      id: 7,
+      title: 'View Catalogue',
+      icon: '📋',
+      description: 'Content library',
+    },
+    {
+      id: 8,
+      title: 'Player Setting',
+      icon: '▶️',
+      description: 'Playback options',
+    },
     { id: 9, title: 'Cast', icon: '📡', description: 'Device casting' },
     { id: 10, title: 'Backup', icon: '💾', description: 'Data backup' },
     { id: 11, title: 'Statistics', icon: '📊', description: 'Usage stats' },
-    { id: 12, title: 'Support', icon: '❓', description: 'Help & support' }
-  ]
+    { id: 12, title: 'Support', icon: '❓', description: 'Help & support' },
+    {
+      id: 13,
+      title: 'EPG',
+      icon: '🕒',
+      description: 'Help & support',
+      nav: 'EPG',
+    },
+  ];
 
-  const handleSettingPress = (setting) => {
-    console.log('Selected setting:', setting.title)
-  }
+  const handleSettingPress = setting => {
+    if (setting.nav) {
+      navigation.navigate(setting.nav);
+    }
+    if (setting.title === 'Video Format') {
+      setIsModalVisible(true);
+    }
+  };
 
   return (
-    <ImageBackground 
-      source={require('../assets/images/Thumb.png')} 
+    <ImageBackground
+      source={require('../assets/images/Thumb.png')}
       style={styles.imageBg}
       resizeMode="cover"
     >
       <SafeAreaView style={styles.container}>
         {/* Background Overlay */}
         <View style={styles.backgroundOverlay}>
-          
           {/* Header */}
           <View style={styles.header}>
-            <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
+            <TouchableOpacity
+              style={styles.backButton}
+              onPress={() => navigation.goBack()}
+            >
               <Text style={styles.backArrow}>←</Text>
             </TouchableOpacity>
-            
+
             <Text style={styles.headerTitle}>SETTINGS</Text>
-            
+
             <TouchableOpacity style={styles.menuButton}>
               <Text style={styles.menuText}></Text>
             </TouchableOpacity>
@@ -69,15 +112,15 @@ export default function SettingsScreen() {
             </View>
           </View>
 
-          <ScrollView 
-            style={styles.content} 
+          <ScrollView
+            style={styles.content}
             showsVerticalScrollIndicator={false}
             contentContainerStyle={styles.scrollContent}
             bounces={true}
           >
             {/* Settings Grid */}
             <View style={styles.settingsGrid}>
-              {settingsOptions.map((setting) => (
+              {settingsOptions.map(setting => (
                 <TouchableOpacity
                   key={setting.id}
                   style={styles.settingCard}
@@ -88,18 +131,25 @@ export default function SettingsScreen() {
                     <Text style={styles.settingIcon}>{setting.icon}</Text>
                   </View>
                   <Text style={styles.settingTitle}>{setting.title}</Text>
-                  <Text style={styles.settingDescription}>{setting.description}</Text>
+                  <Text style={styles.settingDescription}>
+                    {setting.description}
+                  </Text>
                 </TouchableOpacity>
               ))}
             </View>
             {/* Extra space for better scrolling */}
             <View style={styles.extraSpace} />
-          </ScrollView>
 
+            {/* Modal */}
+            <VideoFormatModal
+              visible={isModalVisible}
+              onClose={() => setIsModalVisible(false)}
+            />
+          </ScrollView>
         </View>
       </SafeAreaView>
     </ImageBackground>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
@@ -236,4 +286,4 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     lineHeight: 10,
   },
-})
+});

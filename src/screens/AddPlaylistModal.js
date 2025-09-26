@@ -6,8 +6,14 @@ import {
   Pressable,
   StyleSheet,
   TextInput,
+  Dimensions,
 } from 'react-native';
+
+
 import DropDownPicker from 'react-native-dropdown-picker';
+
+const { width } = Dimensions.get('window');
+const isPhone = width < 768;
 
 const AddPlaylistModal = ({ visible, onClose }) => {
   const [open, setOpen] = useState(false);
@@ -26,8 +32,8 @@ const AddPlaylistModal = ({ visible, onClose }) => {
       onRequestClose={onClose}
     >
       <View style={styles.overlay}>
-        <View style={styles.container}>
-          <View style={styles.inputCon}>
+        <View style={[styles.container, isPhone && { width: '90%' }]}>
+          <View style={[styles.inputCon, isPhone && { width: '100%' }]}>
             <View style={styles.headingAndBtn}>
               <Text style={styles.heading}>Add Playlist</Text>
               <Pressable style={styles.btnClose} onPress={onClose}>

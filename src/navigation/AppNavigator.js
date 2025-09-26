@@ -15,7 +15,7 @@ import PlayerSelectionScreen from "../screens/PlayerSelectionScreen";
 import PlaylistScreen from "../screens/PlaylistScreen";
 import SpeedTestScreen from "../screens/SpeedTestScreen";
 import SubtitleScreen from "../screens/SubtitleScreen";
-import VideoFormatScreen from "../screens/VideoFormatScreen";
+import VideoFormatModal from "../screens/VideoFormatModal";
 import VPNScreen from "../screens/VPNScreen";
 import AutomationScreen from "../screens/AutomationScreen";
 import EPGScreen from "../screens/EPGScreen";
@@ -52,7 +52,7 @@ export default function AppNavigator() {
       <Stack.Screen name="Playlist" component={PlaylistScreen} />
       <Stack.Screen name="SpeedTest" component={SpeedTestScreen} />
       <Stack.Screen name="Subtitles" component={SubtitleScreen} />
-      <Stack.Screen name="VideoFormat" component={VideoFormatScreen} />
+      <Stack.Screen name="VideoFormat" component={VideoFormatModal} />
       <Stack.Screen name="VPN" component={VPNScreen} />
       <Stack.Screen name="AddPlaylist" component={AddPlaylistModal} />
       <Stack.Screen name="Automation" component={AutomationScreen} />

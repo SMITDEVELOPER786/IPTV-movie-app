@@ -6,10 +6,13 @@ import {
   Image,
   FlatList,
   Text,
+  Dimensions,
 } from 'react-native';
 import React from 'react';
 import Header from '../components/Header';
 
+const { width } = Dimensions.get('window');
+const isPhone = width < 768; 
 
 const series = [
   {
@@ -123,17 +126,20 @@ const SeriesList = () => {
     <FlatList
       data={series}
       keyExtractor={item => item.id}
-      numColumns={5}
+      numColumns={isPhone ? 1 : 5}
       scrollEnabled={false}
-      columnWrapperStyle={{
-        gap: 20,
-        marginBottom: 15,
-        justifyContent: 'center',
-      }}
+     columnWrapperStyle={
+        !isPhone
+          ? { gap: 20, marginBottom: 15, justifyContent: 'center' }
+          : undefined
+      }
       renderItem={({ item }) => (
         <ImageBackground
           source={item.image}
-          style={styles.movieImg}
+           style={[
+              styles.movieImg,
+              isPhone && { width: width * 0.84, height: 500, alignSelf:'center', marginBottom: 20 },
+            ]}
           imageStyle={{ borderRadius: 8 }}
         >
           <View style={styles.overlayCard}>
