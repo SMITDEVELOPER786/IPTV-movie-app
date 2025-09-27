@@ -8,8 +8,12 @@ import {
   TouchableOpacity,
   ImageBackground,
   ActivityIndicator,
+  Dimensions
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+
+const { width } = Dimensions.get('window');
+const isPhone = width < 768;
 
 export default function LoginScreen() {
   const navigation = useNavigation();
@@ -21,7 +25,7 @@ export default function LoginScreen() {
     setLoading(true);
     setTimeout(() => {
       setLoading(false);
-      navigation.navigate("Home"); // simulate success
+      navigation.navigate("Home");
     }, 2000);
   };
 
@@ -32,7 +36,7 @@ export default function LoginScreen() {
     >
       <View style={styles.overlay} />
 
-      <View style={styles.container}>
+      <View style={[styles.container, isPhone && { width: '100%' }]}>
         <Text style={styles.title}>Welcome Back</Text>
         <Text style={styles.subtitle}>Sign in to continue</Text>
 
@@ -86,6 +90,8 @@ const styles = StyleSheet.create({
   container: {
     padding: 20,
     justifyContent: "center",
+    width: "40%",
+    alignSelf: "center",
   },
   title: {
     fontSize: 30,

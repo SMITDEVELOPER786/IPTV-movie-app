@@ -11,12 +11,15 @@ import {
 import React, { useState } from 'react';
 import VideoFormatModal from './VideoFormatModal';
 import { useNavigation } from '@react-navigation/native';
+import AutomationSettingsModal from './AutomationSettingsModal';
+import ParentalControlModal from './ParentalControlModal';
+import PlayerSelectionModal from './PlayerSelectionModal';
 
 const { width, height } = Dimensions.get('window');
 
 export default function SettingsScreen() {
   const navigation = useNavigation();
-  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [activeModal, setActiveModal] = useState(null);
 
   const settingsOptions = [
     {
@@ -69,9 +72,14 @@ export default function SettingsScreen() {
   const handleSettingPress = setting => {
     if (setting.nav) {
       navigation.navigate(setting.nav);
-    }
-    if (setting.title === 'Video Format') {
-      setIsModalVisible(true);
+    } else if (setting.title === 'Video Format') {
+      setActiveModal('video');
+    } else if (setting.title === 'Automation') {
+      setActiveModal('automation');
+    } else if (setting.title === 'Parental Control') {
+      setActiveModal('parental');
+    } else if (setting.title === 'Player Setting') {
+      setActiveModal('player');
     }
   };
 
@@ -142,9 +150,22 @@ export default function SettingsScreen() {
 
             {/* Modal */}
             <VideoFormatModal
-              visible={isModalVisible}
-              onClose={() => setIsModalVisible(false)}
+              visible={activeModal === 'video'}
+              onClose={() => setActiveModal(null)}
             />
+            <AutomationSettingsModal
+              visible={activeModal === 'automation'}
+              onClose={() => setActiveModal(null)}
+            />
+            <ParentalControlModal
+              visible={activeModal === 'parental'}
+              onClose={() => setActiveModal(null)}
+            />
+            <PlayerSelectionModal
+              visible={activeModal === 'player'}
+              onClose={() => setActiveModal(null)}
+            />
+            
           </ScrollView>
         </View>
       </SafeAreaView>

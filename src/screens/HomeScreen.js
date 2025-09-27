@@ -14,7 +14,8 @@ import AddPlaylistModal from '../screens/AddPlaylistModal';
 
 import { useNavigation } from '@react-navigation/native';
 
-const { width, height } = Dimensions.get('window');
+const { width} = Dimensions.get('window');
+const isPhone = width < 768;
 
 export default function HomeScreen({ navigation }) {
   const mainnavigation = useNavigation();
@@ -28,7 +29,7 @@ export default function HomeScreen({ navigation }) {
     <ScrollView
       style={styles.container}
       showsVerticalScrollIndicator={true}
-      contentContainerStyle={{ paddingBottom: 40 }} // 🔹 let content expand
+      contentContainerStyle={{ paddingBottom: 40 }}
     >
       <ImageBackground
         source={require('../assets/images/Thumb.png')}
@@ -48,9 +49,9 @@ export default function HomeScreen({ navigation }) {
           </View>
 
           {/* Categories */}
-          <View style={styles.categoryRow}>
+          <View style={[styles.categoryRow, isPhone && {flexDirection:'column', alignItems:'center'}]}>
             <TouchableOpacity
-              style={styles.card}
+              style={[styles.card, isPhone && {width:'90%'}]}
               onPress={() => handleCardClick('LiveTV')}
             >
               <Image
@@ -84,27 +85,27 @@ export default function HomeScreen({ navigation }) {
           </View>
 
           {/* Action Buttons */}
-          <View style={styles.actions}>
+          <View style={[styles.actions, isPhone && {flexDirection:'column', alignItems:'center'}]}>
             <TouchableOpacity
-              style={styles.actionBtn}
+              style={[styles.actionBtn, isPhone && {width:'100%'}]}
               onPress={() => handleCardClick('Playlist')}
             >
               <Text style={styles.actionText}>Update Playlist</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.actionBtn}>
+            <TouchableOpacity style={[styles.actionBtn, isPhone && {width:'100%'}]}>
               <Text style={styles.actionText}>Reload Cache</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.actionBtn}>
+            <TouchableOpacity style={[styles.actionBtn, isPhone && {width:'100%'}]}>
               <Text style={styles.actionText}>Multiscreen</Text>
             </TouchableOpacity>
             <TouchableOpacity
-              style={styles.actionBtn}
+              style={[styles.actionBtn, isPhone && {width:'100%'}]}
               onPress={() => setIsModalVisible(true)}
             >
               <Text style={styles.actionText}>Add Playlist</Text>
             </TouchableOpacity>
             <TouchableOpacity
-              style={styles.actionBtn}
+              style={[styles.actionBtn, isPhone && {width:'100%'}]}
               onPress={() => handleCardClick('Settings')}
             >
               <Text style={styles.actionText}>Settings</Text>
@@ -147,24 +148,27 @@ const styles = StyleSheet.create({
     borderRadius: 6,
     width: '100%',
   },
-  categoryRow: { marginVertical: 15 },
-  card: { marginBottom: 15, alignItems: 'center', width: '100%' },
-  cardImage: { width: width * 0.8, height: width * 0.48, borderRadius: 8 },
+  categoryRow: { marginVertical: 15, flexDirection: 'row', justifyContent: 'space-around', paddingHorizontal: 20, marginTop:30 },
+  card: { marginBottom: 15, alignItems: 'center', width:300 },
+  cardImage: { width:'100%', borderRadius: 8 },
   cardText: { color: '#fff', marginTop: 6, fontWeight: 'bold', fontSize: 14 },
   actions: {
-    flexDirection: 'column',
+    flexDirection: 'row',
     marginVertical: 15,
-    alignItems: 'stretch',
+    justifyContent: 'space-around',
   },
   actionBtn: {
     backgroundColor: '#0E0D13',
     color: '#fff',
     paddingVertical: 10,
-    paddingHorizontal: 15,
+    paddingHorizontal: 40,
     borderRadius: 5,
     marginVertical: 6,
     alignItems: 'center',
-    width: '100%',
+    borderWidth: 0.5,
+    borderColor: '#444',
+    
+   
   },
   actionText: { color: '#fff', fontSize: 14 },
   expiration: { color: '#aaa', textAlign: 'center', fontSize: 12 },

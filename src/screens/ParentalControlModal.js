@@ -12,7 +12,7 @@ import React, { useState } from 'react';
 const { width } = Dimensions.get('window');
 const isPhone = width < 600;
 
-const VideoFormatModal = ({ visible, onClose }) => {
+const ParentalControlModal = ({ visible, onClose }) => {
   const [formatModalVisible, setFormatModalVisible] = useState(false);
   const [bufferModalVisible, setBufferModalVisible] = useState(false);
   const [decodeModalVisible, setDecodeModalVisible] = useState(false);
@@ -47,7 +47,7 @@ const VideoFormatModal = ({ visible, onClose }) => {
       <View style={styles.overlay}>
         <View style={[styles.container, isPhone && { width: '90%' }]}>
           <View style={styles.headingAndBtn}>
-            <Text style={styles.heading}>Video Format</Text>
+            <Text style={styles.heading}>Parental Control</Text>
             <Pressable style={styles.btnClose} onPress={onClose}>
               <Text style={styles.btnText}>✖</Text>
             </Pressable>
@@ -190,7 +190,7 @@ const VideoFormatModal = ({ visible, onClose }) => {
   );
 };
 
-export default VideoFormatModal;
+export default ParentalControlModal;
 
 const styles = StyleSheet.create({
   overlay: {

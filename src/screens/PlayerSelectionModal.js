@@ -12,18 +12,15 @@ import React, { useState } from 'react';
 const { width } = Dimensions.get('window');
 const isPhone = width < 600;
 
-const VideoFormatModal = ({ visible, onClose }) => {
-  const [formatModalVisible, setFormatModalVisible] = useState(false);
-  const [bufferModalVisible, setBufferModalVisible] = useState(false);
-  const [decodeModalVisible, setDecodeModalVisible] = useState(false);
+const PlayerSelectionModal = ({ visible, onClose }) => {
+  const [defaultPlayer, setDefaultPlayer] = useState(false);
 
-  const [selectedFormat, setSelectedFormat] = useState('M3U');
-  const [selectedBuffer, setSelectedBuffer] = useState('Auto');
-  const [selectedDecode, setSelectedDecode] = useState('Hardware');
 
-  const formatOptions = ['M3U', 'XSPF', 'JSON', 'XML'];
-  const bufferOptions = ['Auto', 'Low', 'Medium', 'High'];
-  const decodeOptions = ['Hardware', 'Software'];
+  const [selectedFormat, setSelectedFormat] = useState('VLC Player');
+
+
+  const formatOptions = ['VLC Player', 'MX Player', 'ExoPlayer', 'System Player'];
+
 
   const renderOption = (item, setSelected, closeModal) => (
     <Pressable
@@ -47,7 +44,7 @@ const VideoFormatModal = ({ visible, onClose }) => {
       <View style={styles.overlay}>
         <View style={[styles.container, isPhone && { width: '90%' }]}>
           <View style={styles.headingAndBtn}>
-            <Text style={styles.heading}>Video Format</Text>
+            <Text style={styles.heading}>Player Selection</Text>
             <Pressable style={styles.btnClose} onPress={onClose}>
               <Text style={styles.btnText}>✖</Text>
             </Pressable>
@@ -57,127 +54,43 @@ const VideoFormatModal = ({ visible, onClose }) => {
           <View style={styles.form}>
             {/* Preferred Format Dropdown */}
             <View style={styles.inputGroup}>
-              <Text style={styles.label}>Preferred Format:</Text>
+              <Text style={styles.label}>Default Player:</Text>
               <Pressable
                 style={styles.dropdown}
-                onPress={() => setFormatModalVisible(true)}
+                onPress={() => setDefaultPlayer(true)}
               >
                 <Text style={styles.dropdownText}>{selectedFormat}</Text>
                 <Text style={styles.arrow}>▾</Text>
               </Pressable>
             </View>
 
-            {/* Buffer Mode Dropdown */}
-            <View style={styles.inputGroup}>
-              <Text style={styles.label}>Buffer Mode:</Text>
-              <Pressable
-                style={styles.dropdown}
-                onPress={() => setBufferModalVisible(true)}
-              >
-                <Text style={styles.dropdownText}>{selectedBuffer}</Text>
-                <Text style={styles.arrow}>▾</Text>
-              </Pressable>
-            </View>
-
-            {/* Decode Mode Dropdown */}
-            <View style={styles.inputGroup}>
-              <Text style={styles.label}>Decode Mode:</Text>
-              <Pressable
-                style={styles.dropdown}
-                onPress={() => setDecodeModalVisible(true)}
-              >
-                <Text style={styles.dropdownText}>{selectedDecode}</Text>
-                <Text style={styles.arrow}>▾</Text>
-              </Pressable>
-            </View>
-
-         
-
             <Pressable style={styles.saveBtn}>
               <Text style={styles.saveText}>Submit</Text>
             </Pressable>
           </View>
 
-          {/* Preferred Format Modal */}
+          {/* Default Player Modal */}
           <Modal
             transparent
-            visible={formatModalVisible}
+            visible={defaultPlayer}
             animationType="fade"
-            onRequestClose={() => setFormatModalVisible(false)}
+            onRequestClose={() => setDefaultPlayer(false)}
           >
             <Pressable
               style={styles.modalOverlay}
-              onPress={() => setFormatModalVisible(false)}
+              onPress={() => setDefaultPlayer(false)}
             >
               <View style={styles.modalBox}>
                 <FlatList
                   data={formatOptions}
                   keyExtractor={item => item}
                   renderItem={({ item }) =>
-                    renderOption(item, setSelectedFormat, setFormatModalVisible)
+                    renderOption(item, setSelectedFormat, setDefaultPlayer)
                   }
                 />
                 <Pressable
                   style={styles.cancelBtn}
-                  onPress={() => setFormatModalVisible(false)}
-                >
-                  <Text style={styles.cancelText}>Cancel</Text>
-                </Pressable>
-              </View>
-            </Pressable>
-          </Modal>
-
-          {/* Buffer Mode Modal */}
-          <Modal
-            transparent
-            visible={bufferModalVisible}
-            animationType="fade"
-            onRequestClose={() => setBufferModalVisible(false)}
-          >
-            <Pressable
-              style={styles.modalOverlay}
-              onPress={() => setBufferModalVisible(false)}
-            >
-              <View style={styles.modalBox}>
-                <FlatList
-                  data={bufferOptions}
-                  keyExtractor={item => item}
-                  renderItem={({ item }) =>
-                    renderOption(item, setSelectedBuffer, setBufferModalVisible)
-                  }
-                />
-                <Pressable
-                  style={styles.cancelBtn}
-                  onPress={() => setBufferModalVisible(false)}
-                >
-                  <Text style={styles.cancelText}>Cancel</Text>
-                </Pressable>
-              </View>
-            </Pressable>
-          </Modal>
-
-          {/* Decode Mode Modal */}
-          <Modal
-            transparent
-            visible={decodeModalVisible}
-            animationType="fade"
-            onRequestClose={() => setDecodeModalVisible(false)}
-          >
-            <Pressable
-              style={styles.modalOverlay}
-              onPress={() => setDecodeModalVisible(false)}
-            >
-              <View style={styles.modalBox}>
-                <FlatList
-                  data={decodeOptions}
-                  keyExtractor={item => item}
-                  renderItem={({ item }) =>
-                    renderOption(item, setSelectedDecode, setDecodeModalVisible)
-                  }
-                />
-                <Pressable
-                  style={styles.cancelBtn}
-                  onPress={() => setDecodeModalVisible(false)}
+                  onPress={() => setDefaultPlayer(false)}
                 >
                   <Text style={styles.cancelText}>Cancel</Text>
                 </Pressable>
@@ -190,7 +103,7 @@ const VideoFormatModal = ({ visible, onClose }) => {
   );
 };
 
-export default VideoFormatModal;
+export default PlayerSelectionModal;
 
 const styles = StyleSheet.create({
   overlay: {
