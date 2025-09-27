@@ -188,7 +188,7 @@ const styles = StyleSheet.create({
     height: 38,
     borderRadius: 20,
     backgroundColor: 'rgba(255,255,255,0.1)',
-    justifyContent: 'center',
+    // justifyContent: 'center',
     alignItems: 'center',
   },
   backArrow: {

@@ -47,7 +47,8 @@ const Header = () => {
       </View>
 
       <View style={styles.navRight}>
-        <View style={styles.bellIcon}>
+        <Pressable onPress={()=>navigation.navigate('Notifications')}>
+            <View style={styles.bellIcon}>
           <Image
             source={require('../assets/images/bell.png')}
             style={styles.bellIconImg}
@@ -56,6 +57,7 @@ const Header = () => {
             <Text style={styles.notiText}>2</Text>
           </View>
         </View>
+        </Pressable>
 
         <View style={styles.searchCon}>
           <Image
