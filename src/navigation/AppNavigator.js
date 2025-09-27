@@ -8,15 +8,15 @@ import MoviesScreen from "../screens/MoviesScreen";
 import SeriesScreen from "../screens/SeriesScreen";
 import LiveTVScreen from "../screens/LiveScreen";
 import SplashScreen from "../screens/SplashScreen";
-import MultiScreen from "../screens/MultiScreen";
+import MultiScreenModal from '../screens/MultiScreen'
 import NotificationScreen from "../screens/NotificationScreen";
 import ParentalControlModal from "../screens/ParentalControlModal";
 import PlayerSelectionScreen from "../screens/PlayerSelectionModal";
 import PlaylistScreen from "../screens/PlaylistScreen";
-import SpeedTestScreen from "../screens/SpeedTestScreen";
+import SpeedTestModal from '../screens/SpeedTestScreen'
 import SubtitleScreen from "../screens/SubtitleModal";
 import VideoFormatModal from "../screens/VideoFormatModal";
-import VPNScreen from "../screens/VPNScreen";
+import VPNModal from '../screens/VPNScreen'
 import EPGScreen from "../screens/EPGScreen";
 import FeedbackScreen from "../screens/FeedbackScreen";
 import GeneralSettingsScreen from "../screens/GeneralSettings";
@@ -44,15 +44,15 @@ export default function AppNavigator() {
       <Stack.Screen name="Movies" component={MoviesScreen} />
       <Stack.Screen name="Series" component={SeriesScreen} />
       <Stack.Screen name="Settings" component={SettingsScreen} />
-      <Stack.Screen name="Multi" component={MultiScreen} />
+      <Stack.Screen name="multiscreen" component={MultiScreenModal} />
       <Stack.Screen name="Notifications" component={NotificationScreen} />
       <Stack.Screen name="ParentalControl" component={ParentalControlModal} />
       <Stack.Screen name="PlayerSelection" component={PlayerSelectionScreen} />
       <Stack.Screen name="Playlist" component={PlaylistScreen} />
-      <Stack.Screen name="SpeedTest" component={SpeedTestScreen} />
+      <Stack.Screen name="SpeedTest" component={SpeedTestModal} />
       <Stack.Screen name="Subtitles" component={SubtitleScreen} />
       <Stack.Screen name="VideoFormat" component={VideoFormatModal} />
-      <Stack.Screen name="VPN" component={VPNScreen} />
+      <Stack.Screen name="VPN" component={VPNModal} />
       <Stack.Screen name="AddPlaylist" component={AddPlaylistModal} />
       <Stack.Screen name="EPG" component={EPGScreen} />
       <Stack.Screen name="Feedback" component={FeedbackScreen} /> 

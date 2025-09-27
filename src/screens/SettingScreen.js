@@ -15,8 +15,13 @@ import AutomationSettingsModal from './AutomationSettingsModal';
 import ParentalControlModal from './ParentalControlModal';
 import PlayerSelectionModal from './PlayerSelectionModal';
 import SubtitleModal from './SubtitleModal';
+import MultiScreenModal from './MultiScreen';
+import VPNModal from './VPNScreen';
+import SpeedTestModal from './SpeedTestScreen';
+import FeedbackScreen from './FeedbackScreen';
 
 const { width, height } = Dimensions.get('window');
+const isTV = width >= 1000; // Threshold for TV screens
 
 export default function SettingsScreen() {
   const navigation = useNavigation();
@@ -38,7 +43,7 @@ export default function SettingsScreen() {
       description: 'Quality settings',
     },
     { id: 4, title: 'Automation', icon: '🤖', description: 'Auto features' },
-    { id: 5, title: 'Languages', icon: '🌐', description: 'App language' },
+    { id: 5, title: 'Feedback', icon: '🌐', description: 'App language' },
     {
       id: 6,
       title: 'Parental Control',
@@ -47,9 +52,9 @@ export default function SettingsScreen() {
     },
     {
       id: 7,
-      title: 'View Catalogue',
-      icon: '📋',
-      description: 'Content library',
+      title: 'Player Selection',
+      icon: '▷',
+      description: 'Movie Selection',
     },
     {
       id: 8,
@@ -57,10 +62,7 @@ export default function SettingsScreen() {
       icon: '▶️',
       description: 'Playback options',
     },
-    { id: 9, title: 'Cast', icon: '📡', description: 'Device casting' },
-    { id: 10, title: 'Backup', icon: '💾', description: 'Data backup' },
-    { id: 11, title: 'Statistics', icon: '📊', description: 'Usage stats' },
-    { id: 12, title: 'Support', icon: '❓', description: 'Help & support' },
+    { id: 9, title: 'Speed Test', icon: '⚡️', description: 'Speed Text' },
     {
       id: 13,
       title: 'EPG',
@@ -68,11 +70,17 @@ export default function SettingsScreen() {
       description: 'Help & support',
       nav: 'EPG',
     },
-       {
+    {
       id: 14,
       title: 'Subtitle',
       icon: '▶️',
       description: 'Comfort options',
+    },
+    {
+      id: 15,
+      title: 'MultiScreen Mode',
+      icon: '🖥️', 
+      description: 'Multi-screen settings',
     },
   ];
 
@@ -89,6 +97,14 @@ export default function SettingsScreen() {
       setActiveModal('player');
     } else if (setting.title === 'Subtitle') {
       setActiveModal('subtitle');
+    } else if (setting.title === 'MultiScreen Mode') {
+      setActiveModal('multiscreen');
+    } else if (setting.title === 'VPN') {
+      setActiveModal('vpn');
+    } else if(setting.title === 'Speed Test'){
+      setActiveModal('speed');
+    } else if(setting.title === 'Feedback'){
+      setActiveModal('feedback')
     }
   };
 
@@ -99,9 +115,7 @@ export default function SettingsScreen() {
       resizeMode="cover"
     >
       <SafeAreaView style={styles.container}>
-        {/* Background Overlay */}
         <View style={styles.backgroundOverlay}>
-          {/* Header */}
           <View style={styles.header}>
             <TouchableOpacity
               style={styles.backButton}
@@ -109,15 +123,11 @@ export default function SettingsScreen() {
             >
               <Text style={styles.backArrow}>←</Text>
             </TouchableOpacity>
-
             <Text style={styles.headerTitle}>SETTINGS</Text>
-
             <TouchableOpacity style={styles.menuButton}>
               <Text style={styles.menuText}></Text>
             </TouchableOpacity>
           </View>
-
-          {/* Date/Time Display */}
           <View style={styles.dateTimeContainer}>
             <View style={styles.dateTimeLeft}>
               <Text style={styles.dateText}>29TH, 2025</Text>
@@ -128,19 +138,17 @@ export default function SettingsScreen() {
               <Text style={styles.timeText}>10:00PM</Text>
             </View>
           </View>
-
           <ScrollView
             style={styles.content}
             showsVerticalScrollIndicator={false}
             contentContainerStyle={styles.scrollContent}
             bounces={true}
           >
-            {/* Settings Grid */}
-            <View style={styles.settingsGrid}>
+            <View style={[styles.settingsGrid, isTV && styles.tvSettingsGrid]}>
               {settingsOptions.map(setting => (
                 <TouchableOpacity
                   key={setting.id}
-                  style={styles.settingCard}
+                  style={[styles.settingCard, isTV && styles.tvSettingCard]}
                   onPress={() => handleSettingPress(setting)}
                   activeOpacity={0.7}
                 >
@@ -154,10 +162,7 @@ export default function SettingsScreen() {
                 </TouchableOpacity>
               ))}
             </View>
-            {/* Extra space for better scrolling */}
             <View style={styles.extraSpace} />
-
-            {/* Modal */}
             <VideoFormatModal
               visible={activeModal === 'video'}
               onClose={() => setActiveModal(null)}
@@ -178,7 +183,22 @@ export default function SettingsScreen() {
               visible={activeModal === 'subtitle'}
               onClose={() => setActiveModal(null)}
             />
-            
+            <MultiScreenModal
+              visible={activeModal === 'multiscreen'}
+              onClose={() => setActiveModal(null)}
+            />
+            <VPNModal
+            visible={activeModal === 'vpn'}
+            onClose={() => setActiveModal(null)}
+          />
+          <SpeedTestModal
+            visible={activeModal === 'speed'}
+            onClose={() => setActiveModal(null)}
+            />
+          <FeedbackScreen
+            visible={activeModal === 'feedback'}
+            onClose={() => setActiveModal(null)}
+          />
           </ScrollView>
         </View>
       </SafeAreaView>
@@ -197,7 +217,7 @@ const styles = StyleSheet.create({
   },
   backgroundOverlay: {
     flex: 1,
-    backgroundColor: 'rgba(16, 16, 24, 0.95)', // dark overlay over the bg image
+    backgroundColor: 'rgba(16, 16, 24, 0.95)',
   },
   header: {
     flexDirection: 'row',
@@ -209,27 +229,27 @@ const styles = StyleSheet.create({
     borderBottomColor: 'rgba(255,255,255,0.1)',
   },
   backButton: {
-    width: 38,
-    height: 38,
-    borderRadius: 20,
+    width: isTV ? 60 : 38,
+    height: isTV ? 60 : 38,
+    borderRadius: isTV ? 30 : 20,
     backgroundColor: 'rgba(255,255,255,0.1)',
     justifyContent: 'center',
     alignItems: 'center',
   },
   backArrow: {
     color: '#fff',
-    fontSize: 20,
+    fontSize: isTV ? 30 : 20,
     fontWeight: '600',
   },
   headerTitle: {
     color: '#fff',
-    fontSize: 20,
+    fontSize: isTV ? 30 : 20,
     fontWeight: '700',
     letterSpacing: 1,
   },
   menuButton: {
-    paddingHorizontal: 12,
-    paddingVertical: 8,
+    paddingHorizontal: isTV ? 20 : 12,
+    paddingVertical: isTV ? 16 : 8,
     borderRadius: 6,
   },
   menuText: {
@@ -251,12 +271,12 @@ const styles = StyleSheet.create({
   },
   dateText: {
     color: '#fff',
-    fontSize: 12,
+    fontSize: isTV ? 16 : 12,
     fontWeight: '600',
   },
   timeText: {
     color: '#aaa',
-    fontSize: 11,
+    fontSize: isTV ? 14 : 11,
     marginTop: 2,
   },
   content: {
@@ -274,6 +294,9 @@ const styles = StyleSheet.create({
     paddingVertical: 24,
     paddingHorizontal: 4,
   },
+  tvSettingsGrid: {
+    justifyContent: 'space-around',
+  },
   settingCard: {
     width: (width - 48) / 3,
     aspectRatio: 0.9,
@@ -290,6 +313,10 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,
     shadowRadius: 4,
+  },
+  tvSettingCard: {
+    width: (width - 80) / 5,
+    padding: 20,
   },
   extraSpace: {
     height: 80,
