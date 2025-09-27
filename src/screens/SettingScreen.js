@@ -14,6 +14,7 @@ import { useNavigation } from '@react-navigation/native';
 import AutomationSettingsModal from './AutomationSettingsModal';
 import ParentalControlModal from './ParentalControlModal';
 import PlayerSelectionModal from './PlayerSelectionModal';
+import SubtitleModal from './SubtitleModal';
 
 const { width, height } = Dimensions.get('window');
 
@@ -67,6 +68,12 @@ export default function SettingsScreen() {
       description: 'Help & support',
       nav: 'EPG',
     },
+       {
+      id: 14,
+      title: 'Subtitle',
+      icon: '▶️',
+      description: 'Comfort options',
+    },
   ];
 
   const handleSettingPress = setting => {
@@ -80,6 +87,8 @@ export default function SettingsScreen() {
       setActiveModal('parental');
     } else if (setting.title === 'Player Setting') {
       setActiveModal('player');
+    } else if (setting.title === 'Subtitle') {
+      setActiveModal('subtitle');
     }
   };
 
@@ -163,6 +172,10 @@ export default function SettingsScreen() {
             />
             <PlayerSelectionModal
               visible={activeModal === 'player'}
+              onClose={() => setActiveModal(null)}
+            />
+            <SubtitleModal
+              visible={activeModal === 'subtitle'}
               onClose={() => setActiveModal(null)}
             />
             

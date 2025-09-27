@@ -14,7 +14,7 @@ import ParentalControlModal from "../screens/ParentalControlModal";
 import PlayerSelectionScreen from "../screens/PlayerSelectionModal";
 import PlaylistScreen from "../screens/PlaylistScreen";
 import SpeedTestScreen from "../screens/SpeedTestScreen";
-import SubtitleScreen from "../screens/SubtitleScreen";
+import SubtitleScreen from "../screens/SubtitleModal";
 import VideoFormatModal from "../screens/VideoFormatModal";
 import VPNScreen from "../screens/VPNScreen";
 import EPGScreen from "../screens/EPGScreen";

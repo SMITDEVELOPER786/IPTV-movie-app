@@ -33,9 +33,7 @@ const AutomationSettingsModal = ({ visible, onClose }) => {
             </Pressable>
           </View>
 
-          {/* Settings Form */}
           <View style={styles.form}>
-            {/* Auto-Start on Launch */}
             <View style={styles.settingRow}>
               <Text style={styles.settingLabel}>Auto-Start on Launch:</Text>
               <Switch
@@ -47,7 +45,6 @@ const AutomationSettingsModal = ({ visible, onClose }) => {
               />
             </View>
 
-            {/* Auto-Play on Select */}
             <View style={styles.settingRow}>
               <Text style={styles.settingLabel}>Auto-Play on Select:</Text>
               <Switch
@@ -59,7 +56,6 @@ const AutomationSettingsModal = ({ visible, onClose }) => {
               />
             </View>
 
-            {/* Skip Intro Automatically */}
             <View style={styles.settingRow}>
               <Text style={styles.settingLabel}>Skip Intro Automatically:</Text>
               <Switch
@@ -71,7 +67,6 @@ const AutomationSettingsModal = ({ visible, onClose }) => {
               />
             </View>
 
-            {/* Save Settings Button */}
             <Pressable style={styles.saveBtn}>
               <Text style={styles.saveText}>Save Settings</Text>
             </Pressable>

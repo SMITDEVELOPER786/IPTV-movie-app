@@ -5,6 +5,7 @@ import {
   Pressable,
   Dimensions,
   Modal,
+  Switch,
   FlatList,
 } from 'react-native';
 import React, { useState } from 'react';
@@ -12,22 +13,19 @@ import React, { useState } from 'react';
 const { width } = Dimensions.get('window');
 const isPhone = width < 600;
 
-const PlayerSelectionModal = ({ visible, onClose }) => {
-  const [defaultPlayer, setDefaultPlayer] = useState(false);
+const SubtitleModal = ({ visible, onClose }) => {
+  const [enableSubtitles, setEnableSubtitles] = useState(true);
+  const [showLanguageModal, setShowLanguageModal] = useState(false);
+  const [selectedLanguage, setSelectedLanguage] = useState('English');
 
+  const languageOptions = ['English', 'Spanish', 'French', 'German', 'Japanese', 'Chinese'];
 
-  const [selectedFormat, setSelectedFormat] = useState('VLC Player');
-
-
-  const formatOptions = ['VLC Player', 'MX Player', 'ExoPlayer', 'System Player'];
-
-
-  const renderOption = (item, setSelected, closeModal) => (
+  const renderOption = (item) => (
     <Pressable
       style={styles.option}
       onPress={() => {
-        setSelected(item);
-        closeModal(false);
+        setSelectedLanguage(item);
+        setShowLanguageModal(false);
       }}
     >
       <Text style={styles.optionText}>{item}</Text>
@@ -44,50 +42,59 @@ const PlayerSelectionModal = ({ visible, onClose }) => {
       <View style={styles.overlay}>
         <View style={[styles.container, isPhone && { width: '90%' }]}>
           <View style={styles.headingAndBtn}>
-            <Text style={styles.heading}>Player Selection</Text>
+            <Text style={styles.heading}>SUBTITLE SETTINGS</Text>
             <Pressable style={styles.btnClose} onPress={onClose}>
               <Text style={styles.btnText}>✖</Text>
             </Pressable>
           </View>
 
           <View style={styles.form}>
+            <View style={styles.settingRow}>
+              <Text style={styles.settingLabel}>Enable Subtitles:</Text>
+              <Switch
+                trackColor={{ false: '#767577', true: '#6512CF' }}
+                thumbColor={enableSubtitles ? '#fff' : '#f4f3f4'}
+                ios_backgroundColor="#3e3e3e"
+                onValueChange={setEnableSubtitles}
+                value={enableSubtitles}
+              />
+            </View>
+
             <View style={styles.inputGroup}>
-              <Text style={styles.label}>Default Player:</Text>
+              <Text style={styles.label}>Default Language:</Text>
               <Pressable
                 style={styles.dropdown}
-                onPress={() => setDefaultPlayer(true)}
+                onPress={() => setShowLanguageModal(true)}
               >
-                <Text style={styles.dropdownText}>{selectedFormat}</Text>
+                <Text style={styles.dropdownText}>{selectedLanguage}</Text>
                 <Text style={styles.arrow}>▾</Text>
               </Pressable>
             </View>
 
             <Pressable style={styles.saveBtn}>
-              <Text style={styles.saveText}>Submit</Text>
+              <Text style={styles.saveText}>Save Settings</Text>
             </Pressable>
           </View>
 
           <Modal
             transparent
-            visible={defaultPlayer}
+            visible={showLanguageModal}
             animationType="fade"
-            onRequestClose={() => setDefaultPlayer(false)}
+            onRequestClose={() => setShowLanguageModal(false)}
           >
             <Pressable
               style={styles.modalOverlay}
-              onPress={() => setDefaultPlayer(false)}
+              onPress={() => setShowLanguageModal(false)}
             >
               <View style={styles.modalBox}>
                 <FlatList
-                  data={formatOptions}
+                  data={languageOptions}
                   keyExtractor={item => item}
-                  renderItem={({ item }) =>
-                    renderOption(item, setSelectedFormat, setDefaultPlayer)
-                  }
+                  renderItem={({ item }) => renderOption(item)}
                 />
                 <Pressable
                   style={styles.cancelBtn}
-                  onPress={() => setDefaultPlayer(false)}
+                  onPress={() => setShowLanguageModal(false)}
                 >
                   <Text style={styles.cancelText}>Cancel</Text>
                 </Pressable>
@@ -100,7 +107,7 @@ const PlayerSelectionModal = ({ visible, onClose }) => {
   );
 };
 
-export default PlayerSelectionModal;
+export default SubtitleModal;
 
 const styles = StyleSheet.create({
   overlay: {
@@ -122,19 +129,37 @@ const styles = StyleSheet.create({
   headingAndBtn: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 25,
   },
   heading: {
     color: '#fff',
     fontSize: 18,
     fontWeight: 'bold',
-    marginBottom: 25,
+  },
+  btnClose: {
+    padding: 5,
   },
   btnText: {
     color: '#fff',
+    fontSize: 18,
     fontWeight: '500',
-    alignSelf: 'center',
   },
-  form: { marginTop: 10 },
+  form: { 
+    marginTop: 10,
+  },
+  settingRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 25,
+    paddingHorizontal: 5,
+  },
+  settingLabel: { 
+    color: '#aaa', 
+    fontSize: 16, 
+    flex: 1,
+  },
   inputGroup: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -146,33 +171,43 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     borderRadius: 25,
   },
-  label: { color: '#aaa', fontSize: 14, flex: 1 },
-  input: { color: '#fff', fontSize: 14, textAlign: 'right', flex: 1 },
+  label: { 
+    color: '#aaa', 
+    fontSize: 14, 
+    flex: 1 
+  },
   dropdown: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'flex-end',
     flex: 1,
   },
-  dropdownText: { color: '#fff', fontSize: 14, marginRight: 8 },
-  arrow: { color: '#6512CF', fontSize: 30 },
-  refreshBtn: {
-    borderWidth: 1,
-    borderColor: '#fff',
-    paddingVertical: 12,
-    borderRadius: 6,
-    alignItems: 'center',
-    marginBottom: 20,
+  dropdownText: { 
+    color: '#fff', 
+    fontSize: 14, 
+    marginRight: 8 
   },
-  refreshText: { color: '#fff', fontSize: 14, fontWeight: '500' },
+  staticText: {
+    color: '#fff',
+    fontSize: 14,
+  },
+  arrow: { 
+    color: '#6512CF', 
+    fontSize: 30 
+  },
   saveBtn: {
     backgroundColor: '#515DEF',
     paddingVertical: 14,
     borderRadius: 6,
     alignItems: 'center',
+    marginTop: 10,
+    marginBottom: 30,
   },
-  saveText: { color: '#fff', fontSize: 16, fontWeight: '600' },
-
+  saveText: { 
+    color: '#fff', 
+    fontSize: 16, 
+    fontWeight: '600' 
+  },
   modalOverlay: {
     flex: 1,
     backgroundColor: 'rgba(0,0,0,0.6)',
@@ -190,7 +225,11 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: 'rgba(255,255,255,0.1)',
   },
-  optionText: { color: '#fff', fontSize: 16, textAlign: 'center' },
+  optionText: { 
+    color: '#fff', 
+    fontSize: 16, 
+    textAlign: 'center' 
+  },
   cancelBtn: {
     padding: 15,
     alignItems: 'center',

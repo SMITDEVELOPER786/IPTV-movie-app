@@ -1,6 +1,7 @@
 import { StyleSheet, Text, View, ScrollView, TouchableOpacity, TextInput, Image, Dimensions, ImageBackground } from 'react-native';
 import React, { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
+import Header from '../components/Header';
 
 const { width } = Dimensions.get('window');
 
@@ -33,7 +34,8 @@ export default function LiveTVScreen() {
       resizeMode="cover"
     >
       <View style={styles.overlay}>
-               <View style={styles.headers}>
+        <Header />
+               {/* <View style={styles.headers}>
                   <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
                     <Text style={styles.backArrow}>←</Text>
                   </TouchableOpacity>
@@ -43,9 +45,9 @@ export default function LiveTVScreen() {
                   <TouchableOpacity style={styles.menuButton}>
                     <Text style={styles.menuText}></Text>
                   </TouchableOpacity>
-                </View>
+                </View> */}
         {/* Header Navigation */}
-        <View style={styles.header}>
+        {/* <View style={styles.header}>
           <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.tabContainer}>
             {tabs.map((tab, index) => (
               <TouchableOpacity
@@ -58,10 +60,10 @@ export default function LiveTVScreen() {
                 </Text>
               </TouchableOpacity>
             ))}
-          </ScrollView>
+          </ScrollView> */}
 
           {/* Search Bar */}
-          <View style={styles.searchContainer}>
+          {/* <View style={styles.searchContainer}>
             <TextInput
               style={styles.searchInput}
               placeholder="Master Search"
@@ -70,7 +72,7 @@ export default function LiveTVScreen() {
               onChangeText={setSearchText}
             />
           </View>
-        </View>
+        </View> */}
 
         <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
           {/* Featured Content */}
@@ -141,7 +143,8 @@ const styles = StyleSheet.create({
   },
   overlay: {
     flex: 1,
-    backgroundColor: 'rgba(2, 2, 2, 0.8)', // semi-transparent overlay for readability
+    backgroundColor: 'rgba(2, 2, 2, 0.8)',
+    padding: '6%', // semi-transparent overlay for readability
   },
   container: {
     flex: 1,
@@ -227,7 +230,7 @@ const styles = StyleSheet.create({
   activeTabText: { color: '#fff' },
   searchContainer: { marginTop: 8 },
   searchInput: { backgroundColor: '#333', borderRadius: 25, paddingHorizontal: 16, paddingVertical: 10, color: '#fff', fontSize: 14 },
-  content: { flex: 1 },
+  content: { flex: 1, marginTop: 40 },
   featuredSection: { paddingHorizontal: 16, marginBottom: 16 },
   featuredCard: { borderRadius: 12, overflow: 'hidden', position: 'relative', shadowColor: '#000', shadowOffset: { width: 0, height: 3 }, shadowOpacity: 0.3, shadowRadius: 6, elevation: 5 },
   featuredImage: { width: '100%', height: 200 },
