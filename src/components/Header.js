@@ -9,6 +9,8 @@ import {
 } from 'react-native';
 import React, { useState } from 'react';
 import { useNavigation, useRoute } from '@react-navigation/native';
+import NotificationModal from '../screens/NotificationScreen';
+
 
 const { width } = Dimensions.get('window');
 const isPhone = width < 768; 
@@ -17,6 +19,8 @@ const Header = () => {
   const navigation = useNavigation();
   const route = useRoute();
   const [activeTab, setActiveTab] = useState(route.name);
+  const [isNotificationVisible, setIsNotificationVisible] = useState(false);
+
 
   const handlePress = screen => {
     setActiveTab(screen);
@@ -72,17 +76,18 @@ const Header = () => {
           isPhone && { width: '100%', justifyContent: 'space-between' },
         ]}
       >
-        <Pressable onPress={() => navigation.navigate('Notifications')}>
-          <View style={styles.bellIcon}>
-            <Image
-              source={require('../assets/images/bell.png')}
-              style={[styles.bellIconImg, isPhone && { width: 26, height: 26 }]}
-            />
-            <View style={styles.noti}>
-              <Text style={styles.notiText}>2</Text>
-            </View>
+      <Pressable onPress={() => setIsNotificationVisible(true)}>
+        <View style={styles.bellIcon}>
+          <Image
+            source={require('../assets/images/bell.png')}
+            style={[styles.bellIconImg, isPhone && { width: 26, height: 26 }]}
+          />
+          <View style={styles.noti}>
+            <Text style={styles.notiText}>2</Text>
           </View>
-        </Pressable>
+        </View>
+      </Pressable>
+
 
         <View style={[styles.searchCon, isPhone && { flex: 1 }]}>
           <Image
@@ -99,6 +104,10 @@ const Header = () => {
           />
         </View>
       </View>
+        <NotificationModal
+        visible={isNotificationVisible}
+        onClose={() => setIsNotificationVisible(false)}
+      />
     </View>
   );
 };
@@ -139,7 +148,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     right: -5,
     top: -8,
-    backgroundColor: '#4F45B6',
+    backgroundColor: '#ff9264ff',
     paddingVertical: 2,
     paddingHorizontal: 7,
     borderRadius: 5,
