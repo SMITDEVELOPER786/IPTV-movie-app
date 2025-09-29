@@ -37,7 +37,7 @@ export default function AppNavigator() {
         headerShown:false
       }}
     >
-      <Stack.Screen name="Splash" component={SplashScreen} ptions={{ headerShown: false }} />
+      <Stack.Screen name="Splash" component={SplashScreen} options={{ headerShown: false }} />
       <Stack.Screen name="Login" component={LoginScreen} />
       <Stack.Screen name="Home" component={HomeScreen} />
       <Stack.Screen name="LiveTV" component={LiveTVScreen}/>

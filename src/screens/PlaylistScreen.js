@@ -80,15 +80,14 @@ const PlaylistScreen = () => {
 
           <Text style={styles.headerTitle}>Playlist</Text>
 
-          {/* Spacer for balance */}
-          <View style={{ width: 38 }} />
-        </View>
-
-        {/* Time & Date */}
+            {/* Time & Date */}
         <View style={styles.headerLeft}>
           <Text style={styles.time}>{currentTime}</Text>
           <Text style={styles.date}>{currentDate}</Text>
         </View>
+        </View>
+
+      
 
         {/* Playlist Management Section */}
         <View style={styles.listbg}>
@@ -171,17 +170,16 @@ export default PlaylistScreen;
 
 const styles = StyleSheet.create({
   imageBg: { flex: 1 },
-  overlay: { flex: 1, backgroundColor: 'rgba(0, 0, 0, 0.7)', padding: 20 },
+  overlay: { flex: 1,  backgroundColor: 'rgba(0, 0, 0, 0.83)', padding: 20 },
   
   /* Header */
+/* Header */
   headers: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: 20,
     paddingVertical: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: 'rgba(255,255,255,0.1)',
   },
   backButton: {
     width: 38,
@@ -198,16 +196,16 @@ const styles = StyleSheet.create({
   },
   headerTitle: {
     color: '#fff',
-    fontSize: 20,
+    fontSize: 30,
     fontWeight: '700',
     letterSpacing: 1,
   },
 
   /* Time & Date */
   headerLeft: {
-    flexDirection: 'column',
-    marginBottom: 30,
-    marginTop: 30,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 20,
   },
   time: {
     color: '#fff',
@@ -217,7 +215,6 @@ const styles = StyleSheet.create({
   date: {
     color: '#fff',
   },
-
   /* Playlist Section */
   heading2: { color: '#fff', fontSize: 18, fontWeight: 'bold' },
   listbg: {

@@ -7,8 +7,10 @@ import {
   SafeAreaView,
   ImageBackground,
   Dimensions,
+  Pressable,
+  Image,
 } from 'react-native';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import VideoFormatModal from './VideoFormatModal';
 import { useNavigation } from '@react-navigation/native';
 import AutomationSettingsModal from './AutomationSettingsModal';
@@ -19,68 +21,112 @@ import MultiScreenModal from './MultiScreen';
 import VPNModal from './VPNScreen';
 import SpeedTestModal from './SpeedTestScreen';
 import FeedbackScreen from './FeedbackScreen';
+import LinearGradient from 'react-native-linear-gradient';
 
 const { width, height } = Dimensions.get('window');
-const isTV = width >= 1000; // Threshold for TV screens
+const isPhone = width < 768;
 
 export default function SettingsScreen() {
   const navigation = useNavigation();
   const [activeModal, setActiveModal] = useState(null);
+  const [currentTime, setCurrentTime] = useState('');
+  const [currentDate, setCurrentDate] = useState('');
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const now = new Date();
+      let time = now.toLocaleTimeString([], {
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: true,
+      });
+
+      const options = {
+        day: 'numeric',
+        month: 'short',
+        year: 'numeric',
+      };
+      let dateParts = now.toLocaleDateString('en-US', options).toUpperCase();
+      let day = now.getDate();
+      let suffix =
+        day % 10 === 1 && day !== 11
+          ? 'ST'
+          : day % 10 === 2 && day !== 12
+          ? 'ND'
+          : day % 10 === 3 && day !== 13
+          ? 'RD'
+          : 'TH';
+      dateParts = dateParts.replace(String(day), `${day}${suffix}`);
+
+      setCurrentTime(time);
+      setCurrentDate(dateParts);
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, []);
 
   const settingsOptions = [
     {
       id: 1,
       title: 'General Setting',
-      icon: '⚙️',
-      description: 'App preferences',
+      icon: require('../assets/images/general.png'),
       nav: 'GeneralSettings',
     },
-    { id: 2, title: 'VPN', icon: '🔒', description: 'Network security' },
+    {
+      id: 2,
+      title: 'VPN',
+      icon: require('../assets/images/vpn.png'),
+    },
     {
       id: 3,
       title: 'Video Format',
-      icon: '🎥',
-      description: 'Quality settings',
+      icon: require('../assets/images/video.png'),
     },
-    { id: 4, title: 'Automation', icon: '🤖', description: 'Auto features' },
-    { id: 5, title: 'Feedback', icon: '🌐', description: 'App language' },
+    {
+      id: 4,
+      title: 'Automation',
+      icon: require('../assets/images/automation.png'),
+    },
+    {
+      id: 5,
+      title: 'Feedback',
+      icon: require('../assets/images/feedback.png'),
+    },
     {
       id: 6,
       title: 'Parental Control',
-      icon: '👨‍👩‍👧‍👦',
-      description: 'Family safety',
+      icon: require('../assets/images/parental.png'),
     },
     {
       id: 7,
       title: 'Player Selection',
-      icon: '▷',
-      description: 'Movie Selection',
+      icon: require('../assets/images/playersection.png'),
     },
     {
       id: 8,
       title: 'Player Setting',
-      icon: '▶️',
-      description: 'Playback options',
+      icon: require('../assets/images/playersetting.png'),
     },
-    { id: 9, title: 'Speed Test', icon: '⚡️', description: 'Speed Text' },
+    {
+      id: 9,
+      title: 'Speed Test',
+      icon: require('../assets/images/speed.png'),
+    },
     {
       id: 13,
       title: 'EPG',
-      icon: '🕒',
-      description: 'Help & support',
+      icon: require('../assets/images/epg.png'),
       nav: 'EPG',
     },
     {
       id: 14,
       title: 'Subtitle',
-      icon: '▶️',
-      description: 'Comfort options',
+      icon: require('../assets/images/subtitle.png'),
     },
     {
       id: 15,
       title: 'MultiScreen Mode',
-      icon: '🖥️', 
-      description: 'Multi-screen settings',
+      icon: require('../assets/images/multi.png'),
     },
   ];
 
@@ -101,10 +147,10 @@ export default function SettingsScreen() {
       setActiveModal('multiscreen');
     } else if (setting.title === 'VPN') {
       setActiveModal('vpn');
-    } else if(setting.title === 'Speed Test'){
+    } else if (setting.title === 'Speed Test') {
       setActiveModal('speed');
-    } else if(setting.title === 'Feedback'){
-      setActiveModal('feedback')
+    } else if (setting.title === 'Feedback') {
+      setActiveModal('feedback');
     }
   };
 
@@ -116,49 +162,50 @@ export default function SettingsScreen() {
     >
       <SafeAreaView style={styles.container}>
         <View style={styles.backgroundOverlay}>
-          <View style={styles.header}>
-            <TouchableOpacity
+          <View style={styles.headers}>
+            <Pressable
               style={styles.backButton}
               onPress={() => navigation.goBack()}
             >
               <Text style={styles.backArrow}>←</Text>
-            </TouchableOpacity>
-            <Text style={styles.headerTitle}>SETTINGS</Text>
-            <TouchableOpacity style={styles.menuButton}>
-              <Text style={styles.menuText}></Text>
-            </TouchableOpacity>
-          </View>
-          <View style={styles.dateTimeContainer}>
-            <View style={styles.dateTimeLeft}>
-              <Text style={styles.dateText}>29TH, 2025</Text>
-              <Text style={styles.timeText}>10:00PM</Text>
-            </View>
-            <View style={styles.dateTimeRight}>
-              <Text style={styles.dateText}>AUG 29TH, 2025</Text>
-              <Text style={styles.timeText}>10:00PM</Text>
+            </Pressable>
+
+            <Text style={styles.headerTitle}>Settings</Text>
+
+            <View style={styles.headerLeft}>
+              <Text style={styles.time}>{currentTime}</Text>
+              <Text style={styles.date}>{currentDate}</Text>
             </View>
           </View>
+
           <ScrollView
             style={styles.content}
             showsVerticalScrollIndicator={false}
             contentContainerStyle={styles.scrollContent}
             bounces={true}
           >
-            <View style={[styles.settingsGrid, isTV && styles.tvSettingsGrid]}>
+            <View style={[styles.settingsGrid, isPhone && { justifyContent: 'center', flexDirection:'column', alignItems:'center' }]}>
               {settingsOptions.map(setting => (
                 <TouchableOpacity
                   key={setting.id}
-                  style={[styles.settingCard, isTV && styles.tvSettingCard]}
+                  style={[
+                    { borderRadius: 12, overflow: 'hidden' },
+                    isPhone && { width: '100%', height: 170} ,
+                  ]}
                   onPress={() => handleSettingPress(setting)}
                   activeOpacity={0.7}
                 >
-                  <View style={styles.settingIconContainer}>
-                    <Text style={styles.settingIcon}>{setting.icon}</Text>
-                  </View>
-                  <Text style={styles.settingTitle}>{setting.title}</Text>
-                  <Text style={styles.settingDescription}>
-                    {setting.description}
-                  </Text>
+                  <LinearGradient
+                    colors={['#111017', '#070031']}
+                    start={{ x: 0, y: 0 }}
+                    end={{ x: 0, y: 1 }}
+                    style={styles.settingCard}
+                  >
+                    <View style={styles.settingIconContainer}>
+                      <Image source={setting.icon} style={styles.settingIcon} />
+                    </View>
+                    <Text style={styles.settingTitle}>{setting.title}</Text>
+                  </LinearGradient>
                 </TouchableOpacity>
               ))}
             </View>
@@ -188,17 +235,17 @@ export default function SettingsScreen() {
               onClose={() => setActiveModal(null)}
             />
             <VPNModal
-            visible={activeModal === 'vpn'}
-            onClose={() => setActiveModal(null)}
-          />
-          <SpeedTestModal
-            visible={activeModal === 'speed'}
-            onClose={() => setActiveModal(null)}
+              visible={activeModal === 'vpn'}
+              onClose={() => setActiveModal(null)}
             />
-          <FeedbackScreen
-            visible={activeModal === 'feedback'}
-            onClose={() => setActiveModal(null)}
-          />
+            <SpeedTestModal
+              visible={activeModal === 'speed'}
+              onClose={() => setActiveModal(null)}
+            />
+            <FeedbackScreen
+              visible={activeModal === 'feedback'}
+              onClose={() => setActiveModal(null)}
+            />
           </ScrollView>
         </View>
       </SafeAreaView>
@@ -217,68 +264,62 @@ const styles = StyleSheet.create({
   },
   backgroundOverlay: {
     flex: 1,
-    backgroundColor: 'rgba(16, 16, 24, 0.95)',
+    backgroundColor: 'rgba(0, 0, 0, 0.83)',
+    padding: 20,
   },
-  header: {
+  /* Header */
+  headers: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: 20,
     paddingVertical: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: 'rgba(255,255,255,0.1)',
+    flexWrap: 'wrap',
   },
   backButton: {
-    width: isTV ? 60 : 38,
-    height: isTV ? 60 : 38,
-    borderRadius: isTV ? 30 : 20,
+    width: 38,
+    height: 38,
+    borderRadius: 20,
     backgroundColor: 'rgba(255,255,255,0.1)',
-    justifyContent: 'center',
+    // justifyContent: 'center',
     alignItems: 'center',
   },
   backArrow: {
     color: '#fff',
-    fontSize: isTV ? 30 : 20,
+    fontSize: 20,
     fontWeight: '600',
   },
   headerTitle: {
     color: '#fff',
-    fontSize: isTV ? 30 : 20,
+    fontSize: 30,
     fontWeight: '700',
     letterSpacing: 1,
   },
+
+  /* Time & Date */
+  headerLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 20,
+  },
+  time: {
+    color: '#fff',
+    fontSize: 20,
+    fontWeight: 'bold',
+  },
+  date: {
+    color: '#fff',
+  },
   menuButton: {
-    paddingHorizontal: isTV ? 20 : 12,
-    paddingVertical: isTV ? 16 : 8,
+    paddingHorizontal: 12,
+    paddingVertical: 8,
     borderRadius: 6,
   },
   menuText: {
     color: '#aaa',
     fontSize: 12,
   },
-  dateTimeContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    paddingHorizontal: 20,
-    paddingVertical: 12,
-    backgroundColor: 'rgba(255,255,255,0.05)',
-  },
-  dateTimeLeft: {
-    alignItems: 'flex-start',
-  },
-  dateTimeRight: {
-    alignItems: 'flex-end',
-  },
-  dateText: {
-    color: '#fff',
-    fontSize: isTV ? 16 : 12,
-    fontWeight: '600',
-  },
-  timeText: {
-    color: '#aaa',
-    fontSize: isTV ? 14 : 11,
-    marginTop: 2,
-  },
+
   content: {
     flex: 1,
   },
@@ -293,45 +334,28 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingVertical: 24,
     paddingHorizontal: 4,
+    gap: 20,
   },
-  tvSettingsGrid: {
-    justifyContent: 'space-around',
-  },
+
   settingCard: {
-    width: (width - 48) / 3,
-    aspectRatio: 0.9,
-    backgroundColor: 'rgba(30, 40, 80, 0.8)',
+    width: 230,
+    height: 130,
     borderRadius: 12,
     padding: 12,
-    marginBottom: 12,
     alignItems: 'center',
     justifyContent: 'space-evenly',
-    borderWidth: 1,
-    borderColor: 'rgba(100, 120, 200, 0.3)',
-    elevation: 3,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
   },
-  tvSettingCard: {
-    width: (width - 80) / 5,
-    padding: 20,
-  },
-  extraSpace: {
-    height: 80,
-  },
+
   settingIconContainer: {
-    width: 40,
-    height: 40,
-    borderRadius: 16,
-    backgroundColor: 'rgba(100, 120, 200, 0.2)',
+    width: 25,
+    height: 25,
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 8,
   },
   settingIcon: {
-    fontSize: 20,
+    width: 22,
+    height: 22,
   },
   settingTitle: {
     color: '#fff',
@@ -340,11 +364,5 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginBottom: 2,
     lineHeight: 12,
-  },
-  settingDescription: {
-    color: '#aaa',
-    fontSize: 10,
-    textAlign: 'center',
-    lineHeight: 10,
   },
 });

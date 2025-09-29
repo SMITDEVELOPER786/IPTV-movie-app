@@ -76,7 +76,7 @@ const Header = () => {
           isPhone && { width: '100%', justifyContent: 'space-between' },
         ]}
       >
-      <Pressable onPress={() => setIsNotificationVisible(true)}>
+      <Pressable onPress={() => navigation.navigate('Notifications')}>
         <View style={styles.bellIcon}>
           <Image
             source={require('../assets/images/bell.png')}
@@ -104,10 +104,7 @@ const Header = () => {
           />
         </View>
       </View>
-        <NotificationModal
-        visible={isNotificationVisible}
-        onClose={() => setIsNotificationVisible(false)}
-      />
+    
     </View>
   );
 };
