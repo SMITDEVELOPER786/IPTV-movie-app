@@ -18,9 +18,16 @@ const SubtitleModal = ({ visible, onClose }) => {
   const [showLanguageModal, setShowLanguageModal] = useState(false);
   const [selectedLanguage, setSelectedLanguage] = useState('English');
 
-  const languageOptions = ['English', 'Spanish', 'French', 'German', 'Japanese', 'Chinese'];
+  const languageOptions = [
+    'English',
+    'Spanish',
+    'French',
+    'German',
+    'Japanese',
+    'Chinese',
+  ];
 
-  const renderOption = (item) => (
+  const renderOption = item => (
     <Pressable
       style={styles.option}
       onPress={() => {
@@ -60,7 +67,13 @@ const SubtitleModal = ({ visible, onClose }) => {
               />
             </View>
 
-            <View style={styles.inputGroup}>
+            <View
+              style={[
+                styles.inputGroup,
+                !enableSubtitles && { opacity: 0.5 },
+              ]}
+              pointerEvents={enableSubtitles ? 'auto' : 'none'}
+            >
               <Text style={styles.label}>Default Language:</Text>
               <Pressable
                 style={styles.dropdown}
@@ -145,7 +158,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: '500',
   },
-  form: { 
+  form: {
     marginTop: 10,
   },
   settingRow: {
@@ -155,9 +168,9 @@ const styles = StyleSheet.create({
     marginBottom: 25,
     paddingHorizontal: 5,
   },
-  settingLabel: { 
-    color: '#aaa', 
-    fontSize: 16, 
+  settingLabel: {
+    color: '#aaa',
+    fontSize: 16,
     flex: 1,
   },
   inputGroup: {
@@ -171,10 +184,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     borderRadius: 25,
   },
-  label: { 
-    color: '#aaa', 
-    fontSize: 14, 
-    flex: 1 
+  label: {
+    color: '#aaa',
+    fontSize: 14,
+    flex: 1,
   },
   dropdown: {
     flexDirection: 'row',
@@ -182,18 +195,18 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
     flex: 1,
   },
-  dropdownText: { 
-    color: '#fff', 
-    fontSize: 14, 
-    marginRight: 8 
+  dropdownText: {
+    color: '#fff',
+    fontSize: 14,
+    marginRight: 8,
   },
   staticText: {
     color: '#fff',
     fontSize: 14,
   },
-  arrow: { 
-    color: '#6512CF', 
-    fontSize: 30 
+  arrow: {
+    color: '#6512CF',
+    fontSize: 30,
   },
   saveBtn: {
     backgroundColor: '#515DEF',
@@ -203,10 +216,10 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginBottom: 30,
   },
-  saveText: { 
-    color: '#fff', 
-    fontSize: 16, 
-    fontWeight: '600' 
+  saveText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: '600',
   },
   modalOverlay: {
     flex: 1,
@@ -225,10 +238,10 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: 'rgba(255,255,255,0.1)',
   },
-  optionText: { 
-    color: '#fff', 
-    fontSize: 16, 
-    textAlign: 'center' 
+  optionText: {
+    color: '#fff',
+    fontSize: 16,
+    textAlign: 'center',
   },
   cancelBtn: {
     padding: 15,
