@@ -1,26 +1,28 @@
 import {
+  ImageBackground,
   StyleSheet,
   Text,
   View,
+  ScrollView,
   Pressable,
-  Dimensions,
   Modal,
   FlatList,
   TouchableWithoutFeedback,
+  Dimensions,
+  Image,
 } from 'react-native';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useNavigation } from '@react-navigation/native';
 
-const { width, height } = Dimensions.get('window');
-const isTV = width >= 1000;
-const isLargeTV = width >= 1920; // 4K TV support
-const scale = isLargeTV ? 1.5 : isTV ? 1.2 : 1;
 
-const VPNModal = ({ visible, onClose }) => {
+
+const VPNScreen = () => {
+  const [currentTime, setCurrentTime] = useState('');
+  const [currentDate, setCurrentDate] = useState('');
+  const navigation = useNavigation();
   const [isEnabled, setIsEnabled] = useState(false);
   const [selectedServer, setSelectedServer] = useState('United States');
-  const [selectedProtocol, setSelectedProtocol] = useState('OpenVPN');
   const [showServerModal, setShowServerModal] = useState(false);
-  const [showProtocolModal, setShowProtocolModal] = useState(false);
 
   const serverOptions = [
     { label: 'United States', value: 'US', flag: '🇺🇸' },
@@ -29,10 +31,8 @@ const VPNModal = ({ visible, onClose }) => {
     { label: 'Germany', value: 'DE', flag: '🇩🇪' },
     { label: 'Japan', value: 'JP', flag: '🇯🇵' },
   ];
-  
-  const protocolOptions = ['OpenVPN', 'WireGuard', 'IPSec', 'L2TP'];
 
-  const renderServerOption = (item) => (
+  const renderServerOption = item => (
     <TouchableWithoutFeedback
       onPress={() => {
         setSelectedServer(item.label);
@@ -47,86 +47,82 @@ const VPNModal = ({ visible, onClose }) => {
     </TouchableWithoutFeedback>
   );
 
-  const renderProtocolOption = (item) => (
-    <TouchableWithoutFeedback
-      onPress={() => {
-        setSelectedProtocol(item);
-        setShowProtocolModal(false);
-      }}
-    >
-      <View style={styles.option}>
-        <Text style={styles.optionText}>{item}</Text>
-      </View>
-    </TouchableWithoutFeedback>
-  );
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const now = new Date();
+      let time = now.toLocaleTimeString([], {
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: true,
+      });
 
-  const getCurrentTime = () => {
-    const now = new Date();
-    return now.toLocaleTimeString('en-US', { 
-      hour: '2-digit', 
-      minute: '2-digit',
-      hour12: false 
-    });
-  };
+      const options = {
+        day: 'numeric',
+        month: 'short',
+        year: 'numeric',
+      };
+      let dateParts = now.toLocaleDateString('en-US', options).toUpperCase();
+      let day = now.getDate();
+      let suffix =
+        day % 10 === 1 && day !== 11
+          ? 'ST'
+          : day % 10 === 2 && day !== 12
+          ? 'ND'
+          : day % 10 === 3 && day !== 13
+          ? 'RD'
+          : 'TH';
+      dateParts = dateParts.replace(String(day), `${day}${suffix}`);
 
-  const getCurrentDate = () => {
-    const now = new Date();
-    return now.toLocaleDateString('en-US', { 
-      month: 'short', 
-      day: '2-digit',
-      year: 'numeric'
-    }).toUpperCase();
-  };
+      setCurrentTime(time);
+      setCurrentDate(dateParts);
+    }, 1000);
 
+    return () => clearInterval(interval);
+  }, []);
   return (
-    <Modal
-      transparent
-      animationType="fade"
-      visible={visible}
-      onRequestClose={onClose}
+    <ImageBackground
+      source={require('../assets/images/Thumb.png')}
+      style={styles.imageBg}
+      resizeMode="cover"
     >
       <View style={styles.overlay}>
-        <View style={[styles.container, isTV && styles.tvContainer]}>
-          {/* Header */}
-          <View style={styles.header}>
-            <View style={styles.titleSection}>
-              <Text style={styles.title}>VPN</Text>
-              <View style={styles.timeDate}>
-                <Text style={styles.time}>{getCurrentTime()}</Text>
-                <Text style={styles.date}>{getCurrentDate()}</Text>
-              </View>
-            </View>
-            <Pressable style={styles.closeBtn} onPress={onClose}>
-              <Text style={styles.closeText}>✕</Text>
+        <ScrollView
+          style={styles.scrollContainer}
+          contentContainerStyle={{ paddingBottom: 40 }}
+          showsVerticalScrollIndicator={false}
+        >
+          <View style={styles.headers}>
+            <Pressable
+              style={styles.backButton}
+              onPress={() => navigation.goBack()}
+            >
+              <Text style={styles.backArrow}>←</Text>
             </Pressable>
+
+            <Text style={styles.headerTitle}>VPN</Text>
+
+            {/* Time & Date */}
+            <View style={styles.headerLeft}>
+              <Text style={styles.time}>{currentTime}</Text>
+              <Text style={styles.date}>{currentDate}</Text>
+            </View>
           </View>
 
           {/* Main Content */}
           <View style={styles.content}>
-            {/* Power Button */}
-            <View style={styles.powerSection}>
-              <Pressable
-                style={[styles.powerButton, isEnabled && styles.powerButtonActive]}
-                onPress={() => setIsEnabled(!isEnabled)}
-              >
-                <View style={[styles.powerIcon, isEnabled && styles.powerIconActive]}>
-                  <Text style={[styles.powerText, isEnabled && styles.powerTextActive]}>
-                    ⏻
-                  </Text>
-                </View>
-              </Pressable>
-              <Text style={styles.statusText}>
-                {isEnabled ? 'CONNECTED' : 'DISCONNECTED'}
-              </Text>
-            </View>
-
             {/* Server Selection */}
-            <View style={[styles.settingRow, !isEnabled && styles.disabled]}>
+            <View style={[styles.serverRow, !isEnabled && styles.disabled]}>
               <View style={styles.serverInfo}>
                 <Text style={styles.serverFlag}>🇺🇸</Text>
+
                 <View>
-                  <Text style={styles.serverLabel}>Server Location</Text>
                   <Text style={styles.serverValue}>{selectedServer}</Text>
+                  {/* IP Display */}
+                  {isEnabled && (
+                    <View style={styles.ipSection}>
+                      <Text style={styles.ipLabel}>IP: 99.110.0.16</Text>
+                    </View>
+                  )}
                 </View>
               </View>
               <Pressable
@@ -134,47 +130,56 @@ const VPNModal = ({ visible, onClose }) => {
                 onPress={() => isEnabled && setShowServerModal(true)}
                 disabled={!isEnabled}
               >
-                <Text style={[styles.changeBtnText, !isEnabled && styles.disabledText]}>
-                  →
+                <Text
+                  style={[
+                    styles.changeBtnText,
+                    !isEnabled && styles.disabledText,
+                  ]}
+                >
+                  ›
                 </Text>
               </Pressable>
             </View>
 
-            {/* Stats */}
-            {isEnabled && (
-              <View style={styles.statsRow}>
-                <View style={styles.statItem}>
-                  <Text style={styles.statLabel}>↓ 28.5 MB/s</Text>
-                </View>
-                <View style={styles.statItem}>
-                  <Text style={styles.statLabel}>↑ 31.6 MB/s</Text>
-                </View>
-              </View>
-            )}
+            {/* Stats Row */}
+            <View style={styles.statsRow}>
+              {isEnabled ? (
+                <>
+                  <View style={styles.statItem}>
+                    <Text style={styles.statLabel}>
+                      <Text style={styles.statArrowDown}>↓</Text> 28.5 KB/s
+                    </Text>
+                  </View>
+                  <View style={styles.statItem}>
+                    <Text style={styles.statLabel}>
+                      <Text style={styles.statArrowUp}>↑</Text> 31.6 MB/s
+                    </Text>
+                  </View>
+                </>
+              ) : (
+                
+                <View style={{ flex: 1 }} />
+              )}
+            </View>
 
-            {/* Protocol Selection */}
-            <View style={[styles.settingRow, !isEnabled && styles.disabled]}>
-              <View>
-                <Text style={styles.settingLabel}>Connection Protocol</Text>
-                <Text style={styles.settingValue}>{selectedProtocol}</Text>
-              </View>
+            {/* Power Button */}
+            <View style={styles.powerSection}>
               <Pressable
-                style={styles.changeBtn}
-                onPress={() => isEnabled && setShowProtocolModal(true)}
-                disabled={!isEnabled}
+                style={[
+                  styles.powerButton,
+                  isEnabled && styles.powerButtonActive,
+                ]}
+                onPress={() => setIsEnabled(!isEnabled)}
               >
-                <Text style={[styles.changeBtnText, !isEnabled && styles.disabledText]}>
-                  →
-                </Text>
+                <Image
+                  source={require('../assets/images/powerButton.png')}
+                  style={[styles.powerImg, isEnabled && styles.powerImgActive]}
+                />
               </Pressable>
+              <Text style={styles.statusText}>
+                {isEnabled ? 'CONNECTED' : 'DISCONNECTED'}
+              </Text>
             </View>
-
-            {/* IP Display */}
-            {isEnabled && (
-              <View style={styles.ipSection}>
-                <Text style={styles.ipLabel}>IP: 99.110.0.16</Text>
-              </View>
-            )}
           </View>
 
           {/* Server Selection Modal */}
@@ -204,278 +209,189 @@ const VPNModal = ({ visible, onClose }) => {
               </View>
             </Pressable>
           </Modal>
-
-          {/* Protocol Selection Modal */}
-          <Modal
-            transparent
-            visible={showProtocolModal}
-            animationType="fade"
-            onRequestClose={() => setShowProtocolModal(false)}
-          >
-            <Pressable
-              style={styles.modalOverlay}
-              onPress={() => setShowProtocolModal(false)}
-            >
-              <View style={styles.modalBox}>
-                <Text style={styles.modalTitle}>Select Protocol</Text>
-                <FlatList
-                  data={protocolOptions}
-                  keyExtractor={item => item}
-                  renderItem={({ item }) => renderProtocolOption(item)}
-                />
-                <Pressable
-                  style={styles.cancelBtn}
-                  onPress={() => setShowProtocolModal(false)}
-                >
-                  <Text style={styles.cancelText}>Cancel</Text>
-                </Pressable>
-              </View>
-            </Pressable>
-          </Modal>
-        </View>
+        </ScrollView>
       </View>
-    </Modal>
+    </ImageBackground>
   );
 };
 
-export default VPNModal;
+export default VPNScreen;
 
 const styles = StyleSheet.create({
+  imageBg: { flex: 1 },
   overlay: {
     flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.8)',
-    justifyContent: 'center',
-    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.83)',
+    paddingTop: 20,
+    paddingRight: '8%',
+    paddingLeft: '8%',
   },
-  container: {
-    width: isLargeTV ? '45%' : isTV ? '55%' : '85%',
-    maxWidth: isLargeTV ? 900 : 800,
-    backgroundColor: '#1a1a1a',
-    borderRadius: 20 * scale,
-    overflow: 'hidden',
-    // Ensure proper aspect ratio for different TV sizes
-    minHeight: isLargeTV ? 600 : isTV ? 500 : 400,
-  },
-  tvContainer: {
-    width: isLargeTV ? '40%' : '50%',
-    maxWidth: isLargeTV ? 800 : 600,
-  },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingHorizontal: (isLargeTV ? 50 : isTV ? 40 : 24) * scale,
-    paddingVertical: (isLargeTV ? 35 : isTV ? 30 : 20) * scale,
-    backgroundColor: '#2a2a2a',
-  },
-  titleSection: {
-    flexDirection: 'row',
-    alignItems: 'center',
+  scrollContainer: {
     flex: 1,
+    marginTop: 30,
   },
-  title: {
-    color: '#ffffff',
-    fontSize: (isLargeTV ? 40 : isTV ? 32 : 24) * scale,
+  /* Header */
+  headers: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 20,
+    paddingVertical: 16,
+  },
+  backButton: {
+    width: 38,
+    height: 38,
+    borderRadius: 20,
+    backgroundColor: 'rgba(255,255,255,0.1)',
+    // justifyContent: 'center',
+    alignItems: 'center',
+  },
+  backArrow: {
+    color: '#fff',
+    fontSize: 20,
     fontWeight: '600',
-    marginRight: (isLargeTV ? 50 : isTV ? 40 : 24) * scale,
   },
-  timeDate: {
-    alignItems: 'flex-end',
+  headerTitle: {
+    color: '#fff',
+    fontSize: 30,
+    fontWeight: '700',
+    letterSpacing: 1,
+  },
+
+  /* Time & Date */
+  headerLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 20,
   },
   time: {
-    color: '#ffffff',
-    fontSize: (isLargeTV ? 24 : isTV ? 20 : 16) * scale,
-    fontWeight: '500',
+    color: '#fff',
+    fontSize: 20,
+    fontWeight: 'bold',
   },
   date: {
-    color: '#888',
-    fontSize: (isLargeTV ? 18 : isTV ? 14 : 12) * scale,
-    marginTop: 2 * scale,
+    color: '#fff',
   },
-  closeBtn: {
-    width: (isLargeTV ? 60 : isTV ? 50 : 40) * scale,
-    height: (isLargeTV ? 60 : isTV ? 50 : 40) * scale,
-    borderRadius: (isLargeTV ? 30 : isTV ? 25 : 20) * scale,
-    backgroundColor: 'rgba(255,255,255,0.1)',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  closeText: {
-    color: '#ffffff',
-    fontSize: (isLargeTV ? 30 : isTV ? 24 : 18) * scale,
-    fontWeight: '300',
-  },
+
   content: {
-    paddingHorizontal: (isLargeTV ? 50 : isTV ? 40 : 24) * scale,
-    paddingVertical: (isLargeTV ? 45 : isTV ? 40 : 24) * scale,
+    padding: 20,
+    marginTop: 40,
+    alignSelf: 'flex-end',
   },
-  powerSection: {
-    alignItems: 'center',
-    marginBottom: (isLargeTV ? 50 : isTV ? 40 : 32) * scale,
-  },
-  powerButton: {
-    width: (isLargeTV ? 140 : isTV ? 120 : 100) * scale,
-    height: (isLargeTV ? 140 : isTV ? 120 : 100) * scale,
-    borderRadius: (isLargeTV ? 70 : isTV ? 60 : 50) * scale,
-    backgroundColor: '#333',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: (isLargeTV ? 25 : isTV ? 20 : 16) * scale,
-    borderWidth: 3 * scale,
-    borderColor: '#555',
-  },
-  powerButtonActive: {
-    backgroundColor: '#4285f4',
-    borderColor: '#5294f7',
-  },
-  powerIcon: {
-    width: (isLargeTV ? 90 : isTV ? 80 : 60) * scale,
-    height: (isLargeTV ? 90 : isTV ? 80 : 60) * scale,
-    borderRadius: (isLargeTV ? 45 : isTV ? 40 : 30) * scale,
-    backgroundColor: 'rgba(255,255,255,0.1)',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  powerIconActive: {
-    backgroundColor: 'rgba(255,255,255,0.2)',
-  },
-  powerText: {
-    color: '#888',
-    fontSize: (isLargeTV ? 42 : isTV ? 36 : 28) * scale,
-    fontWeight: '300',
-  },
-  powerTextActive: {
-    color: '#ffffff',
-  },
-  statusText: {
-    color: '#888',
-    fontSize: (isLargeTV ? 18 : isTV ? 16 : 14) * scale,
-    fontWeight: '500',
-    letterSpacing: 1 * scale,
-  },
-  settingRow: {
+  serverInfo: { flexDirection: 'row', alignItems: 'center', gap: 12 },
+  serverRow: {
     flexDirection: 'row',
+    alignItems: 'center',
     justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingVertical: (isLargeTV ? 25 : isTV ? 20 : 16) * scale,
-    borderBottomWidth: 1 * scale,
-    borderBottomColor: 'rgba(255,255,255,0.1)',
+    paddingVertical: 15,
+    paddingHorizontal: 20,
+    borderWidth: 1,
+    borderColor: '#4B5563',
+    borderRadius: 18,
+    marginBottom: 20,
+    backgroundColor: '#13141C',
+    width: '40%',
   },
-  serverInfo: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    flex: 1,
-  },
-  serverFlag: {
-    fontSize: (isLargeTV ? 38 : isTV ? 32 : 24) * scale,
-    marginRight: (isLargeTV ? 20 : isTV ? 16 : 12) * scale,
-  },
-  serverLabel: {
-    color: '#888',
-    fontSize: (isLargeTV ? 18 : isTV ? 16 : 14) * scale,
-    marginBottom: 4 * scale,
-  },
-  serverValue: {
-    color: '#ffffff',
-    fontSize: (isLargeTV ? 22 : isTV ? 20 : 16) * scale,
-    fontWeight: '500',
-  },
-  settingLabel: {
-    color: '#888',
-    fontSize: (isLargeTV ? 18 : isTV ? 16 : 14) * scale,
-    marginBottom: 4 * scale,
-  },
-  settingValue: {
-    color: '#ffffff',
-    fontSize: (isLargeTV ? 22 : isTV ? 20 : 16) * scale,
-    fontWeight: '500',
-  },
+  serverValue: { color: '#fff', fontSize: 16, fontWeight: '600' },
+  serverFlag: { fontSize: 30 },
+  ipLabel: { color: '#FFFFFF', fontSize: 12, marginTop: 4 },
   changeBtn: {
-    width: (isLargeTV ? 60 : isTV ? 50 : 40) * scale,
-    height: (isLargeTV ? 60 : isTV ? 50 : 40) * scale,
-    borderRadius: (isLargeTV ? 30 : isTV ? 25 : 20) * scale,
-    backgroundColor: 'rgba(255,255,255,0.1)',
+    marginLeft: 'auto',
+    paddingVertical: 1,
+    paddingHorizontal: 10,
+    borderWidth: 1,
+    borderColor: '#fff',
     justifyContent: 'center',
     alignItems: 'center',
   },
   changeBtnText: {
-    color: '#ffffff',
-    fontSize: (isLargeTV ? 28 : isTV ? 24 : 18) * scale,
-    fontWeight: '300',
+    color: '#fff',
+    fontSize: 20,
+    fontWeight: '600',
+    marginBottom: 2,
   },
   statsRow: {
     flexDirection: 'row',
+    justifyContent: 'space-between',
+      minHeight: 40, 
+  },
+  statLabel: { color: '#fff', fontSize: 16, fontWeight: '600' },
+  statArrowDown: { color: '#6622CC', fontSize: 20, fontWeight: '600' },
+
+  statArrowUp: { color: '#22CCC2', fontSize: 20, fontWeight: '600' },
+  powerImg: { width: 30, height: 30, tintColor: '#fff' },
+  powerImgActive: { tintColor: '#22CCC2' },
+  powerSection: {
+    marginTop: 60,
+    alignSelf: 'center',
+  },
+  powerButton: {
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    backgroundColor: '#2489FF',
+    alignItems: 'center',
     justifyContent: 'center',
-    gap: (isLargeTV ? 80 : isTV ? 60 : 40) * scale,
-    paddingVertical: (isLargeTV ? 25 : isTV ? 20 : 16) * scale,
   },
-  statItem: {
-    alignItems: 'center',
+  powerButtonActive: {
+    backgroundColor: '#1e6ecad2',
   },
-  statLabel: {
-    color: '#4285f4',
-    fontSize: (isLargeTV ? 20 : isTV ? 18 : 14) * scale,
-    fontWeight: '500',
-  },
-  ipSection: {
-    alignItems: 'center',
-    paddingTop: (isLargeTV ? 25 : isTV ? 20 : 16) * scale,
-  },
-  ipLabel: {
-    color: '#888',
-    fontSize: (isLargeTV ? 18 : isTV ? 16 : 14) * scale,
-    fontWeight: '400',
-  },
-  disabled: {
-    opacity: 0.4,
-  },
-  disabledText: {
-    color: '#555',
+  statusText: {
+    color: '#fff',
+    fontSize: 12,
+    fontWeight: '600',
+    marginTop: 20,
+    alignSelf: 'center',
   },
   modalOverlay: {
     flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.8)',
+    backgroundColor: 'rgba(0,0,0,0.6)',
     justifyContent: 'center',
     alignItems: 'center',
+    padding: 20,
   },
   modalBox: {
-    backgroundColor: '#2a2a2a',
-    width: isLargeTV ? '35%' : isTV ? '40%' : '70%',
-    maxWidth: isLargeTV ? 500 : 400,
-    borderRadius: 16 * scale,
-    paddingVertical: (isLargeTV ? 25 : isTV ? 20 : 16) * scale,
-    maxHeight: '70%',
+    backgroundColor: '#1E1E2C',
+    borderRadius: 20,
+    width: '85%',
+    paddingVertical: 25,
+    paddingHorizontal: 20,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.25,
+    shadowRadius: 10,
+    elevation: 10,
   },
   modalTitle: {
-    color: '#ffffff',
-    fontSize: (isLargeTV ? 28 : isTV ? 24 : 18) * scale,
-    fontWeight: '600',
+    color: '#fff',
+    fontSize: 18,
+    fontWeight: '700',
+    marginBottom: 20,
     textAlign: 'center',
-    paddingBottom: (isLargeTV ? 25 : isTV ? 20 : 16) * scale,
-    borderBottomWidth: 1 * scale,
-    borderBottomColor: 'rgba(255,255,255,0.1)',
-    marginBottom: (isLargeTV ? 20 : isTV ? 16 : 12) * scale,
+    letterSpacing: 0.5,
   },
   option: {
-    paddingVertical: (isLargeTV ? 25 : isTV ? 20 : 16) * scale,
-    paddingHorizontal: (isLargeTV ? 30 : isTV ? 24 : 20) * scale,
-    borderBottomWidth: 1 * scale,
-    borderBottomColor: 'rgba(255,255,255,0.05)',
+    paddingVertical: 14,
+    paddingHorizontal: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: 'rgba(255,255,255,0.1)',
   },
   optionText: {
-    color: '#ffffff',
-    fontSize: (isLargeTV ? 22 : isTV ? 20 : 16) * scale,
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#fff',
     textAlign: 'center',
-    fontWeight: '400',
   },
   cancelBtn: {
-    paddingVertical: (isLargeTV ? 25 : isTV ? 20 : 16) * scale,
+    marginTop: 20,
+    backgroundColor: '#2489FF',
+    borderRadius: 12,
+    paddingVertical: 12,
     alignItems: 'center',
-    marginTop: (isLargeTV ? 20 : isTV ? 16 : 12) * scale,
   },
   cancelText: {
-    color: '#ff6b6b',
-    fontSize: (isLargeTV ? 22 : isTV ? 20 : 16) * scale,
-    fontWeight: '500',
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: '700',
   },
 });

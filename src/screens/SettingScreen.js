@@ -76,6 +76,7 @@ export default function SettingsScreen() {
       id: 2,
       title: 'VPN',
       icon: require('../assets/images/vpn.png'),
+      nav: 'VPN',
     },
     {
       id: 3,
@@ -145,8 +146,6 @@ export default function SettingsScreen() {
       setActiveModal('subtitle');
     } else if (setting.title === 'MultiScreen Mode') {
       setActiveModal('multiscreen');
-    } else if (setting.title === 'VPN') {
-      setActiveModal('vpn');
     } else if (setting.title === 'Speed Test') {
       setActiveModal('speed');
     } else if (setting.title === 'Feedback') {
@@ -232,10 +231,6 @@ export default function SettingsScreen() {
             />
             <MultiScreenModal
               visible={activeModal === 'multiscreen'}
-              onClose={() => setActiveModal(null)}
-            />
-            <VPNModal
-              visible={activeModal === 'vpn'}
               onClose={() => setActiveModal(null)}
             />
             <SpeedTestModal
