@@ -147,8 +147,6 @@ export default function SettingsScreen() {
       setActiveModal('subtitle');
     } else if (setting.title === 'MultiScreen Mode') {
       setActiveModal('multiscreen');
-    } else if (setting.title === 'Speed Test') {
-      setActiveModal('speed');
     } else if (setting.title === 'Feedback') {
       setActiveModal('feedback');
     }
@@ -234,10 +232,7 @@ export default function SettingsScreen() {
               visible={activeModal === 'multiscreen'}
               onClose={() => setActiveModal(null)}
             />
-            <SpeedTestModal
-              visible={activeModal === 'speed'}
-              onClose={() => setActiveModal(null)}
-            />
+         
             <FeedbackScreen
               visible={activeModal === 'feedback'}
               onClose={() => setActiveModal(null)}
