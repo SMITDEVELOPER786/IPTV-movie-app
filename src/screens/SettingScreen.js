@@ -19,7 +19,7 @@ import PlayerSelectionModal from './PlayerSelectionModal';
 import SubtitleModal from './SubtitleModal';
 import MultiScreenModal from './MultiScreen';
 import VPNModal from './VPNScreen';
-import SpeedTestModal from './SpeedTestScreen';
+import SpeedTestScreen from './SpeedTestScreen';
 import FeedbackScreen from './FeedbackScreen';
 import LinearGradient from 'react-native-linear-gradient';
 
@@ -112,6 +112,7 @@ export default function SettingsScreen() {
       id: 9,
       title: 'Speed Test',
       icon: require('../assets/images/speed.png'),
+      nav: 'SpeedTest',
     },
     {
       id: 13,

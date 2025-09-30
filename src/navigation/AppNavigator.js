@@ -1,6 +1,6 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
-
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 // Import all screens
 import HomeScreen from "../screens/HomeScreen";
 import LoginScreen from "../screens/LoginScreen";
@@ -24,7 +24,7 @@ import SettingsScreen from "../screens/SettingScreen";
 import AddPlaylistModal from "../screens/AddPlaylistModal";
 
 
-const Stack = createStackNavigator();
+const Stack = createNativeStackNavigator()
 
 export default function AppNavigator() {
   return (
