@@ -1,419 +1,205 @@
+import React, { useState } from 'react';
 import {
-  StyleSheet,
-  Text,
   View,
+  Text,
+  StyleSheet,
   Pressable,
   Dimensions,
-  Modal,
-  FlatList,
-  TouchableWithoutFeedback,
-  Animated,
-  ActivityIndicator,
-  PixelRatio,
   ScrollView,
 } from 'react-native';
-import React, { useState, useEffect, useRef } from 'react';
+import LinearGradient from 'react-native-linear-gradient';
 
-const { width, height } = Dimensions.get('window');
+const { width } = Dimensions.get('window');
 
-// 🔹 Scaling system
-const baseWidth = 375;
-const scale = width / baseWidth;
-const normalizeFont = (size) =>
-  Math.round(PixelRatio.roundToNearestPixel(size * scale));
+const SpeedTestScreen = ({ navigation }) => {
+  const [running, setRunning] = useState(false);
+  const [completed, setCompleted] = useState(false);
+  const [download, setDownload] = useState('');
+  const [upload, setUpload] = useState('');
+  const [ping, setPing] = useState('');
 
-const SpeedTestModal = ({ visible, onClose }) => {
-  const [isTestRunning, setIsTestRunning] = useState(false);
-  const [testComplete, setTestComplete] = useState(false);
-  const [selectedServer, setSelectedServer] = useState('Auto-Select');
-  const [autoSelect, setAutoSelect] = useState(true);
-  const [showServerModal, setShowServerModal] = useState(false);
-  const [testPhase, setTestPhase] = useState('idle');
-  const [downloadSpeed, setDownloadSpeed] = useState('0.00');
-  const [uploadSpeed, setUploadSpeed] = useState('0.00');
-  const [ping, setPing] = useState('0');
+  const handleTest = () => {
+    if (running) return;
+    setRunning(true);
+    setCompleted(false);
+    setDownload('');
+    setUpload('');
+    setPing('');
 
-  const rotateAnim = useRef(new Animated.Value(0)).current;
-
-  const serverOptions = [
-    { label: 'Auto-Select', value: 'auto' },
-    { label: 'New York, NY', value: 'ny' },
-    { label: 'Los Angeles, CA', value: 'la' },
-    { label: 'London, UK', value: 'london' },
-    { label: 'Tokyo, Japan', value: 'tokyo' },
-    { label: 'Sydney, Australia', value: 'sydney' },
-  ];
-
-  useEffect(() => {
-    if (isTestRunning) {
-      Animated.loop(
-        Animated.timing(rotateAnim, {
-          toValue: 1,
-          duration: 2000,
-          useNativeDriver: true,
-        })
-      ).start();
-      runSpeedTest();
-    } else {
-      rotateAnim.stopAnimation();
-      rotateAnim.setValue(0);
-    }
-  }, [isTestRunning]);
-
-  const runSpeedTest = () => {
-    setTestPhase('ping');
-    setPing('...');
     setTimeout(() => {
-      setPing('12');
-      setTestPhase('download');
-      simulateDownloadTest();
-    }, 1000);
+      setDownload('152.4');
+      setUpload('38.7');
+      setPing('22');
+      setRunning(false);
+      setCompleted(true);
+    }, 3000);
   };
-
-  const simulateDownloadTest = () => {
-    let speed = 0;
-    const interval = setInterval(() => {
-      speed += Math.random() * 20;
-      setDownloadSpeed(speed.toFixed(2));
-      if (speed >= 150) {
-        clearInterval(interval);
-        setTestPhase('upload');
-        simulateUploadTest();
-      }
-    }, 100);
-  };
-
-  const simulateUploadTest = () => {
-    let speed = 0;
-    const interval = setInterval(() => {
-      speed += Math.random() * 15;
-      setUploadSpeed(speed.toFixed(2));
-      if (speed >= 120) {
-        clearInterval(interval);
-        setTestPhase('complete');
-        setIsTestRunning(false);
-        setTestComplete(true);
-      }
-    }, 100);
-  };
-
-  const startTest = () => {
-    if (isTestRunning) return;
-    setIsTestRunning(true);
-    setTestComplete(false);
-    setTestPhase('idle');
-    setDownloadSpeed('0.00');
-    setUploadSpeed('0.00');
-    setPing('0');
-  };
-
-  const resetTest = () => {
-    setIsTestRunning(false);
-    setTestComplete(false);
-    setTestPhase('idle');
-    setDownloadSpeed('0.00');
-    setUploadSpeed('0.00');
-    setPing('0');
-  };
-
-  const renderServerOption = (item) => (
-    <TouchableWithoutFeedback
-      onPress={() => {
-        setSelectedServer(item.label);
-        setAutoSelect(item.value === 'auto');
-        setShowServerModal(false);
-      }}
-    >
-      <View style={styles.option}>
-        <Text style={styles.optionText}>{item.label}</Text>
-      </View>
-    </TouchableWithoutFeedback>
-  );
-
-  const getCurrentTime = () =>
-    new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false });
-
-  const getCurrentDate = () =>
-    new Date()
-      .toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' })
-      .toUpperCase();
-
-  const spin = rotateAnim.interpolate({
-    inputRange: [0, 1],
-    outputRange: ['0deg', '360deg'],
-  });
 
   return (
-    <Modal transparent animationType="fade" visible={visible} onRequestClose={onClose}>
-      <View style={styles.overlay}>
-        <View style={styles.container}>
-          <ScrollView
-            contentContainerStyle={styles.scrollContent}
-            showsVerticalScrollIndicator={false}
-          >
-            {/* Header */}
-            <View style={styles.header}>
-              <View style={styles.titleSection}>
-                <Text style={styles.title}>Speed Test</Text>
-                <View style={styles.timeDate}>
+    <LinearGradient
+      colors={['#0f2027', '#203a43', '#2c5364']}
+      style={styles.background}
+    >
+      <View style={styles.backgroundOverlay}>
+        <ScrollView contentContainerStyle={styles.container}>
+          {/* HEADER */}
+          <View style={styles.header}>
+            <Pressable
+              style={({ pressed }) => [
+                styles.backButtonHeader,
+                pressed && styles.backButtonHeaderPressed,
+              ]}
+              onPress={() => navigation?.goBack?.()}
+            >
+              <Text style={styles.backArrow}>←</Text>
+            </Pressable>
+            <Text style={styles.title}>Speed Test</Text>
+            <View style={styles.headerRight}>
+              <Text style={styles.time}>10:00PM</Text>
+              <Text style={styles.date}>SEP 29, 2025</Text>
+            </View>
+          </View>
 
-                </View>
-              </View>
-              <Pressable style={styles.closeBtn} onPress={onClose}>
-                <Text style={styles.closeText}>✕</Text>
+          {/* SERVER CARD */}
+          <View style={styles.card}>
+            <Text style={styles.cardLabel}>Server:</Text>
+            <Text style={styles.cardValue}>Auto-Select</Text>
+          </View>
+
+          {/* MAIN SPLIT */}
+          <View style={styles.mainContent}>
+            {/* LEFT 50% → Start Button */}
+            <View style={styles.leftArea}>
+              <Pressable
+                onPress={handleTest}
+                disabled={running}
+                style={({ pressed }) => [
+                  styles.startButton,
+                  completed && styles.startButtonDone,
+                  pressed && styles.startButtonPressed,
+                ]}
+              >
+                <Text style={styles.startButtonText}>
+                  {completed ? 'Done' : running ? 'Testing...' : 'Start Test'}
+                </Text>
               </Pressable>
             </View>
 
-            {/* Server Settings */}
-            <View style={styles.content}>
-              <View style={styles.settingRow}>
-                <View style={styles.settingInfo}>
-                  <Text style={styles.settingLabel}>Server:</Text>
-                  <Text style={styles.settingValue}>{selectedServer}</Text>
-                </View>
-                <Pressable style={styles.changeBtn} onPress={() => setShowServerModal(true)}>
-                  <Text style={styles.changeBtnText}>▾</Text>
-                </Pressable>
+            {/* RIGHT 50% → Results */}
+            <View style={styles.rightArea}>
+              <View style={styles.resultCard}>
+                <Text style={styles.resultLabel}>Download</Text>
+                <Text style={styles.resultValue}>
+                  {download || '--'} <Text style={styles.unit}>Mbps</Text>
+                </Text>
               </View>
 
-              <View style={styles.settingRow}>
-                <Text style={styles.settingLabel}>Auto-Select</Text>
-                <Pressable
-                  style={[styles.toggle, autoSelect && styles.toggleActive]}
-                  onPress={() => {
-                    setAutoSelect(!autoSelect);
-                    if (!autoSelect) setSelectedServer('Auto-Select');
-                  }}
-                >
-                  <View style={[styles.toggleThumb, autoSelect && styles.toggleThumbActive]} />
-                </Pressable>
+              <View style={styles.resultCard}>
+                <Text style={styles.resultLabel}>Upload</Text>
+                <Text style={styles.resultValue}>
+                  {upload || '--'} <Text style={styles.unit}>Mbps</Text>
+                </Text>
               </View>
 
-              {/* Test Button */}
-              <View style={styles.testSection}>
-                <Pressable
-                  style={[
-                    styles.testButton,
-                    isTestRunning && styles.testButtonActive,
-                    testComplete && styles.testButtonComplete,
-                  ]}
-                  onPress={testComplete ? resetTest : startTest}
-                  disabled={isTestRunning}
-                >
-                  <Animated.View
-                    style={[styles.testButtonInner, isTestRunning && { transform: [{ rotate: spin }] }]}
-                  >
-                    {isTestRunning ? (
-                      <ActivityIndicator size="large" color="#ffffff" />
-                    ) : (
-                      <Text
-                        style={[styles.testButtonText, testComplete && styles.testButtonTextComplete]}
-                      >
-                        {testComplete ? 'Test Again' : 'Start Test'}
-                      </Text>
-                    )}
-                  </Animated.View>
-                </Pressable>
+              <View style={styles.resultCard}>
+                <Text style={styles.resultLabel}>Ping</Text>
+                <Text style={styles.resultValue}>
+                  {ping || '--'} <Text style={styles.unit}>ms</Text>
+                </Text>
               </View>
-
-              {/* Results */}
-              <View style={styles.resultsSection}>
-                <View style={styles.resultRow}>
-                  <View style={styles.resultItem}>
-                    <Text style={styles.resultLabel}>Download Speed</Text>
-                    <Text style={styles.resultValue}>{downloadSpeed}</Text>
-                    <Text style={styles.resultUnit}>Mbps</Text>
-                  </View>
-                  <View style={styles.resultDivider} />
-                  <View style={styles.resultItem}>
-                    <Text style={styles.resultLabel}>Upload Speed</Text>
-                    <Text style={styles.resultValue}>{uploadSpeed}</Text>
-                    <Text style={styles.resultUnit}>Mbps</Text>
-                  </View>
-                </View>
-
-                <View style={styles.pingSection}>
-                  <Text style={styles.resultLabel}>Ping</Text>
-                  <Text style={styles.pingValue}>{ping}</Text>
-                  <Text style={styles.resultUnit}>ms</Text>
-                </View>
-              </View>
-
-              {isTestRunning && (
-                <View style={styles.statusSection}>
-                  <Text style={styles.statusText}>
-                    {testPhase === 'ping' && 'Testing connection...'}
-                    {testPhase === 'download' && 'Testing download speed...'}
-                    {testPhase === 'upload' && 'Testing upload speed...'}
-                  </Text>
-                </View>
-              )}
             </View>
-          </ScrollView>
-
-          {/* Server Modal */}
-          <Modal
-            transparent
-            visible={showServerModal}
-            animationType="fade"
-            onRequestClose={() => setShowServerModal(false)}
-          >
-            <Pressable style={styles.modalOverlay} onPress={() => setShowServerModal(false)}>
-              <View style={styles.modalBox}>
-                <Text style={styles.modalTitle}>Select Server</Text>
-                <FlatList
-                  data={serverOptions}
-                  keyExtractor={(item) => item.value}
-                  renderItem={({ item }) => renderServerOption(item)}
-                />
-                <Pressable style={styles.cancelBtn} onPress={() => setShowServerModal(false)}>
-                  <Text style={styles.cancelText}>Cancel</Text>
-                </Pressable>
-              </View>
-            </Pressable>
-          </Modal>
-        </View>
+          </View>
+        </ScrollView>
       </View>
-    </Modal>
+    </LinearGradient>
   );
 };
 
-export default SpeedTestModal;
-
 const styles = StyleSheet.create({
-  overlay: { flex: 1, backgroundColor: 'rgba(0,0,0,0.8)', justifyContent: 'center', alignItems: 'center' },
-  container: {
-    width: width * 0.9,
-    maxWidth: 900,
-    maxHeight: height * 0.9,
-    backgroundColor: '#1a1a1a',
-    borderRadius: 20 * scale,
-    overflow: 'hidden',
+  background: { flex: 1 },
+  backgroundOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.6)',
   },
-  scrollContent: { flexGrow: 1 },
+  container: { padding: 24, paddingTop: 40 },
+
+  // HEADER
   header: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
     alignItems: 'center',
-    paddingHorizontal: 24 * scale,
-    paddingVertical: 20 * scale,
-    backgroundColor: '#2a2a2a',
+    marginBottom: 20,
   },
-  titleSection: { flexDirection: 'row', alignItems: 'center', flex: 1 },
-  title: { color: '#fff', fontSize: normalizeFont(24), fontWeight: '600', marginRight: 24 * scale },
-  timeDate: { alignItems: 'flex-end' },
-  time: { color: '#fff', fontSize: normalizeFont(16), fontWeight: '500' },
-  date: { color: '#888', fontSize: normalizeFont(12), marginTop: 2 * scale },
-  closeBtn: {
-    width: 40 * scale,
-    height: 40 * scale,
-    borderRadius: 20 * scale,
+  backButtonHeader: {
+    padding: 8,
+    marginRight: 12,
     backgroundColor: 'rgba(255,255,255,0.1)',
-    justifyContent: 'center',
-    alignItems: 'center',
+    borderRadius: 20,
   },
-  closeText: { color: '#fff', fontSize: normalizeFont(18), fontWeight: '300' },
-  content: { padding: 24 * scale },
-  settingRow: {
+  backButtonHeaderPressed: { backgroundColor: 'rgba(255,255,255,0.2)' },
+  backArrow: { color: '#fff', fontSize: 20, fontWeight: 'bold' },
+  title: {
+    flex: 1,
+    textAlign: 'center',
+    fontSize: 22,
+    fontWeight: '700',
+    color: '#fff',
+  },
+  headerRight: { alignItems: 'flex-end' },
+  time: { fontSize: 16, fontWeight: '600', color: '#fff' },
+  date: { fontSize: 13, color: '#ddd', marginTop: 2 },
+
+  // SERVER CARD
+  card: {
+    backgroundColor: 'rgba(255,255,255,0.1)',
+    borderRadius: 12,
+    padding: 14,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingVertical: 12 * scale,
-    marginBottom: 12 * scale,
-    borderBottomWidth: 1,
-    borderBottomColor: 'rgba(255,255,255,0.1)',
+    marginBottom: 24,
   },
-  settingInfo: { flex: 1 },
-  settingLabel: { color: '#888', fontSize: normalizeFont(14) },
-  settingValue: { color: '#fff', fontSize: normalizeFont(16), fontWeight: '500', marginTop: 4 * scale },
-  changeBtn: {
-    width: 32 * scale,
-    height: 32 * scale,
-    borderRadius: 16 * scale,
-    backgroundColor: 'rgba(255,255,255,0.1)',
+  cardLabel: { fontSize: 16, color: '#eee' },
+  cardValue: { fontSize: 16, fontWeight: '600', color: '#fff' },
+
+  // MAIN SPLIT
+  mainContent: { flexDirection: 'row', flex: 1 },
+
+  leftArea: { flex: 1, justifyContent: 'center', alignItems: 'center' },
+  rightArea: { flex: 1, justifyContent: 'space-evenly' },
+
+  // BIG START BUTTON
+  startButton: {
+    width: width * 0.35,
+    height: width * 0.35,
+    borderRadius: (width * 0.35) / 2,
+    backgroundColor: '#2196f3',
     justifyContent: 'center',
     alignItems: 'center',
+    shadowColor: '#2196f3',
+    shadowOpacity: 0.4,
+    shadowOffset: { width: 0, height: 6 },
+    shadowRadius: 10,
+    elevation: 8,
   },
-  changeBtnText: { color: '#fff', fontSize: normalizeFont(16) },
-  toggle: {
-    width: 50 * scale,
-    height: 28 * scale,
-    borderRadius: 14 * scale,
-    backgroundColor: '#333',
-    justifyContent: 'center',
-    paddingHorizontal: 4 * scale,
-  },
-  toggleActive: { backgroundColor: '#4285f4' },
-  toggleThumb: {
-    width: 20 * scale,
-    height: 20 * scale,
-    borderRadius: 10 * scale,
-    backgroundColor: '#fff',
-    alignSelf: 'flex-start',
-  },
-  toggleThumbActive: { alignSelf: 'flex-end' },
-  testSection: { alignItems: 'center', marginVertical: 32 * scale },
-  testButton: {
-    width: 120 * scale,
-    height: 120 * scale,
-    borderRadius: 60 * scale,
-    backgroundColor: '#4285f4',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  testButtonActive: { backgroundColor: '#5294f7' },
-  testButtonComplete: { backgroundColor: '#34a853' },
-  testButtonInner: { justifyContent: 'center', alignItems: 'center' },
-  testButtonText: { color: '#fff', fontSize: normalizeFont(16), fontWeight: '600' },
-  testButtonTextComplete: { fontSize: normalizeFont(14) },
-  resultsSection: {
-    backgroundColor: 'rgba(255,255,255,0.05)',
-    borderRadius: 16 * scale,
-    padding: 20 * scale,
-    marginTop: 20 * scale,
-  },
-  resultRow: { flexDirection: 'row', alignItems: 'center' },
-  resultItem: { flex: 1, alignItems: 'center' },
-  resultDivider: { width: 1, height: 60 * scale, backgroundColor: 'rgba(255,255,255,0.2)', marginHorizontal: 20 * scale },
-  resultLabel: { color: '#888', fontSize: normalizeFont(12), marginBottom: 8 * scale },
-  resultValue: { color: '#fff', fontSize: normalizeFont(28), fontWeight: '700' },
-  resultUnit: { color: '#888', fontSize: normalizeFont(12), marginTop: 4 * scale },
-  pingSection: {
-    alignItems: 'center',
-    marginTop: 20 * scale,
-    paddingTop: 20 * scale,
-    borderTopWidth: 1,
-    borderTopColor: 'rgba(255,255,255,0.1)',
-  },
-  pingValue: { color: '#4285f4', fontSize: normalizeFont(24), fontWeight: '700' },
-  statusSection: { alignItems: 'center', marginTop: 20 * scale },
-  statusText: { color: '#4285f4', fontSize: normalizeFont(14), fontWeight: '500' },
-  modalOverlay: { flex: 1, backgroundColor: 'rgba(0,0,0,0.8)', justifyContent: 'center', alignItems: 'center' },
-  modalBox: {
-    backgroundColor: '#2a2a2a',
-    width: width * 0.7,
-    maxWidth: 500,
-    borderRadius: 16 * scale,
-    paddingVertical: 16 * scale,
-    maxHeight: '70%',
-  },
-  modalTitle: {
+  startButtonDone: { backgroundColor: '#27ae60', shadowColor: '#27ae60' },
+  startButtonPressed: { opacity: 0.85 },
+  startButtonText: {
+    fontSize: 20,
+    fontWeight: 'bold',
     color: '#fff',
-    fontSize: normalizeFont(18),
-    fontWeight: '600',
     textAlign: 'center',
-    paddingBottom: 16 * scale,
-    borderBottomWidth: 1,
-    borderBottomColor: 'rgba(255,255,255,0.1)',
-    marginBottom: 12 * scale,
   },
-  option: {
-    paddingVertical: 16 * scale,
-    paddingHorizontal: 20 * scale,
-    borderBottomWidth: 1,
-    borderBottomColor: 'rgba(255,255,255,0.05)',
+
+  // RESULTS
+  resultCard: {
+    backgroundColor: 'rgba(255,255,255,0.08)',
+    padding: 18,
+    borderRadius: 12,
+    marginBottom: 16,
   },
-  optionText: { color: '#fff', fontSize: normalizeFont(16), textAlign: 'center' },
-  cancelBtn: { paddingVertical: 16 * scale, alignItems: 'center', marginTop: 12 * scale },
-  cancelText: { color: '#ff6b6b', fontSize: normalizeFont(16), fontWeight: '500' },
+  resultLabel: { fontSize: 16, color: '#ddd' },
+  resultValue: { fontSize: 22, fontWeight: '700', color: '#fff', marginTop: 6 },
+  unit: { fontSize: 14, color: '#bbb' },
 });
+
+export default SpeedTestScreen;

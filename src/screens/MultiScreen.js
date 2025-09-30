@@ -7,11 +7,13 @@ import {
   Modal,
   FlatList,
   Switch,
+  Platform,
 } from 'react-native';
 import React, { useState } from 'react';
 
 const { width, height } = Dimensions.get('window');
 const isTV = width >= 1000;
+const baseWidth = isTV ? width * 0.4 : width * 0.5; // Reduced to 40% on TV, 50% on others
 
 const MultiScreenModal = ({ visible, onClose }) => {
   const [isEnabled, setIsEnabled] = useState(false);
@@ -23,7 +25,11 @@ const MultiScreenModal = ({ visible, onClose }) => {
 
   const renderOption = (item, setSelected, closeModal) => (
     <Pressable
-      style={styles.option}
+      style={({ pressed }) => [
+        styles.option,
+        pressed && styles.optionPressed,
+        Platform.OS === 'tv' && styles.tvFocus,
+      ]}
       onPress={() => {
         setSelected(item);
         closeModal(false);
@@ -36,33 +42,45 @@ const MultiScreenModal = ({ visible, onClose }) => {
   return (
     <Modal
       transparent
-      animationType="fade"
+      animationType="slide"
       visible={visible}
       onRequestClose={onClose}
     >
       <View style={styles.overlay}>
-        <View style={[styles.container, isTV && styles.tvContainer]}>
-          <View style={styles.headingAndBtn}>
+        <View style={[styles.container, { width: baseWidth }]}>
+          <View style={styles.header}>
             <Text style={styles.heading}>MULTISCREEN MODE</Text>
-            <Pressable style={styles.btnClose} onPress={onClose}>
+            <Pressable
+              style={({ pressed }) => [
+                styles.btnClose,
+                pressed && styles.btnPressed,
+                Platform.OS === 'tv' && styles.tvFocus,
+              ]}
+              onPress={onClose}
+            >
               <Text style={styles.btnText}>✖</Text>
             </Pressable>
           </View>
           <View style={styles.form}>
             <View style={styles.inputGroup}>
-              <Text style={styles.label}>Enable Multiscreen:</Text>
+              <Text style={styles.label}>Enable Multiscreen</Text>
               <Switch
-                trackColor={{ false: '#767577', true: '#81b0ff' }}
-                thumbColor={isEnabled ? '#f5dd4b' : '#f4f3f4'}
-                ios_backgroundColor="#3e3e3e"
+                trackColor={{ false: '#666', true: '#4dabf7' }}
+                thumbColor={isEnabled ? '#ffd700' : '#ccc'}
+                ios_backgroundColor="#444"
                 onValueChange={setIsEnabled}
                 value={isEnabled}
+                style={styles.switch}
               />
             </View>
             <View style={[styles.inputGroup, !isEnabled && styles.disabled]}>
-              <Text style={styles.label}>Num Screens:</Text>
+              <Text style={styles.label}>Number of Screens</Text>
               <Pressable
-                style={styles.dropdown}
+                style={({ pressed }) => [
+                  styles.dropdown,
+                  pressed && styles.dropdownPressed,
+                  Platform.OS === 'tv' && styles.tvFocus,
+                ]}
                 onPress={() => isEnabled && setNumScreens(true)}
                 disabled={!isEnabled}
               >
@@ -71,9 +89,13 @@ const MultiScreenModal = ({ visible, onClose }) => {
               </Pressable>
             </View>
             <View style={[styles.inputGroup, !isEnabled && styles.disabled]}>
-              <Text style={styles.label}>Max Screens:</Text>
+              <Text style={styles.label}>Max Screens</Text>
               <Pressable
-                style={styles.dropdown}
+                style={({ pressed }) => [
+                  styles.dropdown,
+                  pressed && styles.dropdownPressed,
+                  Platform.OS === 'tv' && styles.tvFocus,
+                ]}
                 onPress={() => isEnabled && setMaxScreens(true)}
                 disabled={!isEnabled}
               >
@@ -81,14 +103,20 @@ const MultiScreenModal = ({ visible, onClose }) => {
                 <Text style={styles.arrow}>▾</Text>
               </Pressable>
             </View>
-            <Pressable style={styles.saveBtn}>
+            <Pressable
+              style={({ pressed }) => [
+                styles.saveBtn,
+                pressed && styles.saveBtnPressed,
+                Platform.OS === 'tv' && styles.tvFocus,
+              ]}
+            >
               <Text style={styles.saveText}>Submit</Text>
             </Pressable>
           </View>
           <Modal
             transparent
             visible={numScreens === true}
-            animationType="fade"
+            animationType="slide"
             onRequestClose={() => setNumScreens(false)}
           >
             <Pressable
@@ -104,7 +132,11 @@ const MultiScreenModal = ({ visible, onClose }) => {
                   }
                 />
                 <Pressable
-                  style={styles.cancelBtn}
+                  style={({ pressed }) => [
+                    styles.cancelBtn,
+                    pressed && styles.cancelBtnPressed,
+                    Platform.OS === 'tv' && styles.tvFocus,
+                  ]}
                   onPress={() => setNumScreens(false)}
                 >
                   <Text style={styles.cancelText}>Cancel</Text>
@@ -115,7 +147,7 @@ const MultiScreenModal = ({ visible, onClose }) => {
           <Modal
             transparent
             visible={maxScreens === true}
-            animationType="fade"
+            animationType="slide"
             onRequestClose={() => setMaxScreens(false)}
           >
             <Pressable
@@ -131,7 +163,11 @@ const MultiScreenModal = ({ visible, onClose }) => {
                   }
                 />
                 <Pressable
-                  style={styles.cancelBtn}
+                  style={({ pressed }) => [
+                    styles.cancelBtn,
+                    pressed && styles.cancelBtnPressed,
+                    Platform.OS === 'tv' && styles.tvFocus,
+                  ]}
                   onPress={() => setMaxScreens(false)}
                 >
                   <Text style={styles.cancelText}>Cancel</Text>
@@ -150,97 +186,153 @@ export default MultiScreenModal;
 const styles = StyleSheet.create({
   overlay: {
     flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.6)',
+    backgroundColor: 'rgba(0,0,0,0.75)',
     justifyContent: 'center',
     alignItems: 'center',
   },
   container: {
-    width: '75%',
-    backgroundColor: '#040404cd',
+    backgroundColor: '#1e1e1e',
     paddingVertical: '4%',
-    paddingHorizontal: '10%',
+    paddingHorizontal: '4%',
     borderRadius: 12,
     borderStyle: 'solid',
-    borderColor: '#2E293E',
-    borderWidth: 1,
+    borderColor: '#4a4060',
+    borderWidth: 2,
+    elevation: 10,
   },
-  tvContainer: {
-    width: '50%',
-    paddingVertical: '6%',
-    paddingHorizontal: '15%',
-  },
-  headingAndBtn: {
+  header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 15,
   },
   heading: {
     color: '#fff',
-    fontSize: isTV ? 24 : 18,
-    fontWeight: 'bold',
-    marginBottom: 25,
+    fontSize: isTV ? 26 : 18,
+    fontWeight: '700',
+    textTransform: 'uppercase',
+    letterSpacing: 1,
+  },
+  btnClose: {
+    padding: isTV ? 12 : 8,
+    backgroundColor: 'rgba(255,255,255,0.1)',
+    borderRadius: isTV ? 20 : 16,
+  },
+  btnPressed: {
+    backgroundColor: 'rgba(255,255,255,0.2)',
   },
   btnText: {
     color: '#fff',
-    fontWeight: '500',
-    alignSelf: 'center',
-    fontSize: isTV ? 24 : 18,
+    fontSize: isTV ? 22 : 16,
+    fontWeight: '600',
   },
-  form: { marginTop: 10 },
+  form: {
+    marginTop: 15,
+  },
   inputGroup: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginBottom: 20,
-    borderWidth: 1,
-    borderColor: '#2E293E',
-    paddingVertical: 12,
-    paddingHorizontal: 12,
+    marginBottom: 15,
+    borderWidth: 2,
+    borderColor: '#4a4060',
+    paddingVertical: isTV ? 15 : 10,
+    paddingHorizontal: isTV ? 12 : 8,
     borderRadius: 25,
+    backgroundColor: 'rgba(255,255,255,0.05)',
   },
   disabled: {
-    opacity: 0.5,
+    opacity: 0.6,
+    backgroundColor: 'rgba(255,255,255,0.03)',
   },
-  label: { color: '#aaa', fontSize: isTV ? 18 : 14, flex: 1 },
+  label: {
+    color: '#bbb',
+    fontSize: isTV ? 18 : 14,
+    fontWeight: '500',
+    flex: 1,
+  },
+  switch: {
+    transform: isTV ? [{ scale: 1.3 }] : [{ scale: 1 }],
+  },
   dropdown: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'flex-end',
     flex: 1,
+    padding: isTV ? 8 : 5,
   },
-  dropdownText: { color: '#fff', fontSize: isTV ? 18 : 14, marginRight: 8 },
-  arrow: { color: '#6512CF', fontSize: isTV ? 36 : 30 },
+  dropdownPressed: {
+    backgroundColor: 'rgba(255,255,255,0.1)',
+  },
+  dropdownText: {
+    color: '#fff',
+    fontSize: isTV ? 18 : 14,
+    marginRight: isTV ? 10 : 6,
+  },
+  arrow: {
+    color: '#7e4aff',
+    fontSize: isTV ? 34 : 26,
+  },
   saveBtn: {
-    backgroundColor: '#515DEF',
-    paddingVertical: isTV ? 20 : 14,
+    backgroundColor: '#6b4eff',
+    paddingVertical: isTV ? 18 : 12,
     borderRadius: 6,
     alignItems: 'center',
+    marginTop: 15,
+    elevation: 5,
   },
-  saveText: { color: '#fff', fontSize: isTV ? 20 : 16, fontWeight: '600' },
+  saveBtnPressed: {
+    backgroundColor: '#5a3de6',
+  },
+  saveText: {
+    color: '#fff',
+    fontSize: isTV ? 20 : 14,
+    fontWeight: '700',
+  },
   modalOverlay: {
     flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.6)',
+    backgroundColor: 'rgba(0,0,0,0.8)',
     justifyContent: 'center',
     alignItems: 'center',
   },
   modalBox: {
-    backgroundColor: '#1c1c1c',
-    width: isTV ? '60%' : '80%',
-    borderRadius: 8,
-    paddingVertical: 10,
+    backgroundColor: '#252525',
+    width: isTV ? '40%' : '60%', // Adjusted to match smaller dialog
+    borderRadius: isTV ? 12 : 8,
+    paddingVertical: isTV ? 15 : 8,
+    elevation: 15,
   },
   option: {
-    padding: isTV ? 20 : 15,
+    padding: isTV ? 20 : 12,
     borderBottomWidth: 1,
     borderBottomColor: 'rgba(255,255,255,0.1)',
-  },
-  optionText: { color: '#fff', fontSize: isTV ? 20 : 16, textAlign: 'center' },
-  cancelBtn: {
-    padding: isTV ? 20 : 15,
     alignItems: 'center',
   },
-  cancelText: {
-    color: '#ff4d4d',
-    fontSize: isTV ? 20 : 16,
+  optionPressed: {
+    backgroundColor: 'rgba(255,255,255,0.1)',
+  },
+  tvFocus: {
+    borderColor: '#7e4aff',
+    borderWidth: 3,
+    borderRadius: 8,
+  },
+  optionText: {
+    color: '#fff',
+    fontSize: isTV ? 20 : 14,
+    textAlign: 'center',
     fontWeight: '600',
+  },
+  cancelBtn: {
+    padding: isTV ? 15 : 10,
+    alignItems: 'center',
+    marginTop: 8,
+  },
+  cancelBtnPressed: {
+    backgroundColor: 'rgba(255,77,77,0.2)',
+  },
+  cancelText: {
+    color: '#ff6666',
+    fontSize: isTV ? 20 : 14,
+    fontWeight: '700',
   },
 });
