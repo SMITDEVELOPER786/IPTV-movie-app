@@ -15,17 +15,13 @@ import NotificationModal from '../screens/NotificationScreen';
 import MultiScreenModal from '../screens/MultiScreen';
 import { useNavigation } from '@react-navigation/native';
 
-const { width } = Dimensions.get('window');
-const isPhone = width < 768;
-
+const { width, height } = Dimensions.get('window');
 
 export default function HomeScreen() {
   const mainnavigation = useNavigation();
   const [isMultiScreenVisible, setIsMultiScreenVisible] = useState(false);
   const [isAddPlaylistVisible, setIsAddPlaylistVisible] = useState(false);
-  const [isSettingsVisible, setIsSettingsVisible] = useState(false);
   const [isNotificationVisible, setIsNotificationVisible] = useState(false);
-
   const [unreadNotifications] = useState(3);
 
   const handleCardClick = (screenName) => {
@@ -44,123 +40,126 @@ export default function HomeScreen() {
         imageStyle={{ resizeMode: 'cover' }}
       >
         <View style={styles.overlay}>
-          {/* 🔹 Header */}
+          {/* Header */}
           <View style={styles.header}>
-            {/* Left side (time, date, notification) */}
-            <View style={styles.headerLeft}>
-              <View style={styles.timeDateContainer}>
-                <Text style={styles.time}>05:52 AM</Text>
-                <Text style={styles.date}>SEP 30TH, 2025</Text>
-              </View>
-              <TouchableOpacity
-                style={styles.notificationBtn}
-                onPress={() => setIsNotificationVisible(true)}
-              >
-                <Text style={styles.notificationIcon}>🔔</Text>
-                {unreadNotifications > 0 && (
-                  <View style={styles.notificationBadge}>
-                    <Text style={styles.notificationBadgeText}>
-                      {unreadNotifications > 9 ? '9+' : unreadNotifications}
-                    </Text>
-                  </View>
-                )}
-              </TouchableOpacity>
+            {/* Time & Date - Left */}
+            <View style={styles.timeDateContainer}>
+              <Text style={styles.time}>10:00PM</Text>
+              <Text style={styles.date}>AUG 29TH, 2025</Text>
             </View>
 
-            {/* Right side (search) */}
-            <View style={styles.headerRight}>
+            {/* Search - Center */}
+            <View style={styles.searchContainer}>
+              <Text style={styles.emojiIcon}>🔍</Text>
               <TextInput
                 style={styles.search}
                 placeholder="Master Search"
-                placeholderTextColor="#aaa"
+                placeholderTextColor="#999"
               />
             </View>
+
+            {/* Notification - Right */}
+            <TouchableOpacity
+              style={styles.notificationBtn}
+              onPress={() => handleCardClick('Notifications')}
+            >
+              <Text style={styles.emojiIcon}>🔔</Text>
+              {unreadNotifications > 0 && (
+                <View style={styles.notificationBadge}>
+                  <Text style={styles.notificationBadgeText}>
+                    {unreadNotifications > 9 ? '9+' : unreadNotifications}
+                  </Text>
+                </View>
+              )}
+            </TouchableOpacity>
           </View>
 
-          {/* 🔹 Categories */}
-          <View
-            style={[
-              styles.categoryRow,
-              isPhone && { flexDirection: 'column', alignItems: 'center' },
-            ]}
-          >
+          {/* Main Categories */}
+          <View style={styles.categorySection}>
             <TouchableOpacity
-              style={[styles.card, isPhone && { width: '90%' }]}
+              style={styles.bigCard}
               onPress={() => handleCardClick('LiveTV')}
             >
               <Image
                 source={require('../assets/images/livve.png')}
-                style={styles.cardImage}
+                style={styles.bigCardImage}
               />
-              <Text style={styles.cardText}>LIVE TV</Text>
+              <View style={styles.cardOverlay}>
+                <Text style={styles.emojiIcon}>📺</Text>
+                <Text style={styles.bigCardText}>LIVE TV</Text>
+              </View>
             </TouchableOpacity>
 
             <TouchableOpacity
-              style={styles.card}
+              style={styles.bigCard}
               onPress={() => handleCardClick('Movies')}
             >
               <Image
                 source={require('../assets/images/adventures.png')}
-                style={styles.cardImage}
+                style={styles.bigCardImage}
               />
-              <Text style={styles.cardText}>MOVIES</Text>
+              <View style={styles.cardOverlay}>
+                <Text style={styles.emojiIcon}>🎬</Text>
+                <Text style={styles.bigCardText}>MOVIES</Text>
+              </View>
             </TouchableOpacity>
 
             <TouchableOpacity
-              style={styles.card}
+              style={styles.bigCard}
               onPress={() => handleCardClick('Series')}
             >
               <Image
                 source={require('../assets/images/series.png')}
-                style={styles.cardImage}
+                style={styles.bigCardImage}
               />
-              <Text style={styles.cardText}>SERIES</Text>
+              <View style={styles.cardOverlay}>
+                <Text style={styles.emojiIcon}>▶️</Text>
+                <Text style={styles.bigCardText}>SERIES</Text>
+              </View>
             </TouchableOpacity>
           </View>
 
-          {/* 🔹 Action Buttons */}
-          <View
-            style={[
-              styles.actions,
-              isPhone && { flexDirection: 'column', alignItems: 'center' },
-            ]}
-          >
+          {/* Action Buttons */}
+          <View style={styles.actionsSection}>
             <TouchableOpacity
-              style={[styles.actionBtn, isPhone && { width: '100%' }]}
+              style={styles.actionBtn}
               onPress={() => handleCardClick('Playlist')}
             >
-              <Text style={styles.actionText}>🔄 Update Playlist</Text>
+              <Text style={styles.emojiIcon}>🔄</Text>
+              <Text style={styles.actionText}>Update Playlist</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity style={styles.actionBtn}>
+              <Text style={styles.emojiIcon}>♻️</Text>
+              <Text style={styles.actionText}>Reload Cache</Text>
             </TouchableOpacity>
 
             <TouchableOpacity
-              style={[styles.actionBtn, isPhone && { width: '100%' }]}
-            >
-              <Text style={styles.actionText}>🔄 Reload Cache</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              style={[styles.actionBtn, isPhone && { width: '100%' }]}
+              style={styles.actionBtn}
               onPress={() => setIsMultiScreenVisible(true)}
             >
-              <Text style={styles.actionText}>📺 Multiscreen</Text>
+              <Text style={styles.emojiIcon}>🖥️</Text>
+              <Text style={styles.actionText}>Multiscreen</Text>
             </TouchableOpacity>
 
             <TouchableOpacity
-              style={[styles.actionBtn, isPhone && { width: '100%' }]}
+              style={styles.actionBtn}
               onPress={() => setIsAddPlaylistVisible(true)}
             >
-              <Text style={styles.actionText}>➕ Add Playlist</Text>
+              <Text style={styles.emojiIcon}>➕</Text>
+              <Text style={styles.actionText}>Add Playlist</Text>
             </TouchableOpacity>
-            <TouchableOpacity
-              style={[styles.actionBtn, isPhone && { width: '100%' }]}
-              onPress={() => handleCardClick('Settings')}
 
+            <TouchableOpacity
+              style={styles.actionBtn}
+              onPress={() => handleCardClick('Settings')}
             >
-              <Text style={styles.actionText}>⚙️ Settings</Text>
+              <Text style={styles.emojiIcon}>⚙️</Text>
+              <Text style={styles.actionText}>Settings</Text>
             </TouchableOpacity>
           </View>
 
-          {/* 🔹 Expiration */}
+          {/* Expiration */}
           <Text style={styles.expiration}>
             EXPIRATION: December 25TH, 2025
           </Text>
@@ -175,10 +174,6 @@ export default function HomeScreen() {
           visible={isAddPlaylistVisible}
           onClose={() => setIsAddPlaylistVisible(false)}
         />
-        <NotificationModal
-          visible={isNotificationVisible}
-          onClose={() => setIsNotificationVisible(false)}
-        />
 
       </ImageBackground>
     </ScrollView>
@@ -188,151 +183,160 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'black',
+    backgroundColor: '#000',
   },
   bg: {
     flex: 1,
     width: '100%',
+    minHeight: height,
   },
   overlay: {
-    backgroundColor: 'rgba(0,0,0,0.6)',
-    padding: 10 * scale,
+    backgroundColor: 'rgba(0,0,0,0.7)',
+    padding: 48,
+    minHeight: height,
   },
-  // 🔹 Header Styles
+
+  // Header
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 25 * scale,
-    paddingHorizontal: 20 * scale,
-    borderRadius: 14 * scale,
-    paddingVertical: 12 * scale,
+    marginBottom: 60,
+    backgroundColor: 'rgba(0,0,0,0.4)',
+    paddingVertical: 24,
+    paddingHorizontal: 48,
+    borderRadius: 16,
     borderWidth: 1,
     borderColor: 'rgba(255,255,255,0.1)',
   },
-  headerLeft: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 18 * scale,
-    flex: 1,
-  },
   timeDateContainer: {
-    flexDirection: 'column',
-    alignItems: 'flex-start',
-    marginLeft: 260
+    flex: 1,
   },
   time: {
     color: '#fff',
-    fontSize: (isLargeTV ? 28 : isTV ? 24 : 18) * scale,
+    fontSize: 24,
     fontWeight: 'bold',
   },
   date: {
     color: '#aaa',
-    fontSize: (isLargeTV ? 18 : isTV ? 16 : 12) * scale,
+    fontSize: 14,
+    marginTop: 4,
   },
-  notificationBtn: {
-    position: 'relative',
-    backgroundColor: 'rgba(255,255,255,0.08)',
-    width: (isLargeTV ? 58 : isTV ? 52 : 42) * scale,
-    height: (isLargeTV ? 58 : isTV ? 52 : 42) * scale,
-    borderRadius: (isLargeTV ? 29 : isTV ? 26 : 21) * scale,
-    justifyContent: 'center',
+  searchContainer: {
+    flex: 2,
+    flexDirection: 'row',
     alignItems: 'center',
+    backgroundColor: 'rgba(255,255,255,0.08)',
+    borderRadius: 30,
+    paddingHorizontal: 24,
     borderWidth: 1,
     borderColor: 'rgba(255,255,255,0.15)',
   },
-  notificationIcon: {
-    fontSize: (isLargeTV ? 28 : isTV ? 24 : 20) * scale,
+  search: {
+    flex: 1,
     color: '#fff',
+    fontSize: 18,
+    paddingVertical: 14,
+    marginLeft: 8,
+  },
+  notificationBtn: {
+    flex: 1,
+    alignItems: 'flex-end',
+    position: 'relative',
   },
   notificationBadge: {
     position: 'absolute',
-    top: -5 * scale,
-    right: -5 * scale,
+    top: -8,
+    right: -8,
     backgroundColor: '#ff3333',
-    borderRadius: 12 * scale,
-    minWidth: 22 * scale,
-    height: 22 * scale,
+    borderRadius: 12,
+    minWidth: 24,
+    height: 24,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingHorizontal: 4 * scale,
-    borderWidth: 1.5,
-    borderColor: '#111',
+    paddingHorizontal: 6,
+    borderWidth: 2,
+    borderColor: '#000',
   },
   notificationBadgeText: {
     color: '#fff',
-    fontSize: (isLargeTV ? 13 : isTV ? 12 : 10) * scale,
+    fontSize: 11,
     fontWeight: 'bold',
   },
-  headerRight: {
-    flex: 1,
-    alignItems: 'flex-end',
-  },
-  search: {
-    marginRight: 150,
-    backgroundColor: 'rgba(255,255,255,0.08)',
-    color: '#fff',
-    paddingVertical: (isLargeTV ? 14 : isTV ? 12 : 10) * scale,
-    paddingHorizontal: (isLargeTV ? 20 : isTV ? 18 : 14) * scale,
-    borderRadius: 30 * scale,
-    width: (isLargeTV ? 320 : isTV ? 260 : 200) * scale,
-    fontSize: (isLargeTV ? 20 : isTV ? 18 : 14) * scale,
-    borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.12)',
-  },
-  // 🔹 Categories
-  categoryRow: {
-    marginVertical: 12 * scale,
+
+  // Main Categories
+  categorySection: {
     flexDirection: 'row',
-    justifyContent: 'space-around',
-    marginTop: 30 * scale,
+    justifyContent: 'center',
+    gap: 32,
+    marginBottom: 60,
   },
-  card: {
-    marginBottom: 15 * scale,
-    alignItems: 'center',
-    width: (isLargeTV ? 350 : isTV ? 320 : 300) * scale,
+  bigCard: {
+    width: 380,
+    height: 260,
+    borderRadius: 16,
+    overflow: 'hidden',
+    position: 'relative',
   },
-  cardImage: {
+  bigCardImage: {
     width: '100%',
-    borderRadius: 8 * scale,
-    height: (isLargeTV ? 200 : isTV ? 180 : 160) * scale,
+    height: '100%',
     resizeMode: 'cover',
   },
-  cardText: {
-    color: '#fff',
-    marginTop: 6 * scale,
-    fontWeight: 'bold',
-    fontSize: (isLargeTV ? 20 : isTV ? 18 : 14) * scale,
-  },
-  // 🔹 Action Buttons
-  actions: {
+  cardOverlay: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    backgroundColor: 'rgba(0,0,0,0.7)',
+    paddingVertical: 20,
+    paddingHorizontal: 24,
     flexDirection: 'row',
-    marginVertical: 15 * scale,
-    justifyContent: 'space-around',
+    alignItems: 'center',
+    gap: 16,
+  },
+  bigCardText: {
+    color: '#fff',
+    fontSize: 24,
+    fontWeight: 'bold',
+  },
+
+  // Action Buttons
+  actionsSection: {
+    flexDirection: 'row',
+    justifyContent: 'center',
     flexWrap: 'wrap',
-    gap: 10
+    gap: 24,
+    marginBottom: 40,
   },
   actionBtn: {
-    backgroundColor: '#0E0D13',
-    color: '#fff',
-    paddingVertical: (isLargeTV ? 16 : isTV ? 14 : 10) * scale,
-    paddingHorizontal: (isLargeTV ? 48 : isTV ? 44 : 40) * scale,
-    borderRadius: 6 * scale,
-    marginVertical: 6 * scale,
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    paddingVertical: 20,
+    paddingHorizontal: 40,
+    borderRadius: 12,
     alignItems: 'center',
-    borderWidth: 0.5,
-    borderColor: '#444',
-    minWidth: isPhone ? '45%' : 'auto',
+    gap: 12,
+    minWidth: 200,
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.15)',
   },
   actionText: {
     color: '#fff',
-    fontSize: (isLargeTV ? 18 : isTV ? 16 : 14) * scale,
-    fontWeight: '500',
+    fontSize: 16,
+    fontWeight: '600',
   },
+
+  // Emoji Styling
+  emojiIcon: {
+    fontSize: 28,
+    color: '#fff',
+  },
+
+  // Expiration
   expiration: {
-    color: '#aaa',
+    color: '#888',
     textAlign: 'center',
-    fontSize: (isLargeTV ? 16 : isTV ? 14 : 12) * scale,
-    marginTop: 20 * scale,
+    fontSize: 14,
+    marginTop: 20,
   },
 });
