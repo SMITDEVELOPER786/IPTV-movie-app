@@ -141,7 +141,7 @@ export default function SettingsScreen() {
       setActiveModal('automation');
     } else if (setting.title === 'Parental Control') {
       setActiveModal('parental');
-    } else if (setting.title === 'Player Setting') {
+    } else if (setting.title === 'Player Selection') {
       setActiveModal('player');
     } else if (setting.title === 'Subtitle') {
       setActiveModal('subtitle');
