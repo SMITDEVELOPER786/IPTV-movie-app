@@ -1,5 +1,5 @@
 import React from "react";
-import { createStackNavigator } from "@react-navigation/stack";
+// import { createStackNavigator } from "@react-navigation/stack";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 // Import all screens
 import HomeScreen from "../screens/HomeScreen";
@@ -13,7 +13,6 @@ import NotificationScreen from "../screens/NotificationScreen";
 import ParentalControlModal from "../screens/ParentalControlModal";
 import PlayerSelectionScreen from "../screens/PlayerSelectionModal";
 import PlaylistScreen from "../screens/PlaylistScreen";
-import SpeedTestModal from '../screens/SpeedTestScreen'
 import SubtitleScreen from "../screens/SubtitleModal";
 import VideoFormatModal from "../screens/VideoFormatModal";
 import VPNModal from '../screens/VPNScreen'
@@ -22,7 +21,7 @@ import FeedbackScreen from "../screens/FeedbackScreen";
 import GeneralSettingsScreen from "../screens/GeneralSettings";
 import SettingsScreen from "../screens/SettingScreen";
 import AddPlaylistModal from "../screens/AddPlaylistModal";
-
+import SpeedTestScreen from "../screens/SpeedTestScreen";
 
 const Stack = createNativeStackNavigator()
 
@@ -49,7 +48,7 @@ export default function AppNavigator() {
       <Stack.Screen name="ParentalControl" component={ParentalControlModal} />
       <Stack.Screen name="PlayerSelection" component={PlayerSelectionScreen} />
       <Stack.Screen name="Playlist" component={PlaylistScreen} />
-      <Stack.Screen name="SpeedTest" component={SpeedTestModal} />
+      <Stack.Screen name="SpeedTest" component={SpeedTestScreen} />
       <Stack.Screen name="Subtitles" component={SubtitleScreen} />
       <Stack.Screen name="VideoFormat" component={VideoFormatModal} />
       <Stack.Screen name="VPN" component={VPNModal} />
