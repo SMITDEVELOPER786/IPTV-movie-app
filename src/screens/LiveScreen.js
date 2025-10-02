@@ -18,7 +18,7 @@ import Header from '../components/Header';
 const { width } = Dimensions.get('window');
 const isPhone = width < 768;
 
-// Mock data
+// Mock data - MATCHING FIGMA EXACTLY
 const channels = [
   { id: '1', name: 'Channel 1' },
   { id: '2', name: 'Channel 2' },
@@ -27,14 +27,16 @@ const channels = [
   { id: '5', name: 'Channel 5' },
 ];
 
+// Programs per channel, MATCHING FIGMA EXACTLY
 const programs = [
-  ['Program 1', 'Program 2', 'Program 3', 'Program 4'],
-  ['Program 1', 'Program 2', 'Program 3', 'Program 5'],
-  ['Program 1', 'Program 2', 'Program 3', 'Program 4'],
-  ['Program 1', 'Program 2', 'Program 3', 'Program 4'],
-  ['Program 1', 'Program 2', 'Program 3', 'Program 4'],
+  ['Program 1', 'Program 2', 'Program 3', 'Program 4'],           // Channel 1
+  ['Program 1', 'Program 2', 'Program 3', 'Program 4', 'Program 5'], // Channel 2 ← Added Program 5
+  ['Program 1', 'Program 2', 'Program 3', 'Program 4'],           // Channel 3
+  ['Program 1', 'Program 2', 'Program 3', 'Program 4'],           // Channel 4
+  ['Program 1', 'Program 2', 'Program 3', 'Program 4'],           // Channel 5
 ];
 
+// Time slots from Figma
 const timeSlots = ['Tue, Jul 29, 10:06PM', '12:00 PM', '12:30 PM', '01:00 PM', '01:30 PM'];
 
 const CategoryList = () => {
@@ -81,6 +83,15 @@ const EPGGrid = () => {
     <View style={styles.epgContainer}>
       {/* Time Headers */}
       <View style={styles.timeHeaderRow}>
+        {/* Empty cell for channel number header */}
+        <View style={styles.channelHeaderCell}>
+          <Text style={styles.timeHeaderText}>#</Text>
+        </View>
+        {/* Empty cell for channel name header */}
+        <View style={styles.channelNameHeaderCell}>
+          <Text style={styles.timeHeaderText}>Channel</Text>
+        </View>
+        {/* Time slots */}
         {timeSlots.map((time, index) => (
           <View key={index} style={styles.timeHeaderCell}>
             <Text style={styles.timeHeaderText}>{time}</Text>
@@ -91,10 +102,17 @@ const EPGGrid = () => {
       {/* Program Rows */}
       {channels.map((channel, idx) => (
         <View key={channel.id} style={styles.epgRow}>
-          <View style={styles.channelCell}>
+          {/* Channel Number Cell */}
+          <View style={styles.channelNumberCell}>
             <Text style={styles.channelNumber}>{idx + 1}</Text>
+          </View>
+          
+          {/* Channel Name Cell */}
+          <View style={styles.channelNameCell}>
             <Text style={styles.channelName}>{channel.name}</Text>
           </View>
+          
+          {/* Program Cells */}
           {programs[idx]?.map((prog, pIdx) => (
             <TouchableOpacity key={pIdx} style={styles.programCell}>
               <Text style={styles.programText}>{prog}</Text>
@@ -312,6 +330,16 @@ const styles = StyleSheet.create({
     borderBottomColor: 'rgba(255,255,255,0.2)',
     marginBottom: 10,
   },
+  channelHeaderCell: {
+    width: 50,
+    paddingVertical: 8,
+    alignItems: 'center',
+  },
+  channelNameHeaderCell: {
+    flex: 1,
+    paddingVertical: 8,
+    alignItems: 'center',
+  },
   timeHeaderCell: {
     flex: 1,
     paddingVertical: 8,
@@ -326,8 +354,16 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginBottom: 8,
   },
-  channelCell: {
-    width: 100,
+  channelNumberCell: {
+    width: 50,
+    padding: 8,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(255,255,255,0.1)',
+    borderRadius: 4,
+  },
+  channelNameCell: {
+    flex: 1,
     padding: 8,
     justifyContent: 'center',
     alignItems: 'center',
@@ -342,7 +378,6 @@ const styles = StyleSheet.create({
   channelName: {
     color: '#ccc',
     fontSize: isPhone ? 10 : 12,
-    marginTop: 2,
   },
   programCell: {
     flex: 1,

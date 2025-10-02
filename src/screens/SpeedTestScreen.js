@@ -1,205 +1,269 @@
-import React, { useState } from 'react';
+// src/screens/SpeedTestScreen.tsx
 import {
-  View,
-  Text,
-  StyleSheet,
+  ImageBackground,
   Pressable,
-  Dimensions,
+  StyleSheet,
+  Text,
+  View,
   ScrollView,
+  Image,
+  Dimensions,
+  TouchableOpacity,
+  TextInput,
+  Modal,
 } from 'react-native';
-import LinearGradient from 'react-native-linear-gradient';
+import React, { useState } from 'react';
+import Header from '../components/Header';
 
 const { width } = Dimensions.get('window');
+const isPhone = width < 768;
 
-const SpeedTestScreen = ({ navigation }) => {
-  const [running, setRunning] = useState(false);
-  const [completed, setCompleted] = useState(false);
-  const [download, setDownload] = useState('');
-  const [upload, setUpload] = useState('');
-  const [ping, setPing] = useState('');
+const SpeedTestScreen = () => {
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [selectedServer, setSelectedServer] = useState('Auto-Select');
 
-  const handleTest = () => {
-    if (running) return;
-    setRunning(true);
-    setCompleted(false);
-    setDownload('');
-    setUpload('');
-    setPing('');
+  // Mock speed test results
+  const [downloadSpeed, setDownloadSpeed] = useState('-- Mbps');
+  const [uploadSpeed, setUploadSpeed] = useState('-- Mbps');
+  const [ping, setPing] = useState('-- MS');
 
+  const handleStartTest = () => {
+    // Simulate speed test
     setTimeout(() => {
-      setDownload('152.4');
-      setUpload('38.7');
-      setPing('22');
-      setRunning(false);
-      setCompleted(true);
-    }, 3000);
+      setDownloadSpeed('87.4 Mbps');
+      setUploadSpeed('42.1 Mbps');
+      setPing('23 MS');
+    }, 2000);
   };
 
   return (
-    <LinearGradient
-      colors={['#0f2027', '#203a43', '#2c5364']}
-      style={styles.background}
+    <ImageBackground
+      source={require('../assets/images/Thumb.png')} // Replace with actual speed test bg if needed
+      style={styles.imageBg}
+      resizeMode="cover"
     >
-      <View style={styles.backgroundOverlay}>
-        <ScrollView contentContainerStyle={styles.container}>
-          {/* HEADER */}
-          <View style={styles.header}>
-            <Pressable
-              style={({ pressed }) => [
-                styles.backButtonHeader,
-                pressed && styles.backButtonHeaderPressed,
-              ]}
-              onPress={() => navigation?.goBack?.()}
-            >
-              <Text style={styles.backArrow}>←</Text>
-            </Pressable>
-            <Text style={styles.title}>Speed Test</Text>
-            <View style={styles.headerRight}>
-              <Text style={styles.time}>10:00PM</Text>
-              <Text style={styles.date}>SEP 29, 2025</Text>
+      <View style={styles.overlay}>
+        <Header />
+
+                              {/* Back Arrow - Bottom Left */}
+
+        <ScrollView
+          style={styles.scrollContainer}
+          contentContainerStyle={{ paddingBottom: 40 }}
+          showsVerticalScrollIndicator={false}
+        >
+          {/* Top Header Row - Left Title, Right Date/Time */}
+          <View style={styles.headerRow}>
+
+            <Text style={styles.screenTitle}>Speed Test</Text>
+            <View style={styles.dateTimeContainer}>
+              <Text style={styles.dateTimeText}>10:00PM</Text>
+              <Text style={styles.dateTimeText}>AUG 29TH, 2025</Text>
             </View>
           </View>
 
-          {/* SERVER CARD */}
-          <View style={styles.card}>
-            <Text style={styles.cardLabel}>Server:</Text>
-            <Text style={styles.cardValue}>Auto-Select</Text>
-          </View>
+          {/* Server Selector - Centered Below Header */}
+          <TouchableOpacity 
+            style={styles.serverSelector}
+            onPress={() => setIsModalVisible(true)}
+          >
+            <Text style={styles.serverLabel}>Server:</Text>
+            <View style={styles.serverValueContainer}>
+              <Text style={styles.serverValue}>{selectedServer}</Text>
+              <Text style={styles.dropdownIcon}>▼</Text>
+            </View>
+          </TouchableOpacity>
 
-          {/* MAIN SPLIT */}
+          {/* Main Content - Left Button, Right Cards */}
           <View style={styles.mainContent}>
-            {/* LEFT 50% → Start Button */}
-            <View style={styles.leftArea}>
-              <Pressable
-                onPress={handleTest}
-                disabled={running}
-                style={({ pressed }) => [
-                  styles.startButton,
-                  completed && styles.startButtonDone,
-                  pressed && styles.startButtonPressed,
-                ]}
-              >
-                <Text style={styles.startButtonText}>
-                  {completed ? 'Done' : running ? 'Testing...' : 'Start Test'}
-                </Text>
-              </Pressable>
+            {/* Left Column: Start Test Button */}
+            <View style={styles.leftColumn}>
+              <TouchableOpacity style={styles.startButton} onPress={handleStartTest}>
+               <Text style={styles.text}> </Text> {/* power icon here  */}
+                <Text style={styles.startButtonText}>Start Test</Text>
+              </TouchableOpacity>
             </View>
 
-            {/* RIGHT 50% → Results */}
-            <View style={styles.rightArea}>
+            {/* Right Column: Results Cards */}
+            <View style={styles.rightColumn}>
               <View style={styles.resultCard}>
-                <Text style={styles.resultLabel}>Download</Text>
-                <Text style={styles.resultValue}>
-                  {download || '--'} <Text style={styles.unit}>Mbps</Text>
-                </Text>
+                <Text style={styles.resultLabel}>Download Speed:</Text>
+                <Text style={styles.resultValue}>{downloadSpeed}</Text>
               </View>
-
               <View style={styles.resultCard}>
-                <Text style={styles.resultLabel}>Upload</Text>
-                <Text style={styles.resultValue}>
-                  {upload || '--'} <Text style={styles.unit}>Mbps</Text>
-                </Text>
+                <Text style={styles.resultLabel}>Upload Speed:</Text>
+                <Text style={styles.resultValue}>{uploadSpeed}</Text>
               </View>
-
               <View style={styles.resultCard}>
-                <Text style={styles.resultLabel}>Ping</Text>
-                <Text style={styles.resultValue}>
-                  {ping || '--'} <Text style={styles.unit}>ms</Text>
-                </Text>
+                <Text style={styles.resultLabel}>Ping:</Text>
+                <Text style={styles.resultValue}>{ping}</Text>
               </View>
             </View>
           </View>
+
+
         </ScrollView>
       </View>
-    </LinearGradient>
+    </ImageBackground>
   );
 };
 
+export default SpeedTestScreen;
+
 const styles = StyleSheet.create({
-  background: { flex: 1 },
-  backgroundOverlay: {
+  imageBg: { flex: 1 },
+  overlay: {
     flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.6)',
+    backgroundColor: 'rgba(0, 0, 0, 0.83)',
+    paddingTop: 40,
+    paddingRight: '8%',
+    paddingLeft: '8%',
   },
-  container: { padding: 24, paddingTop: 40 },
-
-  // HEADER
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 20,
-  },
-  backButtonHeader: {
-    padding: 8,
-    marginRight: 12,
-    backgroundColor: 'rgba(255,255,255,0.1)',
-    borderRadius: 20,
-  },
-  backButtonHeaderPressed: { backgroundColor: 'rgba(255,255,255,0.2)' },
-  backArrow: { color: '#fff', fontSize: 20, fontWeight: 'bold' },
-  title: {
+  scrollContainer: {
     flex: 1,
-    textAlign: 'center',
-    fontSize: 22,
-    fontWeight: '700',
-    color: '#fff',
+    marginTop: 30,
   },
-  headerRight: { alignItems: 'flex-end' },
-  time: { fontSize: 16, fontWeight: '600', color: '#fff' },
-  date: { fontSize: 13, color: '#ddd', marginTop: 2 },
-
-  // SERVER CARD
-  card: {
-    backgroundColor: 'rgba(255,255,255,0.1)',
-    borderRadius: 12,
-    padding: 14,
+  headerRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 24,
+    marginBottom: 20,
   },
-  cardLabel: { fontSize: 16, color: '#eee' },
-  cardValue: { fontSize: 16, fontWeight: '600', color: '#fff' },
-
-  // MAIN SPLIT
-  mainContent: { flexDirection: 'row', flex: 1 },
-
-  leftArea: { flex: 1, justifyContent: 'center', alignItems: 'center' },
-  rightArea: { flex: 1, justifyContent: 'space-evenly' },
-
-  // BIG START BUTTON
+  screenTitle: {
+    color: '#fff',
+    fontSize: isPhone ? 20 : 28,
+    fontWeight: 'bold',
+  },
+  dateTimeContainer: {
+    flexDirection: 'row',
+    gap: 10,
+  },
+  dateTimeText: {
+    color: '#fff',
+    fontSize: isPhone ? 12 : 14,
+    fontWeight: '500',
+  },
+  serverSelector: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '100%',
+    backgroundColor: 'rgba(255,255,255,0.1)',
+    borderRadius: 8,
+    padding: 12,
+    marginBottom: 30,
+  },
+  serverLabel: {
+    color: '#fff',
+    fontSize: isPhone ? 14 : 16,
+  },
+  serverValueContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 5,
+  },
+  serverValue: {
+    color: '#fff',
+    fontSize: isPhone ? 14 : 16,
+  },
+  dropdownIcon: {
+    color: '#aaa',
+    fontSize: isPhone ? 12 : 14,
+  },
+  mainContent: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+    gap: 20,
+  },
+  leftColumn: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   startButton: {
-    width: width * 0.35,
-    height: width * 0.35,
-    borderRadius: (width * 0.35) / 2,
-    backgroundColor: '#2196f3',
+    width: isPhone ? 120 : 190,
+    height: isPhone ? 120 : 190,
+    borderRadius: 150,
+    marginTop:50,
+    backgroundColor: '#007AFF',
     justifyContent: 'center',
     alignItems: 'center',
-    shadowColor: '#2196f3',
-    shadowOpacity: 0.4,
-    shadowOffset: { width: 0, height: 6 },
-    shadowRadius: 10,
-    elevation: 8,
   },
-  startButtonDone: { backgroundColor: '#27ae60', shadowColor: '#27ae60' },
-  startButtonPressed: { opacity: 0.85 },
-  startButtonText: {
-    fontSize: 20,
-    fontWeight: 'bold',
+  startIcon: {
+    fontSize: isPhone ? 32 : 40,
     color: '#fff',
-    textAlign: 'center',
+    marginBottom: 5,
   },
-
-  // RESULTS
+  startButtonText: {
+    color: '#fff',
+    fontSize: isPhone ? 14 : 16,
+    fontWeight: 'bold',
+  },
+  rightColumn: {
+    flex: 1,
+    gap: 15,
+  },
   resultCard: {
-    backgroundColor: 'rgba(255,255,255,0.08)',
-    padding: 18,
-    borderRadius: 12,
-    marginBottom: 16,
+    backgroundColor: 'rgba(255,255,255,0.1)',
+    borderRadius: 8,
+    padding: 15,
+    alignItems: 'center',
   },
-  resultLabel: { fontSize: 16, color: '#ddd' },
-  resultValue: { fontSize: 22, fontWeight: '700', color: '#fff', marginTop: 6 },
-  unit: { fontSize: 14, color: '#bbb' },
+  resultLabel: {
+    color: '#fff',
+    fontSize: isPhone ? 14 : 16,
+    marginBottom: 5,
+  },
+  resultValue: {
+    color: '#fff',
+    fontSize: isPhone ? 18 : 24,
+    fontWeight: 'bold',
+  },
+  backArrow: {
+    position: 'absolute',
+    bottom: 20,
+    left: 20,
+  },
+  backArrowText: {
+    color: '#fff',
+    fontSize: isPhone ? 24 : 32,
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.7)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalContent: {
+    width: isPhone ? '80%' : 300,
+    backgroundColor: '#1a1a1a',
+    borderRadius: 12,
+    padding: 20,
+    alignItems: 'center',
+  },
+  modalTitle: {
+    color: '#fff',
+    fontSize: isPhone ? 18 : 20,
+    fontWeight: 'bold',
+    marginBottom: 20,
+  },
+  modalOption: {
+    width: '100%',
+    padding: 12,
+    borderBottomWidth: 1,
+    borderBottomColor: 'rgba(255,255,255,0.1)',
+    alignItems: 'center',
+  },
+  modalOptionText: {
+    color: '#fff',
+    fontSize: isPhone ? 16 : 18,
+  },
+  cancelOption: {
+    borderBottomWidth: 0,
+    marginTop: 10,
+  },
+  cancelText: {
+    color: '#ff4444',
+  },
 });
-
-export default SpeedTestScreen;
