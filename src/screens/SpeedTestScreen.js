@@ -9,7 +9,7 @@ import {
   Dimensions,
   Image,
 } from 'react-native';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 const { width } = Dimensions.get('window');
 const isPhone = width < 768;
@@ -17,11 +17,45 @@ const isPhone = width < 768;
 const SpeedTestScreen = ({ navigation }) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedServer, setSelectedServer] = useState('Auto-Select');
+  const [currentTime, setCurrentTime] = useState('');
+  const [currentDate, setCurrentDate] = useState('');
 
   const [downloadSpeed, setDownloadSpeed] = useState('-- Mbps');
   const [uploadSpeed, setUploadSpeed] = useState('-- Mbps');
   const [ping, setPing] = useState('-- MS');
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const now = new Date();
+      let time = now.toLocaleTimeString([], {
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: true,
+      });
+
+      const options = {
+        day: 'numeric',
+        month: 'short',
+        year: 'numeric',
+      };
+      let dateParts = now.toLocaleDateString('en-US', options).toUpperCase();
+      let day = now.getDate();
+      let suffix =
+        day % 10 === 1 && day !== 11
+          ? 'ST'
+          : day % 10 === 2 && day !== 12
+          ? 'ND'
+          : day % 10 === 3 && day !== 13
+          ? 'RD'
+          : 'TH';
+      dateParts = dateParts.replace(String(day), `${day}${suffix}`);
+
+      setCurrentTime(time);
+      setCurrentDate(dateParts);
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, []);
   const handleStartTest = () => {
     setTimeout(() => {
       setDownloadSpeed('87.4 Mbps');
@@ -32,7 +66,7 @@ const SpeedTestScreen = ({ navigation }) => {
 
   return (
     <ImageBackground
-      source={require('../assets/images/Thumb.png')} 
+      source={require('../assets/images/Thumb.png')}
       style={styles.imageBg}
       resizeMode="cover"
     >
@@ -42,26 +76,27 @@ const SpeedTestScreen = ({ navigation }) => {
           contentContainerStyle={{ paddingBottom: 40 }}
           showsVerticalScrollIndicator={false}
         >
-          <View style={styles.headerRow}>
-            <Pressable
-              style={styles.backArrowContainer}
-              onPress={() => navigation.goBack()}
-            >
-              <Text style={styles.backArrowText}>←</Text>
-            </Pressable>
-
-            <View style={styles.titleContainer}>
-              <Text style={styles.screenTitle}>Speed Test</Text>
-            </View>
-
-            <View style={styles.dateTimeContainer}>
-              <Text style={styles.dateTimeText}>10:00PM</Text>
-              <Text style={styles.dateTimeText}>AUG 29TH, 2025</Text>
-            </View>
-          </View>
+              <View style={styles.headers}>
+                     <Pressable
+                       style={styles.backButton}
+                       onPress={() => navigation.goBack()}
+                     >
+                       <Image
+                         source={require('../assets/images/backBtn.png')}
+                         style={{ tintColor: '#fff' }}
+                       />
+                     </Pressable>
+         
+                     <Text style={styles.headerTitle}>Speed Test</Text>
+         
+                     <View style={styles.headerLeft}>
+                       <Text style={styles.time}>{currentTime}</Text>
+                       <Text style={styles.date}>{currentDate}</Text>
+                     </View>
+                   </View>
 
           {/* Server Selector */}
-          <TouchableOpacity 
+          <TouchableOpacity
             style={styles.serverSelector}
             onPress={() => setIsModalVisible(true)}
           >
@@ -75,8 +110,14 @@ const SpeedTestScreen = ({ navigation }) => {
           {/* Main Content */}
           <View style={styles.mainContent}>
             <View style={styles.leftColumn}>
-              <TouchableOpacity style={styles.startButton} onPress={handleStartTest}>
-                <Image source={require('../assets/images/powerButton.png')} style={{marginBottom: 10}}/>
+              <TouchableOpacity
+                style={styles.startButton}
+                onPress={handleStartTest}
+              >
+                <Image
+                  source={require('../assets/images/powerButton.png')}
+                  style={{ marginBottom: 10 }}
+                />
                 <Text style={styles.startButtonText}>Start Test</Text>
               </TouchableOpacity>
             </View>
@@ -110,7 +151,6 @@ const styles = StyleSheet.create({
   overlay: {
     flex: 1,
     backgroundColor: 'rgba(0, 0, 0, 0.83)',
-    paddingTop: 40,
     paddingHorizontal: '8%',
   },
   scrollContainer: {
@@ -118,57 +158,61 @@ const styles = StyleSheet.create({
     marginTop: 30,
   },
 
-  /* Header Row */
-  headerRow: {
+/* Header */
+  headers: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginBottom: 20,
+    paddingHorizontal: 20,
+    paddingVertical: 16,
+    flexWrap: 'wrap',
   },
-  backArrowContainer: {
+  backButton: {
     width: 38,
     height: 38,
     borderRadius: 20,
-    backgroundColor: 'rgba(100, 98, 98, 0.1)',
-    justifyContent: 'center',
+
     alignItems: 'center',
   },
-  backArrowText: {
+  backArrow: {
     color: '#fff',
-    fontSize: isPhone ? 24 : 32,
+    fontSize: 20,
     fontWeight: '600',
-    justifyContent: 'center',
-    alignItems: 'center',
   },
-  titleContainer: {
-    flex: 1,
-    alignItems: 'center',
-  },
-  screenTitle: {
+  headerTitle: {
     color: '#fff',
-    fontSize: isPhone ? 20 : 28,
+    fontSize: 30,
+    fontWeight: '700',
+    letterSpacing: 1,
+  },
+
+  /* Time & Date */
+  headerLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 20,
+  },
+  time: {
+    color: '#fff',
+    fontSize: 20,
     fontWeight: 'bold',
   },
-  dateTimeContainer: {
-    flexDirection: 'row',
-    gap: 10,
-  },
-  dateTimeText: {
+  date: {
     color: '#fff',
-    fontSize: isPhone ? 12 : 14,
-    fontWeight: '500',
   },
 
   /* Server Selector */
   serverSelector: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'space-between',
     width: '100%',
-    backgroundColor: 'rgba(255,255,255,0.1)',
-    borderRadius: 8,
-    padding: 12,
+    borderRadius: 25,
+    padding: 20,
     marginBottom: 30,
+    marginTop: 60,
+    borderWidth: 1,
+    borderColor: '#2E293E',
   },
   serverLabel: {
     color: '#fff',
@@ -184,7 +228,7 @@ const styles = StyleSheet.create({
     fontSize: isPhone ? 14 : 16,
   },
   dropdownIcon: {
-    color: '#aaa',
+    color: '#6512CF',
     fontSize: isPhone ? 12 : 14,
   },
 
@@ -194,6 +238,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'flex-start',
     gap: 20,
+    marginTop: 40
   },
   leftColumn: {
     flex: 1,
@@ -204,7 +249,7 @@ const styles = StyleSheet.create({
     width: isPhone ? 120 : 190,
     height: isPhone ? 120 : 190,
     borderRadius: 150,
-    marginTop: 50,
+   
     backgroundColor: '#007AFF',
     justifyContent: 'center',
     alignItems: 'center',
@@ -216,22 +261,26 @@ const styles = StyleSheet.create({
   },
   rightColumn: {
     flex: 1,
-    gap: 15,
+    gap: 25,
+    alignSelf:'center'
   },
   resultCard: {
-    backgroundColor: 'rgba(255,255,255,0.1)',
+    backgroundColor: '#2E293E',
     borderRadius: 8,
     padding: 15,
     alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
   resultLabel: {
     color: '#fff',
-    fontSize: isPhone ? 14 : 16,
+    fontSize: 11,
     marginBottom: 5,
+    fontWeight: '400'
   },
   resultValue: {
     color: '#fff',
-    fontSize: isPhone ? 18 : 24,
-    fontWeight: 'bold',
+    fontSize: 11,
+    fontWeight: '400'
   },
 });
