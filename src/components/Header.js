@@ -6,6 +6,7 @@ import {
   TextInput,
   View,
   Dimensions,
+  TouchableOpacity,
 } from 'react-native';
 import React, { useState } from 'react';
 import { useNavigation, useRoute } from '@react-navigation/native';
@@ -76,7 +77,7 @@ const Header = () => {
           isPhone && { width: '100%', justifyContent: 'space-between' },
         ]}
       >
-      <Pressable onPress={() => navigation.navigate('Notifications')}>
+      <TouchableOpacity onPress={() => navigation.navigate('Notifications')}>
         <View style={styles.bellIcon}>
           <Image
             source={require('../assets/images/bell.png')}
@@ -86,7 +87,7 @@ const Header = () => {
             <Text style={styles.notiText}>2</Text>
           </View>
         </View>
-      </Pressable>
+      </TouchableOpacity>
 
 
         <View style={[styles.searchCon, isPhone && { flex: 1 }]}>
