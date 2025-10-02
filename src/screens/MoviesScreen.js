@@ -46,18 +46,21 @@ const movies = [
 ];
 
 const CategoryList = () => {
+  const gap = 10;
+  const totalGaps = gap * (3 - 1);
+  const cardWidth = (width - totalGaps - 8) / 4.4;
   return (
     <FlatList
       data={categories}
       keyExtractor={item => item.id}
       horizontal
       showsHorizontalScrollIndicator={false}
-      contentContainerStyle={{ gap: 15 }}
+      contentContainerStyle={{ gap: gap }}
       renderItem={({ item }) => (
         <View
           style={[
             styles.categoryCard,
-            isPhone && { width: width * 0.84}, 
+            { width: cardWidth },
           ]}
         >
           <ImageBackground
@@ -78,16 +81,17 @@ const CategoryList = () => {
   );
 };
 
+
 const MovieList = () => {
   return (
     <FlatList
       data={movies}
       keyExtractor={item => item.id}
-      numColumns={isPhone ? 1 : 5} 
+      numColumns={isPhone ? 1 : 6} 
       scrollEnabled={false}
       columnWrapperStyle={
         !isPhone
-          ? { gap: 20, marginBottom: 15, justifyContent: 'center' }
+          ? { gap: 20, marginBottom: 15, justifyContent: 'flex-start' }
           : undefined
       }
       renderItem={({ item }) => (
@@ -188,8 +192,8 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'rgba(0, 0, 0, 0.83)',
     paddingTop: 40,
-    paddingRight: '8%',
-    paddingLeft: '8%',
+    paddingRight: '4%',
+    paddingLeft: '4%',
   },
   scrollContainer: {
     flex: 1,

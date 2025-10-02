@@ -7,6 +7,7 @@ import {
   Modal,
   Switch,
   FlatList,
+  Image,
 } from 'react-native';
 import React, { useState } from 'react';
 
@@ -51,7 +52,10 @@ const SubtitleModal = ({ visible, onClose }) => {
           <View style={styles.headingAndBtn}>
             <Text style={styles.heading}>SUBTITLE SETTINGS</Text>
             <Pressable style={styles.btnClose} onPress={onClose}>
-              <Text style={styles.btnText}>✖</Text>
+              <Image
+                source={require('../assets/images/crossBtn.png')}
+                style={{ width: 12, height: 12, tintColor: '#fff' }}
+              />
             </Pressable>
           </View>
 
@@ -68,10 +72,7 @@ const SubtitleModal = ({ visible, onClose }) => {
             </View>
 
             <View
-              style={[
-                styles.inputGroup,
-                !enableSubtitles && { opacity: 0.5 },
-              ]}
+              style={[styles.inputGroup, !enableSubtitles && { opacity: 0.5 }]}
               pointerEvents={enableSubtitles ? 'auto' : 'none'}
             >
               <Text style={styles.label}>Default Language:</Text>

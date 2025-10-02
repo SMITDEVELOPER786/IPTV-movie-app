@@ -165,7 +165,10 @@ export default function SettingsScreen() {
               style={styles.backButton}
               onPress={() => navigation.goBack()}
             >
-              <Text style={styles.backArrow}>←</Text>
+              <Image
+                source={require('../assets/images/backBtn.png')}
+                style={{ tintColor: '#fff' }}
+              />
             </Pressable>
 
             <Text style={styles.headerTitle}>Settings</Text>
@@ -182,13 +185,22 @@ export default function SettingsScreen() {
             contentContainerStyle={styles.scrollContent}
             bounces={true}
           >
-            <View style={[styles.settingsGrid, isPhone && { justifyContent: 'center', flexDirection:'column', alignItems:'center' }]}>
+            <View
+              style={[
+                styles.settingsGrid,
+                isPhone && {
+                  justifyContent: 'center',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                },
+              ]}
+            >
               {settingsOptions.map(setting => (
                 <TouchableOpacity
                   key={setting.id}
                   style={[
                     { borderRadius: 12, overflow: 'hidden' },
-                    isPhone && { width: '100%', height: 170} ,
+                    isPhone && { width: '100%', height: 170 },
                   ]}
                   onPress={() => handleSettingPress(setting)}
                   activeOpacity={0.7}
@@ -232,7 +244,7 @@ export default function SettingsScreen() {
               visible={activeModal === 'multiscreen'}
               onClose={() => setActiveModal(null)}
             />
-         
+
             <FeedbackScreen
               visible={activeModal === 'feedback'}
               onClose={() => setActiveModal(null)}
@@ -271,8 +283,7 @@ const styles = StyleSheet.create({
     width: 38,
     height: 38,
     borderRadius: 20,
-    backgroundColor: 'rgba(255,255,255,0.1)',
-    // justifyContent: 'center',
+
     alignItems: 'center',
   },
   backArrow: {

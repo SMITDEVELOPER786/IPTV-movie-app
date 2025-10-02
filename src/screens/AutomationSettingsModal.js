@@ -6,6 +6,7 @@ import {
   Dimensions,
   Modal,
   Switch,
+  Image,
 } from 'react-native';
 import React, { useState } from 'react';
 
@@ -29,7 +30,10 @@ const AutomationSettingsModal = ({ visible, onClose }) => {
           <View style={styles.headingAndBtn}>
             <Text style={styles.heading}>AUTOMATION SETTINGS</Text>
             <Pressable style={styles.btnClose} onPress={onClose}>
-              <Text style={styles.btnText}>✖</Text>
+              <Image
+                source={require('../assets/images/crossBtn.png')}
+                style={{ width: 12, height: 12, tintColor: '#fff' }}
+              />
             </Pressable>
           </View>
 
@@ -115,7 +119,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: '500',
   },
-  form: { 
+  form: {
     marginTop: 10,
   },
   settingRow: {
@@ -125,9 +129,9 @@ const styles = StyleSheet.create({
     marginBottom: 25,
     paddingHorizontal: 5,
   },
-  settingLabel: { 
-    color: '#aaa', 
-    fontSize: 16, 
+  settingLabel: {
+    color: '#aaa',
+    fontSize: 16,
     flex: 1,
   },
   saveBtn: {
@@ -137,9 +141,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 10,
   },
-  saveText: { 
-    color: '#fff', 
-    fontSize: 16, 
-    fontWeight: '600' 
+  saveText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: '600',
   },
 });

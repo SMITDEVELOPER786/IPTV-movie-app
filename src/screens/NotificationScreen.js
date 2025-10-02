@@ -5,9 +5,11 @@ import {
   View,
   ScrollView,
   Pressable,
+  Image,
 } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
+import { Images } from 'lucide-react-native';
 
 const NotificationScreen = () => {
   const [currentTime, setCurrentTime] = useState('');
@@ -61,7 +63,9 @@ const NotificationScreen = () => {
         >
             <View style={styles.headers}>
                    <Pressable style={styles.backButton} onPress={() => navigation.goBack()}>
-                     <Text style={styles.backArrow}>←</Text>
+                     <Image 
+                     source={require('../assets/images/backBtn.png')}
+                     style={{tintColor:'#fff'}}/>
                    </Pressable>
          
                    <Text style={styles.headerTitle}>Notifications</Text>
@@ -120,7 +124,7 @@ const styles = StyleSheet.create({
     width: 38,
     height: 38,
     borderRadius: 20,
-    backgroundColor: 'rgba(255,255,255,0.1)',
+
     // justifyContent: 'center',
     alignItems: 'center',
   },

@@ -187,6 +187,9 @@ const SeriesScreen = () => {
           </View>
 
           <View style={styles.movieList}>
+            <Text style={{fontSize: 24, fontWeight: '800',  marginBottom: 20}}>
+              Popular Series
+            </Text>
             <SeriesList />
           </View>
         </ScrollView>
@@ -223,7 +226,7 @@ const styles = StyleSheet.create({
     marginTop: 30,
   },
   movieImg: {
-    width: 150,
+    flex: 1,
     height: 210,
     borderRadius: 8,
     overflow: 'hidden',
@@ -250,11 +253,12 @@ const styles = StyleSheet.create({
   ep: {
     color: '#fff',
     fontSize: 11,
-    fontWeight: '500',
+    fontWeight: '700',
   },
   category: {
     color: '#fff',
     fontSize: 11,
-    fontStyle: 'italic',
+    fontWeight: '700',
+    
   },
 });

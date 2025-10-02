@@ -6,6 +6,7 @@ import {
   Dimensions,
   Modal,
   FlatList,
+  Image,
 } from 'react-native';
 import React, { useState } from 'react';
 
@@ -15,12 +16,14 @@ const isPhone = width < 600;
 const PlayerSelectionModal = ({ visible, onClose }) => {
   const [defaultPlayer, setDefaultPlayer] = useState(false);
 
-
   const [selectedFormat, setSelectedFormat] = useState('VLC Player');
 
-
-  const formatOptions = ['VLC Player', 'MX Player', 'ExoPlayer', 'System Player'];
-
+  const formatOptions = [
+    'VLC Player',
+    'MX Player',
+    'ExoPlayer',
+    'System Player',
+  ];
 
   const renderOption = (item, setSelected, closeModal) => (
     <Pressable
@@ -46,7 +49,10 @@ const PlayerSelectionModal = ({ visible, onClose }) => {
           <View style={styles.headingAndBtn}>
             <Text style={styles.heading}>Player Selection</Text>
             <Pressable style={styles.btnClose} onPress={onClose}>
-              <Text style={styles.btnText}>✖</Text>
+              <Image
+                source={require('../assets/images/crossBtn.png')}
+                style={{ width: 12, height: 12, tintColor: '#fff' }}
+              />
             </Pressable>
           </View>
 

@@ -74,11 +74,13 @@ const PlaylistScreen = () => {
       <View style={styles.overlay}>
         
         <View style={styles.headers}>
-          <Pressable style={styles.backButton} onPress={() => navigation.goBack()}>
-            <Text style={styles.backArrow}>←</Text>
-          </Pressable>
+         <Pressable style={styles.backButton} onPress={() => navigation.goBack()}>
+                            <Image 
+                            source={require('../assets/images/backBtn.png')}
+                            style={{tintColor:'#fff'}}/>
+                          </Pressable>
 
-          <Text style={styles.headerTitle}>Playlist</Text>
+          <Text style={styles.headerTitle}>PlAYLIST</Text>
 
             {/* Time & Date */}
         <View style={styles.headerLeft}>
@@ -185,7 +187,7 @@ const styles = StyleSheet.create({
     width: 38,
     height: 38,
     borderRadius: 20,
-    backgroundColor: 'rgba(255,255,255,0.1)',
+    // backgroundColor: 'rgba(255,255,255,0.1)',
     // justifyContent: 'center',
     alignItems: 'center',
   },

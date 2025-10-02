@@ -7,6 +7,7 @@ import {
   StyleSheet,
   TextInput,
   Dimensions,
+  Image
 } from 'react-native';
 
 
@@ -37,7 +38,11 @@ const AddPlaylistModal = ({ visible, onClose }) => {
             <View style={styles.headingAndBtn}>
               <Text style={styles.heading}>Add Playlist</Text>
               <Pressable style={styles.btnClose} onPress={onClose}>
-                <Text style={styles.btnText}>✖</Text>
+                <Image
+                  source={require('../assets/images/crossBtn.png')}
+                  style={{ width: 12, height: 12, tintColor: '#fff' }}
+                  
+                />
               </Pressable>
             </View>
 
@@ -113,7 +118,7 @@ const styles = StyleSheet.create({
   heading: {
     color: '#fff',
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: '700',
     marginBottom: 25,
   },
   inputCon: {
@@ -150,7 +155,7 @@ const styles = StyleSheet.create({
   },
   btnText: {
     color: '#fff',
-    fontWeight: '500',
+    fontWeight: '600',
     alignSelf: 'center',
   },
 });

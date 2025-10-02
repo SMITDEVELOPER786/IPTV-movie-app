@@ -97,24 +97,24 @@ const GeneralSettings = () => {
           contentContainerStyle={{ paddingBottom: 40 }}
           showsVerticalScrollIndicator={false}
         >
-          {/* Header */}
           <View style={styles.headers}>
-            <Pressable
-              style={styles.backButton}
-              onPress={() => navigation.goBack()}
-            >
-              <Text style={styles.backArrow}>←</Text>
-            </Pressable>
-
-            <Text style={styles.headerTitle}>General Settings</Text>
-            <View style={{ width: 38 }} />
-          </View>
-
-          {/* Time & Date */}
-          <View style={styles.headerLeft}>
-            <Text style={styles.time}>{currentTime}</Text>
-            <Text style={styles.date}>{currentDate}</Text>
-          </View>
+                   <Pressable
+                     style={styles.backButton}
+                     onPress={() => navigation.goBack()}
+                   >
+                     <Image
+                       source={require('../assets/images/backBtn.png')}
+                       style={{ tintColor: '#fff' }}
+                     />
+                   </Pressable>
+       
+                   <Text style={styles.headerTitle}>General Settings</Text>
+       
+                   <View style={styles.headerLeft}>
+                     <Text style={styles.time}>{currentTime}</Text>
+                     <Text style={styles.date}>{currentDate}</Text>
+                   </View>
+                 </View>
 
           {/* Profile Card */}
           <View style={[styles.profileCard, isPhone && { width: '100%' }]}>
@@ -260,37 +260,49 @@ const styles = StyleSheet.create({
     paddingLeft: '8%',
   },
   scrollContainer: { flex: 1 },
+    /* Header */
   headers: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: 20,
     paddingVertical: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: 'rgba(255,255,255,0.1)',
+    flexWrap: 'wrap',
   },
   backButton: {
     width: 38,
     height: 38,
     borderRadius: 20,
-    backgroundColor: 'rgba(255,255,255,0.1)',
+
     alignItems: 'center',
   },
-  backArrow: { color: '#fff', fontSize: 20, fontWeight: '600' },
-  headerTitle: {
+  backArrow: {
     color: '#fff',
     fontSize: 20,
+    fontWeight: '600',
+  },
+  headerTitle: {
+    color: '#fff',
+    fontSize: 30,
     fontWeight: '700',
     letterSpacing: 1,
   },
+
+  /* Time & Date */
   headerLeft: {
-    flexDirection: 'column',
-    marginBottom: 30,
-    marginTop: 30,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 20,
   },
-  time: { color: '#fff', fontSize: 20, fontWeight: 'bold' },
-  date: { color: '#fff' },
-  profileCard: { width: '36%', alignSelf: 'center', marginTop: 30 },
+  time: {
+    color: '#fff',
+    fontSize: 20,
+    fontWeight: 'bold',
+  },
+  date: {
+    color: '#fff',
+  },
+  profileCard: { width: '36%', alignSelf: 'center', marginTop: 90 },
   profileimg: { width: 84, height: 84, borderRadius: 50 },
   cardHeader: {
     flexDirection: 'row',

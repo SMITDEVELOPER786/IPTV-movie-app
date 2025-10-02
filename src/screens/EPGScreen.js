@@ -9,6 +9,7 @@ import {
   TextInput,
   Modal,
   FlatList,
+  Image
 } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
@@ -88,23 +89,23 @@ const EPGScreen = () => {
           contentContainerStyle={{ paddingBottom: 40 }}
           showsVerticalScrollIndicator={false}
         >
-          {/* Header */}
           <View style={styles.headers}>
             <Pressable
               style={styles.backButton}
               onPress={() => navigation.goBack()}
             >
-              <Text style={styles.backArrow}>←</Text>
+              <Image
+                source={require('../assets/images/backBtn.png')}
+                style={{ tintColor: '#fff' }}
+              />
             </Pressable>
 
             <Text style={styles.headerTitle}>EPG</Text>
-            <View style={{ width: 38 }} />
-          </View>
 
-          {/* Time & Date */}
-          <View style={styles.headerLeft}>
-            <Text style={styles.time}>{currentTime}</Text>
-            <Text style={styles.date}>{currentDate}</Text>
+            <View style={styles.headerLeft}>
+              <Text style={styles.time}>{currentTime}</Text>
+              <Text style={styles.date}>{currentDate}</Text>
+            </View>
           </View>
 
           {/* Form */}
@@ -157,11 +158,11 @@ const EPGScreen = () => {
           transparent
           visible={intervalModalVisible}
           animationType="fade"
-          onRequestClose={() => setIntervalModalVisible(false)} 
+          onRequestClose={() => setIntervalModalVisible(false)}
         >
           <Pressable
             style={styles.modalOverlay}
-            onPress={() => setIntervalModalVisible(false)} 
+            onPress={() => setIntervalModalVisible(false)}
           >
             <View style={styles.modalBox}>
               <FlatList
@@ -236,32 +237,42 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingHorizontal: 20,
     paddingVertical: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: 'rgba(255,255,255,0.1)',
+    flexWrap: 'wrap',
   },
   backButton: {
     width: 38,
     height: 38,
     borderRadius: 20,
-    backgroundColor: 'rgba(255,255,255,0.1)',
+
     alignItems: 'center',
-    justifyContent: 'center',
   },
-  backArrow: { color: '#fff', fontSize: 20, fontWeight: '600' },
-  headerTitle: {
+  backArrow: {
     color: '#fff',
     fontSize: 20,
+    fontWeight: '600',
+  },
+  headerTitle: {
+    color: '#fff',
+    fontSize: 30,
     fontWeight: '700',
     letterSpacing: 1,
   },
+
+  /* Time & Date */
   headerLeft: {
-    flexDirection: 'column',
-    marginBottom: 30,
-    marginTop: 30,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 20,
   },
-  time: { color: '#fff', fontSize: 20, fontWeight: 'bold' },
-  date: { color: '#fff' },
-  form: { marginTop: 10 },
+  time: {
+    color: '#fff',
+    fontSize: 20,
+    fontWeight: 'bold',
+  },
+  date: {
+    color: '#fff',
+  },
+  form: { marginTop: 90 },
   inputGroup: {
     flexDirection: 'row',
     alignItems: 'center',

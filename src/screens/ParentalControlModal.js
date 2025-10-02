@@ -6,6 +6,7 @@ import {
   Dimensions,
   Modal,
   FlatList,
+  Image,
 } from 'react-native';
 import React, { useState } from 'react';
 
@@ -49,7 +50,10 @@ const ParentalControlModal = ({ visible, onClose }) => {
           <View style={styles.headingAndBtn}>
             <Text style={styles.heading}>Parental Control</Text>
             <Pressable style={styles.btnClose} onPress={onClose}>
-              <Text style={styles.btnText}>✖</Text>
+              <Image
+                source={require('../assets/images/crossBtn.png')}
+                style={{ width: 12, height: 12, tintColor: '#fff' }}
+              />
             </Pressable>
           </View>
 
@@ -90,8 +94,6 @@ const ParentalControlModal = ({ visible, onClose }) => {
                 <Text style={styles.arrow}>▾</Text>
               </Pressable>
             </View>
-
-         
 
             <Pressable style={styles.saveBtn}>
               <Text style={styles.saveText}>Submit</Text>
