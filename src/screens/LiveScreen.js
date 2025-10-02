@@ -88,9 +88,9 @@ const EPGGrid = () => {
           <Text style={styles.timeHeaderText}>#</Text>
         </View>
         {/* Empty cell for channel name header */}
-        <View style={styles.channelNameHeaderCell}>
+        {/* <View style={styles.channelNameHeaderCell}>
           <Text style={styles.timeHeaderText}>Channel</Text>
-        </View>
+        </View> */}
         {/* Time slots */}
         {timeSlots.map((time, index) => (
           <View key={index} style={styles.timeHeaderCell}>
@@ -297,30 +297,31 @@ const styles = StyleSheet.create({
   },
   liveInfo: {
     flex: 1,
-    marginLeft: isPhone ? 10 : 200,
+    marginLeft: 80,
     justifyContent: 'center',
   },
   championText: {
-    color: '#fff',
-    fontSize: isPhone ? 16 : 28,
-    fontWeight: 'bold',
+    color: '#E4E4E4',
+    fontSize: 15,
+    fontWeight: '400',
     marginBottom: 4,
   },
   timeText: {
-    color: '#aaa',
-    fontSize: isPhone ? 16 : 24,
+    color: '#fff',
+    fontSize: 15,
+    fontWeight: '400',
     marginBottom: 4,
   },
   matchText: {
     color: '#fff',
-    fontSize: isPhone ? 16 : 24,
-    fontWeight: 'bold',
+    fontSize: 21,
+    fontWeight: '500',
   },
   epgSection: {
     marginTop: 20,
   },
   epgContainer: {
-    backgroundColor: 'rgba(255,255,255,0.05)',
+    // backgroundColor: 'rgba(255,255,255,0.05)',
     borderRadius: 8,
     padding: 10,
   },
@@ -359,16 +360,17 @@ const styles = StyleSheet.create({
     padding: 8,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(255,255,255,0.1)',
+    // backgroundColor: 'r',
     borderRadius: 4,
   },
   channelNameCell: {
-    flex: 1,
+    // flex: 1,
     padding: 8,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(255,255,255,0.1)',
+    // backgroundColor: 'rgba(255,255,255,0.1)',
     borderRadius: 4,
+    width: 200
   },
   channelNumber: {
     color: '#fff',

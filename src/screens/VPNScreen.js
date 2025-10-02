@@ -14,8 +14,6 @@ import {
 import React, { useEffect, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 
-
-
 const VPNScreen = () => {
   const [currentTime, setCurrentTime] = useState('');
   const [currentDate, setCurrentDate] = useState('');
@@ -96,7 +94,10 @@ const VPNScreen = () => {
               style={styles.backButton}
               onPress={() => navigation.goBack()}
             >
-              <Text style={styles.backArrow}>←</Text>
+              <Image
+                source={require('../assets/images/backBtn.png')}
+                style={{ tintColor: '#fff' }}
+              />
             </Pressable>
 
             <Text style={styles.headerTitle}>VPN</Text>
@@ -157,7 +158,6 @@ const VPNScreen = () => {
                   </View>
                 </>
               ) : (
-                
                 <View style={{ flex: 1 }} />
               )}
             </View>
@@ -275,7 +275,7 @@ const styles = StyleSheet.create({
 
   content: {
     padding: 20,
-    marginTop: 40,
+    marginTop: 80,
     alignSelf: 'flex-end',
   },
   serverInfo: { flexDirection: 'row', alignItems: 'center', gap: 12 },
@@ -313,7 +313,7 @@ const styles = StyleSheet.create({
   statsRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-      minHeight: 40, 
+    minHeight: 40,
   },
   statLabel: { color: '#fff', fontSize: 16, fontWeight: '600' },
   statArrowDown: { color: '#6622CC', fontSize: 20, fontWeight: '600' },

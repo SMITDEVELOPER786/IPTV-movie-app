@@ -91,7 +91,7 @@ const MovieList = () => {
       scrollEnabled={false}
       columnWrapperStyle={
         !isPhone
-          ? { gap: 20, marginBottom: 15, justifyContent: 'flex-start' }
+          ? { gap: 20, marginBottom: 15, justifyContent: 'center' }
           : undefined
       }
       renderItem={({ item }) => (
