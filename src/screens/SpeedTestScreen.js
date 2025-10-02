@@ -1,4 +1,3 @@
-// src/screens/SpeedTestScreen.tsx
 import {
   ImageBackground,
   Pressable,
@@ -8,6 +7,7 @@ import {
   ScrollView,
   TouchableOpacity,
   Dimensions,
+  Image,
 } from 'react-native';
 import React, { useState } from 'react';
 
@@ -18,13 +18,11 @@ const SpeedTestScreen = ({ navigation }) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedServer, setSelectedServer] = useState('Auto-Select');
 
-  // Mock speed test results
   const [downloadSpeed, setDownloadSpeed] = useState('-- Mbps');
   const [uploadSpeed, setUploadSpeed] = useState('-- Mbps');
   const [ping, setPing] = useState('-- MS');
 
   const handleStartTest = () => {
-    // Simulate speed test
     setTimeout(() => {
       setDownloadSpeed('87.4 Mbps');
       setUploadSpeed('42.1 Mbps');
@@ -44,7 +42,6 @@ const SpeedTestScreen = ({ navigation }) => {
           contentContainerStyle={{ paddingBottom: 40 }}
           showsVerticalScrollIndicator={false}
         >
-          {/* Top Header Row  BackArrow | Title | Date/Time */}
           <View style={styles.headerRow}>
             <Pressable
               style={styles.backArrowContainer}
@@ -77,9 +74,9 @@ const SpeedTestScreen = ({ navigation }) => {
 
           {/* Main Content */}
           <View style={styles.mainContent}>
-            {/* Left Column: Start Test Button */}
             <View style={styles.leftColumn}>
               <TouchableOpacity style={styles.startButton} onPress={handleStartTest}>
+                <Image source={require('../assets/images/powerButton.png')} style={{marginBottom: 10}}/>
                 <Text style={styles.startButtonText}>Start Test</Text>
               </TouchableOpacity>
             </View>
