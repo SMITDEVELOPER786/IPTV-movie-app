@@ -5,11 +5,11 @@ import {
   Pressable,
   Dimensions,
   Modal,
-  Switch,
   FlatList,
   Image,
 } from 'react-native';
 import React, { useState } from 'react';
+import SwitchToggle from 'react-native-switch-toggle'; // ✅ added import
 
 const { width } = Dimensions.get('window');
 const isPhone = width < 600;
@@ -19,11 +19,7 @@ const MultiScreenModal = ({ visible, onClose }) => {
   const [showMaxScreensModal, setshowMaxScreensModal] = useState(false);
   const [selectedScreenNum, setSelectedScreenNum] = useState(2);
 
-  const MaxScreens = [
-    2,
-    3,
-    4,
-  ];
+  const MaxScreens = [2, 3, 4];
 
   const renderOption = item => (
     <Pressable
@@ -57,17 +53,23 @@ const MultiScreenModal = ({ visible, onClose }) => {
           </View>
 
           <View style={styles.form}>
+            {/* Enable Multi-Screen Toggle */}
             <View style={styles.settingRow}>
               <Text style={styles.settingLabel}>Enable Multi-Screen:</Text>
-              <Switch
-                trackColor={{ false: '#767577', true: '#6512CF' }}
-                thumbColor={enableSubtitles ? '#fff' : '#f4f3f4'}
-                ios_backgroundColor="#3e3e3e"
-                onValueChange={setEnableSubtitles}
-                value={enableSubtitles}
+              <SwitchToggle
+                switchOn={enableSubtitles}
+                onPress={() => setEnableSubtitles(!enableSubtitles)}
+                circleColorOff="black"
+                circleColorOn="black"
+                backgroundColorOn="#6512CF"
+                backgroundColorOff="#4E4C5E"
+                containerStyle={styles.toggleContainer}
+                circleStyle={styles.toggleCircle}
+                duration={200}
               />
             </View>
 
+            {/* Max Screens Dropdown */}
             <View
               style={[styles.inputGroup, !enableSubtitles && { opacity: 0.5 }]}
               pointerEvents={enableSubtitles ? 'auto' : 'none'}
@@ -82,11 +84,13 @@ const MultiScreenModal = ({ visible, onClose }) => {
               </Pressable>
             </View>
 
+            {/* Save Button */}
             <Pressable style={styles.saveBtn}>
-              <Text style={styles.saveText}>Save Settings</Text>
+              <Text style={styles.saveText}>Submit</Text>
             </Pressable>
           </View>
 
+          {/* Inner Modal for Options */}
           <Modal
             transparent
             visible={showMaxScreensModal}
@@ -100,7 +104,7 @@ const MultiScreenModal = ({ visible, onClose }) => {
               <View style={styles.modalBox}>
                 <FlatList
                   data={MaxScreens}
-                  keyExtractor={item => item}
+                  keyExtractor={item => item.toString()}
                   renderItem={({ item }) => renderOption(item)}
                 />
                 <Pressable
@@ -151,11 +155,6 @@ const styles = StyleSheet.create({
   btnClose: {
     padding: 5,
   },
-  btnText: {
-    color: '#fff',
-    fontSize: 18,
-    fontWeight: '500',
-  },
   form: {
     marginTop: 10,
   },
@@ -164,12 +163,26 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     marginBottom: 25,
-    paddingHorizontal: 5,
+    borderWidth: 1,
+    borderColor: '#2E293E',
+    padding: 20,
+    borderRadius: 25,
   },
   settingLabel: {
     color: '#aaa',
     fontSize: 16,
     flex: 1,
+  },
+  toggleContainer: {
+    width: 35,
+    height: 20,
+    borderRadius: 25,
+    padding: 2,
+  },
+  toggleCircle: {
+    width: 15,
+    height: 15,
+    borderRadius: 11,
   },
   inputGroup: {
     flexDirection: 'row',
@@ -197,10 +210,6 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 14,
     marginRight: 8,
-  },
-  staticText: {
-    color: '#fff',
-    fontSize: 14,
   },
   arrow: {
     color: '#6512CF',

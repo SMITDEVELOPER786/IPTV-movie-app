@@ -69,7 +69,7 @@ const PlayerSelectionModal = ({ visible, onClose }) => {
             </View>
 
             <Pressable style={styles.saveBtn}>
-              <Text style={styles.saveText}>Submit</Text>
+              <Text style={styles.saveText}>Set as Default</Text>
             </Pressable>
           </View>
 

@@ -5,11 +5,11 @@ import {
   Pressable,
   Dimensions,
   Modal,
-  Switch,
   FlatList,
   Image,
 } from 'react-native';
 import React, { useState } from 'react';
+import SwitchToggle from 'react-native-switch-toggle'; // 👈 imported here
 
 const { width } = Dimensions.get('window');
 const isPhone = width < 600;
@@ -60,17 +60,22 @@ const SubtitleModal = ({ visible, onClose }) => {
           </View>
 
           <View style={styles.form}>
+            {/* Subtitle Toggle */}
             <View style={styles.settingRow}>
               <Text style={styles.settingLabel}>Enable Subtitles:</Text>
-              <Switch
-                trackColor={{ false: '#767577', true: '#6512CF' }}
-                thumbColor={enableSubtitles ? '#fff' : '#f4f3f4'}
-                ios_backgroundColor="#3e3e3e"
-                onValueChange={setEnableSubtitles}
-                value={enableSubtitles}
+              <SwitchToggle
+                switchOn={enableSubtitles}
+                onPress={() => setEnableSubtitles(!enableSubtitles)}
+               circleColorOff="black"
+                circleColorOn="black"
+                backgroundColorOn="#6512CF"
+                backgroundColorOff="#4E4C5E"
+                containerStyle={styles.toggleContainer}
+                circleStyle={styles.toggleCircle}
               />
             </View>
 
+            {/* Language Picker */}
             <View
               style={[styles.inputGroup, !enableSubtitles && { opacity: 0.5 }]}
               pointerEvents={enableSubtitles ? 'auto' : 'none'}
@@ -90,6 +95,7 @@ const SubtitleModal = ({ visible, onClose }) => {
             </Pressable>
           </View>
 
+          {/* Language Modal */}
           <Modal
             transparent
             visible={showLanguageModal}
@@ -136,7 +142,6 @@ const styles = StyleSheet.create({
     paddingVertical: '4%',
     paddingHorizontal: '10%',
     borderRadius: 12,
-    borderStyle: 'solid',
     borderColor: '#2E293E',
     borderWidth: 1,
   },
@@ -154,11 +159,6 @@ const styles = StyleSheet.create({
   btnClose: {
     padding: 5,
   },
-  btnText: {
-    color: '#fff',
-    fontSize: 18,
-    fontWeight: '500',
-  },
   form: {
     marginTop: 10,
   },
@@ -167,12 +167,27 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     marginBottom: 25,
-    paddingHorizontal: 5,
+    padding: 20,
+    borderWidth: 1,
+    borderColor:'#2E293E',
+    borderRadius:25
   },
   settingLabel: {
     color: '#aaa',
     fontSize: 16,
     flex: 1,
+  },
+  // Switch styling 👇
+toggleContainer: {
+    width: 35,
+    height: 20,
+    borderRadius: 25,
+    padding: 2,
+  },
+  toggleCircle: {
+    width: 15,
+    height: 15,
+    borderRadius: 11,
   },
   inputGroup: {
     flexDirection: 'row',
@@ -200,10 +215,6 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 14,
     marginRight: 8,
-  },
-  staticText: {
-    color: '#fff',
-    fontSize: 14,
   },
   arrow: {
     color: '#6512CF',

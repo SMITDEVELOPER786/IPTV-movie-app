@@ -5,10 +5,10 @@ import {
   Pressable,
   Dimensions,
   Modal,
-  Switch,
   Image,
 } from 'react-native';
 import React, { useState } from 'react';
+import SwitchToggle from 'react-native-switch-toggle';
 
 const { width } = Dimensions.get('window');
 const isPhone = width < 600;
@@ -38,36 +38,47 @@ const AutomationSettingsModal = ({ visible, onClose }) => {
           </View>
 
           <View style={styles.form}>
-            <View style={styles.settingRow}>
+             <View style={styles.settingRow}>
               <Text style={styles.settingLabel}>Auto-Start on Launch:</Text>
-              <Switch
-                trackColor={{ false: '#767577', true: '#6512CF' }}
-                thumbColor={autoStart ? '#fff' : '#f4f3f4'}
-                ios_backgroundColor="#3e3e3e"
-                onValueChange={setAutoStart}
-                value={autoStart}
+              <SwitchToggle
+                switchOn={autoStart}
+                onPress={() => setAutoStart(!autoStart)}
+                circleColorOff="black"
+                circleColorOn="black"
+                backgroundColorOn="#6512CF"
+                backgroundColorOff="#4E4C5E"
+                containerStyle={styles.toggleContainer}
+                circleStyle={styles.toggleCircle}
               />
             </View>
 
+            {/* Auto Play */}
             <View style={styles.settingRow}>
               <Text style={styles.settingLabel}>Auto-Play on Select:</Text>
-              <Switch
-                trackColor={{ false: '#767577', true: '#6512CF' }}
-                thumbColor={autoPlay ? '#fff' : '#f4f3f4'}
-                ios_backgroundColor="#3e3e3e"
-                onValueChange={setAutoPlay}
-                value={autoPlay}
+              <SwitchToggle
+                switchOn={autoPlay}
+                onPress={() => setAutoPlay(!autoPlay)}
+                circleColorOff="black"
+                circleColorOn="black"
+                backgroundColorOn="#6512CF"
+                backgroundColorOff="#4E4C5E"
+                containerStyle={styles.toggleContainer}
+                circleStyle={styles.toggleCircle}
               />
             </View>
 
+            {/* Skip Intro */}
             <View style={styles.settingRow}>
               <Text style={styles.settingLabel}>Skip Intro Automatically:</Text>
-              <Switch
-                trackColor={{ false: '#767577', true: '#6512CF' }}
-                thumbColor={skipIntro ? '#fff' : '#f4f3f4'}
-                ios_backgroundColor="#3e3e3e"
-                onValueChange={setSkipIntro}
-                value={skipIntro}
+              <SwitchToggle
+                switchOn={skipIntro}
+                onPress={() => setSkipIntro(!skipIntro)}
+              circleColorOff="black"
+                circleColorOn="black"
+                backgroundColorOn="#6512CF"
+                backgroundColorOff="#4E4C5E"
+                containerStyle={styles.toggleContainer}
+                circleStyle={styles.toggleCircle}
               />
             </View>
 
@@ -91,7 +102,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   container: {
-    width: '75%',
+    width: '80%',
     backgroundColor: '#040404cd',
     paddingVertical: '4%',
     paddingHorizontal: '10%',
@@ -114,11 +125,6 @@ const styles = StyleSheet.create({
   btnClose: {
     padding: 5,
   },
-  btnText: {
-    color: '#fff',
-    fontSize: 18,
-    fontWeight: '500',
-  },
   form: {
     marginTop: 10,
   },
@@ -127,12 +133,27 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     marginBottom: 25,
-    paddingHorizontal: 5,
+    borderWidth: 1,
+    borderColor:'#2E293E',
+    padding: 20,
+    borderRadius:25
+    
   },
   settingLabel: {
     color: '#aaa',
     fontSize: 16,
     flex: 1,
+  },
+  toggleContainer: {
+    width: 35,
+    height: 20,
+    borderRadius: 25,
+    padding: 2,
+  },
+  toggleCircle: {
+    width: 15,
+    height: 15,
+    borderRadius: 11,
   },
   saveBtn: {
     backgroundColor: '#515DEF',

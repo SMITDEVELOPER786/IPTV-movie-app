@@ -1,4 +1,3 @@
-// src/screens/LiveTVScreen.tsx
 import {
   ImageBackground,
   Pressable,
@@ -18,7 +17,6 @@ import Header from '../components/Header';
 const { width } = Dimensions.get('window');
 const isPhone = width < 768;
 
-// Mock data - MATCHING FIGMA EXACTLY
 const channels = [
   { id: '1', name: 'Channel 1' },
   { id: '2', name: 'Channel 2' },
@@ -27,17 +25,22 @@ const channels = [
   { id: '5', name: 'Channel 5' },
 ];
 
-// Programs per channel, MATCHING FIGMA EXACTLY
 const programs = [
-  ['Program 1', 'Program 2', 'Program 3', 'Program 4'],           // Channel 1
+  ['Program 1', 'Program 2', 'Program 3', 'Program 4'], // Channel 1
   ['Program 1', 'Program 2', 'Program 3', 'Program 4', 'Program 5'], // Channel 2 ← Added Program 5
-  ['Program 1', 'Program 2', 'Program 3', 'Program 4'],           // Channel 3
-  ['Program 1', 'Program 2', 'Program 3', 'Program 4'],           // Channel 4
-  ['Program 1', 'Program 2', 'Program 3', 'Program 4'],           // Channel 5
+  ['Program 1', 'Program 2', 'Program 3', 'Program 4'], // Channel 3
+  ['Program 1', 'Program 2', 'Program 3', 'Program 4'], // Channel 4
+  ['Program 1', 'Program 2', 'Program 3', 'Program 4'], // Channel 5
 ];
 
-// Time slots from Figma
-const timeSlots = ['Tue, Jul 29, 10:06PM', '12:00 PM', '12:30 PM', '01:00 PM', '01:30 PM'];
+const timeSlots = [
+  'Tue, Jul 29, 10:06PM',
+  '12:00 PM',
+  '12:30 PM',
+  '01:00 PM',
+  '01:30 PM',
+  'Tue, Jul 29, 10:06PM',
+];
 
 const CategoryList = () => {
   const categories = [
@@ -55,19 +58,19 @@ const CategoryList = () => {
       showsHorizontalScrollIndicator={false}
       contentContainerStyle={{ gap: 15 }}
       renderItem={({ item }) => (
-        <View
-          style={[
-            styles.categoryCard,
-            isPhone && { width: width * 0.84 },
-          ]}
-        >
+        <View style={[styles.categoryCard, isPhone && { width: width * 0.84 }]}>
           <ImageBackground
             source={require('../assets/images/Thumb.png')}
             style={styles.categoryImg}
             imageStyle={{ borderRadius: 12 }}
           >
             <View style={styles.gradientOverlay}>
-              <Text style={[styles.categoryText, item.name === 'Live TV' && styles.activeCategory]}>
+              <Text
+                style={[
+                  styles.categoryText,
+                  item.name === 'Live TV' && styles.activeCategory,
+                ]}
+              >
                 {item.name}
               </Text>
             </View>
@@ -83,14 +86,6 @@ const EPGGrid = () => {
     <View style={styles.epgContainer}>
       {/* Time Headers */}
       <View style={styles.timeHeaderRow}>
-        {/* Empty cell for channel number header */}
-        <View style={styles.channelHeaderCell}>
-          <Text style={styles.timeHeaderText}>#</Text>
-        </View>
-        {/* Empty cell for channel name header */}
-        {/* <View style={styles.channelNameHeaderCell}>
-          <Text style={styles.timeHeaderText}>Channel</Text>
-        </View> */}
         {/* Time slots */}
         {timeSlots.map((time, index) => (
           <View key={index} style={styles.timeHeaderCell}>
@@ -106,12 +101,12 @@ const EPGGrid = () => {
           <View style={styles.channelNumberCell}>
             <Text style={styles.channelNumber}>{idx + 1}</Text>
           </View>
-          
+
           {/* Channel Name Cell */}
           <View style={styles.channelNameCell}>
             <Text style={styles.channelName}>{channel.name}</Text>
           </View>
-          
+
           {/* Program Cells */}
           {programs[idx]?.map((prog, pIdx) => (
             <TouchableOpacity key={pIdx} style={styles.programCell}>
@@ -139,25 +134,23 @@ const LiveTVScreen = () => {
           contentContainerStyle={{ paddingBottom: 40 }}
           showsVerticalScrollIndicator={false}
         >
-   
-          {/* Live Preview + Info */}
           <View style={styles.liveContentRow}>
-            {/* Left: Live Stream Preview */}
             <View style={styles.livePreview}>
               <ImageBackground
                 source={require('../assets/images/livetv.png')}
                 style={styles.previewImage}
-              >
-                <View style={styles.liveTag}>
-                  <Text style={styles.liveTagText}>LIVE</Text>
-                </View>
-              </ImageBackground>
+              ></ImageBackground>
             </View>
 
-            {/* Right: Live Info Text */}
             <View style={styles.liveInfo}>
-              <Text style={styles.championText}>CHAMPIONS LEAGUE</Text>
-              <Text style={styles.timeText}>12:00PM - 12:30 PM • 30Min</Text>
+              <View
+                style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}
+              >
+                <Text style={styles.championText}>CHAMPIONS LEAGUE </Text>
+                <Text style={styles.liveText}>Live</Text>
+              </View>
+              <Text style={styles.timeText}>12:00PM - 12:30 PM {' '} 
+                30Min</Text>
               <Text style={styles.matchText}>Man United vs Chelsea</Text>
             </View>
           </View>
@@ -269,7 +262,7 @@ const styles = StyleSheet.create({
   },
   livePreview: {
     width: isPhone ? width * 0.6 : 317,
-    height: isPhone ? (width * 0.6 * 178 / 317) : 178,
+    height: isPhone ? (width * 0.6 * 178) / 317 : 178,
     backgroundColor: '#1a1a1a',
     borderRadius: 12,
     overflow: 'hidden',
@@ -281,20 +274,17 @@ const styles = StyleSheet.create({
     height: '100%',
     resizeMode: 'cover',
   },
-  liveTag: {
-    position: 'absolute',
-    top: 5,
-    right: 5,
-    backgroundColor: '#ff4444',
+
+  liveText: {
+    backgroundColor: '#E08700',
     paddingHorizontal: 6,
     paddingVertical: 2,
-    borderRadius: 4,
-  },
-  liveTagText: {
     color: '#fff',
-    fontSize: 12,
-    fontWeight: 'bold',
+    borderRadius: 4,
+    fontWeight:'500',
+    marginBottom: 4
   },
+
   liveInfo: {
     flex: 1,
     marginLeft: 80,
@@ -360,17 +350,14 @@ const styles = StyleSheet.create({
     padding: 8,
     justifyContent: 'center',
     alignItems: 'center',
-    // backgroundColor: 'r',
     borderRadius: 4,
   },
   channelNameCell: {
-    // flex: 1,
     padding: 8,
     justifyContent: 'center',
     alignItems: 'center',
-    // backgroundColor: 'rgba(255,255,255,0.1)',
     borderRadius: 4,
-    width: 200
+    width: 200,
   },
   channelNumber: {
     color: '#fff',

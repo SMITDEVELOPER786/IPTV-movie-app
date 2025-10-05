@@ -96,7 +96,7 @@ const ParentalControlModal = ({ visible, onClose }) => {
             </View>
 
             <Pressable style={styles.saveBtn}>
-              <Text style={styles.saveText}>Submit</Text>
+              <Text style={styles.saveText}>Save Settings</Text>
             </Pressable>
           </View>
 
